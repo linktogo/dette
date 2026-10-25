@@ -1,0 +1,136 @@
+// Sources reprises de https://dettedelafrance.fr/sources-bibliographie
+// (consultée le 7 octobre 2026). Seules celles qui alimentent le modèle figurent ici.
+const SOURCES = {
+  insee2025: {
+    nom: 'Insee, Finances publiques 2025',
+    chiffre: 'Dette 3 460,5 Md€ fin 2025 (115,6 % du PIB) ; déficit 152,5 Md€ (5,1 %) ; dépenses 57,2 %, recettes 52,1 %, prélèvements 43,6 % du PIB.',
+    usage: 'Point de départ de la projection.',
+    url: 'https://www.insee.fr/fr/statistiques/8956575',
+  },
+  inseeT1: {
+    nom: 'Insee, Dette publique au T1 2026',
+    chiffre: '3 536,1 Md€ à fin mars 2026, soit 117,5 % du PIB. État 2 889,0 Md€, sécurité sociale 301,2 Md€, collectivités 276,5 Md€.',
+    usage: 'Contrôle de cohérence du point de départ 2026.',
+    url: 'https://www.insee.fr/fr/statistiques/9010340',
+  },
+  cour2026: {
+    nom: 'Cour des comptes, Finances publiques début 2026',
+    chiffre: 'Dette projetée à 118,6 % du PIB en 2026 ; déficit stabilisant d’environ 2,8 % du PIB.',
+    usage: 'Niveau de dette fin 2026 ; test du solde stabilisant.',
+    url: 'https://program-evaluation.ccomptes.fr/fr/publications/la-situation-des-finances-publiques-debut-2026',
+  },
+  bdfDette: {
+    nom: 'Banque de France, Dette publique 2025',
+    chiffre: 'Si le taux d’intérêt dépasse la croissance nominale, un excédent primaire est requis pour stabiliser le ratio.',
+    usage: 'Équation de dynamique de la dette.',
+    url: 'https://www.banque-france.fr/system/files/2025-06/Eco-Bref_Dette-publique.%20DEFpdf.pdf',
+  },
+  senat719: {
+    nom: 'Sénat, Charge de la dette (rapport n° 719)',
+    chiffre: 'Choc de +100 points de base : +13,9 Md€ fin 2027, +24,0 Md€ fin 2030, +32,6 Md€ fin 2033. Maturité moyenne 8,6 ans.',
+    usage: 'Vitesse à laquelle le taux de marché se transmet à la charge d’intérêts.',
+    url: 'https://www.senat.fr/rap/r23-719/r23-719_mono.html',
+  },
+  aft2026: {
+    nom: 'Agence France Trésor, financement 2026',
+    chiffre: 'Programme d’émissions de moyen et long terme nettes des rachats : 310 Md€ en 2026.',
+    usage: 'Ordre de grandeur du refinancement annuel.',
+    url: 'https://www.aft.gouv.fr/en/publications/communiques-presse/30122025-indicative-state-financing-programme-2026',
+  },
+  psmt: {
+    nom: 'Trésor, Plan budgétaire et structurel 2025-2029',
+    chiffre: 'Dépense primaire nette plafonnée à 0,8 % en 2025, 1,2 % les années suivantes, 1,1 % en 2029.',
+    usage: 'Repère du curseur « dépense primaire » et préréglage « Plan budgétaire ».',
+    url: 'https://www.tresor.economie.gouv.fr/Articles/2024/10/23/publication-du-plan-budgetaire-et-structurel-a-moyen-terme-psmt-pour-2025-2029',
+  },
+  bdfProductivite: {
+    nom: 'Banque de France, Productivité 2024',
+    chiffre: 'Productivité du travail inférieure de 8,5 % à sa tendance pré-Covid en 2023.',
+    usage: 'Curseur « rattrapage de productivité ».',
+    url: 'https://www.banque-france.fr/fr/publications-et-statistiques/publications/comment-expliquer-les-pertes-de-productivite-observees-en-france-depuis-la-periode-pre-covid',
+  },
+  plf2026: {
+    nom: 'PLF 2026, Voies et moyens tome II',
+    chiffre: '465 dépenses fiscales, 88,3 Md€ en 2026. Supprimer une niche ne rapporte pas son coût affiché.',
+    usage: 'Curseur « niches fiscales ».',
+    url: 'https://www.assemblee-nationale.fr/dyn/dyn/contenu/visualisation/1087933/file/Voies_et_moyens_Tome_2_2026.pdf',
+  },
+  controleFiscal: {
+    nom: 'Ministère de l’Économie, Contrôle fiscal 2025',
+    chiffre: '17,1 Md€ notifiés, 11,4 Md€ encaissés en 2025.',
+    usage: 'Curseur « fraude recouvrée ».',
+    url: 'https://www.economie.gouv.fr/actualites/lutte-contre-la-fraude-un-controle-fiscal-toujours-plus-efficace-en-2025',
+  },
+  cor2025: {
+    nom: 'Conseil d’orientation des retraites, rapport annuel 2025',
+    chiffre: 'Solde du système de retraite : −0,1 point de PIB en 2024, −0,2 en 2030, −1,4 en 2070.',
+    usage: 'Curseur « dérive des retraites ».',
+    url: 'https://www.cor-retraites.fr/rapports-du-cor/rapport-annuel-cor-juin-2025-evolutions-perspectives-retraites-france',
+  },
+  cofog: {
+    nom: 'Eurostat, dépenses des administrations publiques par fonction, 2024',
+    chiffre: 'Total 1 671,8 Md€ : protection sociale 693,0 (dont vieillesse 392,0), santé 261,2, services généraux 181,1 (dont dette 58,9), affaires économiques 166,1, enseignement 148,6, défense 54,2, ordre et sécurité 52,1.',
+    usage: 'Curseurs « Dépenses par poste ». Montants relevés sur les compteurs de dettedelafrance.fr.',
+    url: 'https://dettedelafrance.fr/compteurs/depenses-cofog-total',
+  },
+  senatIR: {
+    nom: 'Sénat, rapport sur le projet de loi de finances pour 2025 (article 2)',
+    chiffre: 'Impôt sur le revenu : 88,1 Md€ en 2024, 93,8 Md€ prévus en 2025. Les 10 % de foyers aux revenus les plus élevés en paient 72 à 74 %. Tranche à 45 % (2013) : +344 M€. Baisse de 14 à 11 % (2020) : −5 Md€. Contribution différentielle sur les hauts revenus : 2 Md€ attendus, 24 300 foyers.',
+    usage: 'Calage des rendements par tranche. Hors bibliographie du site.',
+    url: 'https://www.senat.fr/rap/l24-144-21/l24-144-212.html',
+  },
+  dgfipTranches: {
+    nom: 'DGFiP, foyers par tranche marginale (revenus 2022), via MoneyVox',
+    chiffre: '13 millions de foyers à 0 %, 20 millions à 11 %, 6,4 millions à 30 %, 436 000 à 41 %, 67 000 à 45 %. Impôt moyen : 530 €, 6 678 €, 38 180 € et 185 046 €.',
+    usage: 'Estimation des revenus taxés dans chaque tranche. Hors bibliographie du site.',
+    url: 'https://www.moneyvox.fr/impot/actualites/97424/impot-sur-le-revenu-0-11-ou-45-combien-de-francais-paient-le-meme-taux-que-vous',
+  },
+  bareme2027: {
+    nom: 'Barème 2027 de l’impôt sur le revenu (projet de loi de finances), via Tout sur mes finances',
+    chiffre: 'Revalorisation de 2,1 % : 0 % jusqu’à 11 844 €, 11 % jusqu’à 30 200 €, 30 % jusqu’à 86 353 €, 41 % jusqu’à 185 737 €, 45 % au-delà. Provisoire jusqu’au vote du budget.',
+    usage: 'Seuils affichés sur les curseurs. Hors bibliographie du site.',
+    url: 'https://www.toutsurmesfinances.com/actualites/?p=2202',
+  },
+  tresorTVA: {
+    nom: 'DG Trésor, Analyse de la composition des recettes de TVA (septembre 2025), via Vie publique',
+    chiffre: 'TVA : 202,7 Md€ en 2022, dont 65,1 % payés par les ménages. Un point de plus en 2025 : 7,5 Md€ au taux de 20 %, 1,6 Md€ à 10 %, 2,0 Md€ à 5,5 %, 0,4 Md€ à 2,1 %, soit 11,4 Md€ nets pour tous les taux, à comportement inchangé.',
+    usage: 'Curseurs « TVA ». Hors bibliographie du site.',
+    url: 'https://www.vie-publique.fr/en-bref/300325-hausse-de-la-tva-quels-effets-les-reponses-de-la-direction-du-tresor',
+  },
+  courRetraites: {
+    nom: 'Cour des comptes, Situation financière et perspectives du système de retraites (février 2025)',
+    chiffre: 'En 2035, toutes finances publiques : âge légal à 65 ans +17,7 Md€, à 63 ans −13 Md€ ; durée à 44 ans +9,7 Md€, à 42 ans −7,1 Md€. Un point de cotisation : 4,8 à 7,6 Md€. Un point de sous-indexation : 2,9 Md€.',
+    usage: 'Curseurs « âge légal », « durée de cotisation », « taux de cotisation » et « sous-indexation ». Hors bibliographie du site.',
+    url: 'https://www.vie-publique.fr/files/rapport/pdf/297428.pdf',
+  },
+  pleinEmploi: {
+    nom: 'dettedelafrance.fr, Scénario plein emploi',
+    chiffre: 'Chômage de 7,4 % à 5 % : environ 700 000 emplois, 30 à 40 Md€ par an d’effet budgétaire net. Fourchette pédagogique du site.',
+    usage: 'Curseur « taux de chômage ».',
+    url: 'https://dettedelafrance.fr/scenario-plein-emploi',
+  },
+  ageing2024: {
+    nom: 'Commission européenne, Ageing Report 2024',
+    chiffre: 'Dépenses publiques d’autonomie : de 1,9 à 2,6 points de PIB entre 2022 et 2070, jusqu’à 4,8 dans le scénario de risque.',
+    usage: 'Curseur « autonomie ».',
+    url: 'https://economy-finance.ec.europa.eu/publications/2024-ageing-report-economic-and-budgetary-projections-eu-member-states-2022-2070_en',
+  },
+  seniors: {
+    nom: 'DARES / Vie publique, Seniors 2024',
+    chiffre: 'Taux d’emploi des 55-64 ans : 60,4 % en 2024, en retrait des meilleurs pays européens.',
+    usage: 'Curseur « emploi des seniors ».',
+    url: 'https://www.vie-publique.fr/en-bref/300161-emploi-des-seniors-des-metiers-souvent-moins-qualifies',
+  },
+  climat: {
+    nom: 'France Stratégie, Incidences économiques de l’action pour le climat',
+    chiffre: 'Risque pour la dette : environ 10 points de PIB en 2030, 15 en 2035, 25 en 2040. Projection sous hypothèses, contestée sur son ampleur.',
+    usage: 'Curseur « risque climat ».',
+    url: 'https://www.strategie-plan.gouv.fr/files/files/Publications/Rapport/2023-incidences-economiques-rapport-pisani-5juin.pdf',
+  },
+  site: {
+    nom: 'dettedelafrance.fr, Sources et bibliographie',
+    chiffre: 'Liste complète des 36 sources, hiérarchie des sources et pièges de lecture.',
+    usage: 'Origine de la sélection ci-dessus ; ordres de grandeur des crises passées (+200 à +600 Md€).',
+    url: 'https://dettedelafrance.fr/sources-bibliographie',
+  },
+};
