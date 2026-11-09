@@ -133,6 +133,18 @@ const SOURCES = {
     usage: 'Curseur « emploi des seniors ».',
     url: 'https://www.vie-publique.fr/en-bref/300161-emploi-des-seniors-des-metiers-souvent-moins-qualifies',
   },
+  daresSmic: {
+    nom: 'DARES, salariés bénéficiaires de la revalorisation du SMIC',
+    chiffre: 'Environ 17 % des salariés du secteur privé, soit près de 3,1 millions de personnes, concernés par la revalorisation de janvier 2024.',
+    usage: 'Curseurs « SMIC ». Hors bibliographie du site ; rendements par point estimés par l’application.',
+    url: 'https://dares.travail-emploi.gouv.fr',
+  },
+  dreesMinima: {
+    nom: 'DREES, Minima sociaux et prestations sociales (panorama annuel) ; CNAF',
+    chiffre: 'Ordres de grandeur annuels : RSA 12 Md€, prime d’activité 10,5 Md€, AAH 13,5 Md€, minimum vieillesse 3,9 Md€, aides au logement 15,5 Md€, prestations familiales 33 Md€.',
+    usage: 'Aides absorbées par le revenu universel. Hors bibliographie du site, à vérifier.',
+    url: 'https://drees.solidarites-sante.gouv.fr',
+  },
   climat: {
     nom: 'France Stratégie, Incidences économiques de l’action pour le climat',
     chiffre: 'Risque pour la dette : environ 10 points de PIB en 2030, 15 en 2035, 25 en 2040. Projection sous hypothèses, contestée sur son ampleur.',
