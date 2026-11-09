@@ -97,6 +97,18 @@ const SOURCES = {
     usage: 'Curseurs « TVA ». Hors bibliographie du site.',
     url: 'https://www.vie-publique.fr/en-bref/300325-hausse-de-la-tva-quels-effets-les-reponses-de-la-direction-du-tresor',
   },
+  senatAides: {
+    nom: 'Sénat, commission d’enquête sur les aides publiques aux entreprises (juillet 2025), via Public Sénat',
+    chiffre: '211 Md€ en 2023 : 88 Md€ de dépenses fiscales, 75 Md€ d’allègements de cotisations sociales, 41 Md€ d’aides de Bpifrance, 7 Md€ de subventions de l’État. Hors collectivités et Union européenne.',
+    usage: 'Curseurs « Aides aux entreprises ». Hors bibliographie du site.',
+    url: 'https://www.publicsenat.fr/actualites/economie/211-milliards-deuros-daides-publiques-aux-entreprises-sur-quoi-repose-le-calcul-de-la-commission-denquete-du-senat',
+  },
+  hcspAides: {
+    nom: 'Haut-commissariat au Plan, Les aides aux entreprises en France : de quoi parle-t-on ? (note n° 157)',
+    chiffre: 'De 82 à 187 Md€ selon le périmètre. Seuls 3,2 Md€ des 73,8 Md€ d’exonérations de cotisations sont comptés comme aides dans le périmètre étroit.',
+    usage: 'Fourchette rappelée en tête du groupe « Aides aux entreprises ». Hors bibliographie du site.',
+    url: 'https://www.strategie-plan.gouv.fr/files/files/Publications/2025/2025-07-17%20-%20NA%20157%20-%20Aides%20aux%20entreprises/HCSP-2025-Edito-Aides%20aux%20entreprises-Juillet.pdf',
+  },
   courRetraites: {
     nom: 'Cour des comptes, Situation financière et perspectives du système de retraites (février 2025)',
     chiffre: 'En 2035, toutes finances publiques : âge légal à 65 ans +17,7 Md€, à 63 ans −13 Md€ ; durée à 44 ans +9,7 Md€, à 42 ans −7,1 Md€. Un point de cotisation : 4,8 à 7,6 Md€. Un point de sous-indexation : 2,9 Md€.',

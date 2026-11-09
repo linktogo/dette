@@ -35,6 +35,11 @@
     montee: 3,             // années de montée en charge des leviers
     nichesTotal: 88.3,     // PLF 2026, Voies et moyens
     nichesRendement: 0.5,  // gain net / coût brut d'une niche supprimée
+    // Aides aux entreprises hors dépenses fiscales (déjà dans les niches) et hors
+    // prêts et garanties Bpifrance. Commission d'enquête du Sénat, 2023, Md€.
+    allegementsTotal: 75,       // allègements de cotisations sociales
+    allegementsRendement: 0.5,  // gain net / montant, après emplois peu qualifiés perdus
+    subventionsTotal: 7,        // subventions de l'État
     ecartProductivite: 8.5, // Banque de France, % sous la tendance pré-Covid
     pibParPointSeniors: 0.2, // % de PIB par point de taux d'emploi 55-64 ans
     autonomie2022: 1.9,    // Ageing Report 2024, % du PIB
@@ -90,6 +95,8 @@
     prelevements: 0,   // variation du taux de recettes, points de PIB
     niches: 0,         // % des dépenses fiscales supprimées
     fraude: 0,         // recouvrement supplémentaire, Md€ de 2026 par an
+    allegements: 0,    // % des allègements de cotisations patronales supprimés
+    subventions: 0,    // % des subventions de l'État aux entreprises supprimées
     tva20: 20, tva10: 10, tva55: 5.5, tva21: 2.1, // taux de TVA, %
     ir11: 11, ir30: 30, ir41: 41, ir45: 45, // taux du barème, %
     irSurtaxe: 0,      // points ajoutés au-delà de irSeuil
@@ -196,12 +203,14 @@
       H.postes.forEach((q, i) => { parPoste[q.id] = postes[i]; });
       parPoste.retraites += pib * retraites / 100 - (age[0] + duree[0] + pensions) * echelle;
       parPoste.social += pib * autonomie / 100 - emploi[0] * echelle;
+      parPoste.economie -= H.subventionsTotal * p.subventions / 100 * montee * echelle;
       const nonVentile = pib * climat / 100 - p.economies * montee * echelle + coutCrise;
       const depensesPrimaires = Object.values(parPoste).reduce((s, v) => s + v, 0) + nonVentile;
 
       // Recettes
       const recettes = pib * (tauxRecettes + (p.prelevements / 100) * montee)
-        + ((H.nichesTotal * H.nichesRendement * p.niches / 100 + p.fraude + impot) * montee + recetteEnPlus) * echelle;
+        + ((H.nichesTotal * H.nichesRendement * p.niches / 100 + p.fraude + impot
+          + H.allegementsTotal * H.allegementsRendement * p.allegements / 100) * montee + recetteEnPlus) * echelle;
 
       // Intérêts : l'ancien encours est repris pour partie au taux de marché,
       // la dette nouvelle l'est en totalité.

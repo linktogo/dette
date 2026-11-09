@@ -74,6 +74,20 @@ const GROUPES = [
     ],
   },
   {
+    titre: 'Aides aux entreprises',
+    intro: 'Sénat : 211 Md€ en 2023, dont 88 Md€ de dépenses fiscales (curseur « niches ») et 41 Md€ de prêts et garanties Bpifrance, non comptés ici. Le Haut-commissariat au Plan retient de 82 à 187 Md€ selon le périmètre.',
+    resume: (p) => {
+      const gain = H.allegementsTotal * H.allegementsRendement * p.allegements / 100 + H.subventionsTotal * p.subventions / 100;
+      return Math.abs(gain) < 0.05 ? 'Aides inchangées.' : `Effet à terme : ${signe(gain)} Md€ par an, en euros de 2026.`;
+    },
+    curseurs: [
+      { id: 'allegements', nom: 'Allègements de cotisations supprimés', min: 0, max: 100, pas: 5, f: (v) => fmt(v, 0) + ' %',
+        repere: `Sénat : ${fmt(H.allegementsTotal, 0)} Md€ en 2023, surtout sur les bas salaires. Gain net retenu : ${fmt(H.allegementsRendement * 100, 0)} %, le reste étant perdu en emplois.` },
+      { id: 'subventions', nom: 'Subventions de l’État supprimées', min: 0, max: 100, pas: 5, f: (v) => fmt(v, 0) + ' %',
+        repere: `Sénat : ${fmt(H.subventionsTotal, 0)} Md€ en 2023. Imputées au poste « Affaires économiques ».` },
+    ],
+  },
+  {
     titre: 'TVA',
     intro: 'Quatre taux en vigueur. Effet immédiat, calculé à consommation inchangée.',
     resume: (p) => {
@@ -410,6 +424,7 @@ function construireTextes() {
     <ul>
       <li>${fmt(H.refinancement * 100)} % de l’encours est refinancé chaque année au taux de marché, et toute dette nouvelle l’est en totalité. Ce réglage reproduit les trois chiffres du Sénat à 15 % près.</li>
       <li>Supprimer une niche fiscale rapporte ${fmt(H.nichesRendement * 100, 0)} % de son coût affiché.</li>
+      <li>Supprimer des allègements de cotisations patronales rapporte ${fmt(H.allegementsRendement * 100, 0)} % de leur montant : le reste est perdu en emplois et en salaires. Les subventions supprimées sont des économies nettes.</li>
       <li>Un point de taux d’emploi des seniors ajoute ${fmt(H.pibParPointSeniors)} % au PIB.</li>
       <li>La dépense hors intérêts de 2026 est répartie entre postes selon leur poids de 2024 (Eurostat). L’objectif Otan de 3,5 % du PIB cité pour la défense ne vient pas des sources du site.</li>
       <li>Les rendements par point de chaque tranche de l’impôt sur le revenu sont des estimations de l’application, fiables à 30 % près : elles partent du nombre de foyers et de l’impôt moyen par tranche (DGFiP, revenus 2022) et des chiffrages cités par le Sénat. Le rendement de l’impôt plancher sur les patrimoines (10 Md€ bruts par point) vient du débat public de 2025, pas des sources du site.</li>
