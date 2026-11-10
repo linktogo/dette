@@ -4,6 +4,24 @@ Application web pédagogique pour explorer l'évolution de la dette publique fra
 
 Modifiez les hypothèses économiques et budgétaires pour comparer les trajectoires de dette, de solde public et de charge d'intérêts. **Il s'agit d'une projection d'hypothèses, pas d'une prévision économique.**
 
+## Lancer en local en une commande
+
+Depuis la racine du dépôt, avec Node.js :
+
+```sh
+node dev-server.js
+```
+
+Ouvrez **http://localhost:8080**.
+
+Ou, avec Docker démarré et Docker Compose installé :
+
+```sh
+bash deploy.sh
+```
+
+Ouvrez **http://localhost:8098**.
+
 ## Fonctionnalités
 
 - Curseurs pour la croissance, l'inflation, les taux d'emprunt et la productivité.
