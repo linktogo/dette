@@ -51,7 +51,7 @@ for (const [id, P] of Object.entries(PAYS)) {
   const m = P.modele;
   const d = m.pointDeDepart();
   const idsCurseurs = P.structure.groupes.flatMap((g) => (g.postes ? [] : g.curseurs.map((c) => c.id)));
-  const essais = [m.DEFAUTS, ...P.structure.prereglages.map((s) => ({ ...m.DEFAUTS, ...s.p }))];
+  const essais = [m.DEFAUTS, ...[...P.structure.prereglages, ...(P.partis ? P.partis.liste : [])].map((s) => ({ ...m.DEFAUTS, ...s.p }))];
 
   test(`${id} : chaque curseur existe dans le modèle`, () => {
     for (const c of idsCurseurs) assert.ok(c in m.DEFAUTS, c);
