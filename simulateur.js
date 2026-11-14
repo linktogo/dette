@@ -2,8 +2,8 @@
 // méthode et sources. Chaque pays fournit globalThis.PAYS (structure et textes par
 // langue) et son modèle ; les textes communs viennent de i18n.js.
 (() => {
-  const { code, u, T: C } = I18N.preparer();
   const P = globalThis.PAYS;
+  const { code, u, T: C } = I18N.preparer(P.devise);
   const M = P.modele;
   const { BASE, DEFAUTS, H, COMPTES_2025, simuler, pointDeDepart } = M;
   const L = P.textes[code](u, M, C);
@@ -23,7 +23,7 @@
         id: 'poste_' + q.id, min: g.min, max: g.max, pas: g.pas,
         nom: L.postes[q.id].nom,
         f: (v, p) => pctSigne(p.depenses + v) + u.mots.an,
-        repere: C.postesRepere(mds(q.montant), pct(q.montant / P.pib2024 * 100), L.postes[q.id].note),
+        repere: C.postesRepere(mds(q.montant), pct(q.montant / P.pib2024 * 100), L.postes[q.id].note, P.anneePostes || 2024),
       }))
       : g.curseurs.map((c) => ({ ...c, ...L.curseurs[c.id] }));
     return { id: g.id, titre: tg.titre, intro: tg.intro, resume: tg.resume, curseurs };
@@ -163,7 +163,7 @@
       <div class="tuile">
         <div class="libelle">${C.tuiles.soldeEn(fin.annee)}</div>
         <div class="valeur">${pctSigne(fin.soldePib)}</div>
-        <div class="detail">${C.tuiles.soldeStab(pctSigne(fin.soldeStabilisant))}</div>
+        <div class="detail">${C.tuiles.soldeStab(pctSigne(fin.soldeStabilisant), !P.horsUE)}</div>
       </div>`;
   }
 

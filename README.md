@@ -1,11 +1,13 @@
-# Simulateurs de dette publique : France et Espagne
+# Simulateurs de dette publique : France, Espagne, Allemagne, Royaume-Uni
 
-Application web pédagogique pour explorer l'évolution de la dette publique de **2027 à 2036**, à partir d'un point de départ estimé fin 2026, pour deux pays :
+Application web pédagogique pour explorer l'évolution de la dette publique de **2027 à 2036**, à partir d'un point de départ estimé fin 2026, pour quatre pays :
 
 - **France** (`/fr/`) : dette de 115,6 % du PIB fin 2025 (Insee), point de départ 2026 d'après la Cour des comptes.
 - **Espagne** (`/es/`) : dette de 100,8 % du PIB fin 2025 (Banco de España), point de départ 2026 d'après l'AIReF, leviers adaptés (IVA à 21 / 10 / 4 %, barème de l'IRPF, âge légal de 67 ans, MEI, SMI, ingreso mínimo vital…).
+- **Allemagne** (`/de/`) : dette de 63,5 % du PIB fin 2025 (Bundesbank), point de départ 2026 d'après le Stabilitätsrat, programmes votés en 2025 (fonds spécial d'infrastructure de 500 Md€, défense à 3,5 % du PIB en 2029), baisse programmée de l'impôt sur les sociétés, Mindestlohn, retraite à 67 ans…
+- **Royaume-Uni** (`/uk/`) : dette nette du secteur public (PSND) de 93,8 % du PIB fin mars 2026 (ONS), point de départ 2026-27 d'après l'OBR, en livres sterling et par exercice d'avril à mars ; gilts indexés sur l'inflation, triple verrou des pensions, National Living Wage, cotisations (NICs)…
 
-L'interface est disponible en **français, anglais, espagnol et allemand** : sélecteur FR · EN · ES · DE en haut de chaque page. La langue est choisie par le paramètre `?lang=` de l'adresse, sinon par le dernier choix mémorisé, sinon par la langue du navigateur ; nombres et unités suivent la langue (Md€, €bn, mil M€, Mrd. €).
+L'interface est disponible en **français, anglais, espagnol et allemand** : sélecteur FR · EN · ES · DE en haut de chaque page. La langue est choisie par le paramètre `?lang=` de l'adresse, sinon par le dernier choix mémorisé, sinon par la langue du navigateur ; nombres et unités suivent la langue (Md€, €bn, mil M€, Mrd. €) et la devise du pays (livres sterling pour le Royaume-Uni).
 
 La page d'accueil présente une tuile par pays : dette mesurée fin 2025, scénario tendanciel en 2036 avec sa courbe, déficit, charge d'intérêts et solde stabilisant, calculés en direct par les modèles. Un lien en haut de chaque simulateur permet de passer d'un pays à l'autre.
 
@@ -120,8 +122,8 @@ L'application sera disponible à l'adresse `http://<adresse-du-pi>:8098`.
 | [style.css](./style.css) | Présentation et mise en page, commune aux pages |
 | [charts.js](./charts.js) | Tracé des graphiques, commun aux simulateurs |
 | [fr/](./fr/) | Simulateur français : `index.html`, `model.js` (hypothèses et calculs, utilisables dans le navigateur et sous Node.js), `textes.js` (structure des curseurs et textes en 4 langues), `sources.js` (références traduites) |
-| [es/](./es/) | Simulateur espagnol, même organisation |
-| [tests/](./tests/) | Tests des deux modèles (`fr.test.js`, `es.test.js`) et complétude des traductions (`i18n.test.js`) |
+| [es/](./es/), [de/](./de/), [uk/](./uk/) | Simulateurs espagnol, allemand et britannique, même organisation |
+| [tests/](./tests/) | Tests des quatre modèles (`fr.test.js`, `es.test.js`, `de.test.js`, `uk.test.js`) et complétude des traductions (`i18n.test.js`) |
 | [dev-server.js](./dev-server.js) | Serveur local avec rechargement automatique |
 | [nginx.conf](./nginx.conf) | Service des fichiers statiques et revalidation du cache |
 | [docker-compose.yml](./docker-compose.yml) | Configuration du conteneur Nginx |

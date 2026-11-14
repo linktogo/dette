@@ -15,3 +15,5 @@ services:
       - ./charts.js:/usr/share/nginx/html/charts.js:ro
       - ./fr:/usr/share/nginx/html/fr:ro
       - ./es:/usr/share/nginx/html/es:ro
+      - ./de:/usr/share/nginx/html/de:ro
+      - ./uk:/usr/share/nginx/html/uk:ro

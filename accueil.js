@@ -2,12 +2,14 @@
 (() => {
   const { code, u, T } = I18N.preparer();
   const A = T.accueil;
-  const { pct, pctSigne, mds, signe } = u;
+  const { pct, pctSigne, signe } = u;
   document.title = A.titre;
 
   const PAYS = [
     { id: 'fr', drapeau: '🇫🇷', modele: globalThis.DetteModel },
     { id: 'es', drapeau: '🇪🇸', modele: globalThis.DetteEspagne },
+    { id: 'de', drapeau: '🇩🇪', modele: globalThis.DetteAllemagne },
+    { id: 'uk', drapeau: '🇬🇧', modele: globalThis.DetteRoyaumeUni, devise: 'GBP' },
   ];
 
   function trajectoire(m) {
@@ -35,6 +37,7 @@
 
   function carte(p, echelle) {
     const m = p.modele;
+    const mds = I18N.outils(code, p.devise).mds; // montants dans la devise du pays
     const { depart, t, courbe } = trajectoire(m);
     const fin = t[t.length - 1];
     const c25 = m.COMPTES_2025;

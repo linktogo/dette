@@ -7,6 +7,8 @@ const I18N = require('../i18n.js');
 const PAYS = {
   fr: require('../fr/textes.js')(require('../fr/model.js'), require('../fr/sources.js')),
   es: require('../es/textes.js')(require('../es/model.js'), require('../es/sources.js')),
+  de: require('../de/textes.js')(require('../de/model.js'), require('../de/sources.js')),
+  uk: require('../uk/textes.js')(require('../uk/model.js'), require('../uk/sources.js')),
 };
 
 const propre = (texte, ou) => {
@@ -31,6 +33,9 @@ test('i18n : quatre langues, mêmes textes communs partout', () => {
 
 test('i18n : formats de nombres et d’unités par langue', () => {
   const f = (c) => I18N.outils(c);
+  assert.equal(I18N.outils('fr', 'GBP').mds(117), '117 Md£');
+  assert.equal(I18N.outils('en', 'GBP').mds(117), '£117bn');
+  assert.equal(I18N.outils('de', 'GBP').mds(117), '117 Mrd. £');
   assert.equal(f('fr').pct(12.5), '12,5 %');
   assert.equal(f('en').pct(12.5), '12.5%');
   assert.equal(f('en').mds(1698), '€1,698bn');
@@ -54,7 +59,7 @@ for (const [id, P] of Object.entries(PAYS)) {
 
   for (const code of I18N.CODES) {
     test(`${id} / ${code} : tous les textes sont traduits et bien formés`, () => {
-      const u = I18N.outils(code);
+      const u = I18N.outils(code, P.devise);
       const L = P.textes[code](u, m, I18N.COMMUN[code](u));
       propre(L.titreDoc, 'titreDoc');
       propre(L.h1, 'h1');
