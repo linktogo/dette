@@ -115,6 +115,10 @@
       details: { tableau: 'Tableau année par année', methode: 'Méthode et limites', sources: 'Sources' },
       usage: 'Usage :',
       modifies: (n) => `${n} curseur${n > 1 ? 's' : ''} modifié${n > 1 ? 's' : ''}`,
+      bandeau: {
+        dette: (a) => `Dette ${a}`, parHab: 'Par habitant', interets: 'Intérêts', solde: 'Solde public',
+        stab: (v) => `stabilisant : ${v}`,
+      },
       tuiles: {
         detteEn: (a) => `Dette en ${a}`,
         depuis: (pts, a, r) => `${pts} depuis ${a} (${r})`,
@@ -192,6 +196,10 @@
       details: { tableau: 'Year-by-year table', methode: 'Method and limitations', sources: 'Sources' },
       usage: 'Use:',
       modifies: (n) => `${n} slider${n > 1 ? 's' : ''} changed`,
+      bandeau: {
+        dette: (a) => `Debt ${a}`, parHab: 'Per person', interets: 'Interest', solde: 'Budget balance',
+        stab: (v) => `stabilising: ${v}`,
+      },
       tuiles: {
         detteEn: (a) => `Debt in ${a}`,
         depuis: (pts, a, r) => `${pts} since ${a} (${r})`,
@@ -269,6 +277,10 @@
       details: { tableau: 'Tabla año por año', methode: 'Método y limitaciones', sources: 'Fuentes' },
       usage: 'Uso:',
       modifies: (n) => `${n} control${n > 1 ? 'es' : ''} modificado${n > 1 ? 's' : ''}`,
+      bandeau: {
+        dette: (a) => `Deuda ${a}`, parHab: 'Por habitante', interets: 'Intereses', solde: 'Saldo público',
+        stab: (v) => `estabilizador: ${v}`,
+      },
       tuiles: {
         detteEn: (a) => `Deuda en ${a}`,
         depuis: (pts, a, r) => `${pts} desde ${a} (${r})`,
@@ -346,6 +358,10 @@
       details: { tableau: 'Tabelle Jahr für Jahr', methode: 'Methode und Grenzen', sources: 'Quellen' },
       usage: 'Verwendung:',
       modifies: (n) => `${n} Regler geändert`,
+      bandeau: {
+        dette: (a) => `Schulden ${a}`, parHab: 'Je Einwohner', interets: 'Zinsen', solde: 'Finanzierungssaldo',
+        stab: (v) => `stabilisierend: ${v}`,
+      },
       tuiles: {
         detteEn: (a) => `Schulden ${a}`,
         depuis: (pts, a, r) => `${pts} seit ${a} (${r})`,
