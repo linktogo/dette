@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dette publique espagnole : projection 2027-2036</title>
+  <link rel="stylesheet" href="../style.css?v=10">
+</head>
+<body>
+  <header class="entete">
+    <div>
+      <div class="barre-nav">
+        <nav class="pays" data-t-aria="nav.pays" aria-label="Pays">
+          <a data-lien="../" data-t="nav.accueil" href="../">Accueil</a>
+          <a data-lien="../fr/" data-t="pays.fr" href="../fr/">France</a>
+          <a data-lien="../es/" data-t="pays.es" href="../es/" aria-current="page">Espagne</a>
+          <a data-lien="../de/" data-t="pays.de" href="../de/">Allemagne</a>
+          <a data-lien="../uk/" data-t="pays.uk" href="../uk/">Royaume-Uni</a>
+        </nav>
+        <nav class="langues" id="langues" aria-label="Langue"></nav>
+      </div>
+      <h1 id="titre">Dette publique espagnole : projection 2027-2036</h1>
+      <p class="chapo" data-t="chapo"></p>
+    </div>
+    <div class="prereglages" id="prereglages" role="group" data-t-aria="aria.prereglages"></div>
+  </header>
+
+  <main class="page">
+    <aside class="curseurs" id="curseurs" data-t-aria="aria.hypotheses"></aside>
+
+    <div class="resultats">
+      <section class="tuiles" id="tuiles" aria-live="polite"></section>
+
+      <section class="carte">
+        <header>
+          <h2 data-t="h2.ratio"></h2>
+          <div class="legende" id="legende-ratio"></div>
+        </header>
+        <div class="graphique" id="g-ratio"></div>
+      </section>
+
+      <div class="duo">
+        <section class="carte">
+          <header>
+            <h2 data-t="h2.solde"></h2>
+            <div class="legende" id="legende-solde"></div>
+          </header>
+          <div class="graphique" id="g-solde"></div>
+          <p class="note" data-t="noteSolde"></p>
+        </section>
+        <section class="carte">
+          <header><h2 data-t="h2.interets"></h2></header>
+          <div class="graphique" id="g-interets"></div>
+          <p class="note" id="note-interets"></p>
+        </section>
+      </div>
+
+      <section class="carte">
+        <header>
+          <h2 id="h2-postes"></h2>
+          <div class="legende" id="legende-postes"></div>
+        </header>
+        <div id="postes"></div>
+      </section>
+
+      <section class="carte">
+        <details id="details-tableau">
+          <summary data-t="details.tableau"></summary>
+          <div class="tableau-defilant"><table id="tableau"></table></div>
+        </details>
+      </section>
+
+      <section class="carte">
+        <details>
+          <summary data-t="details.methode"></summary>
+          <div class="texte" id="methode"></div>
+        </details>
+      </section>
+
+      <section class="carte">
+        <details>
+          <summary data-t="details.sources"></summary>
+          <ul class="sources" id="sources"></ul>
+        </details>
+      </section>
+    </div>
+  </main>
+
+  <div class="infobulle" id="infobulle" hidden></div>
+
+  <script src="../i18n.js?v=2"></script>
+  <script src="model.js?v=3"></script>
+  <script src="sources.js?v=10"></script>
+  <script src="textes.js?v=2"></script>
+  <script src="../charts.js?v=10"></script>
+  <script src="../simulateur.js?v=2"></script>
+</body>
+</html>
