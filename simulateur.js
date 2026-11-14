@@ -29,6 +29,9 @@
     return { id: g.id, titre: tg.titre, intro: tg.intro, resume: tg.resume, curseurs };
   });
   const PREREGLAGES = P.structure.prereglages.map((s) => ({ ...s, nom: L.prereglages[s.id] }));
+  // Programmes des partis (France seulement) : réglages, textes de la langue, sources.
+  const TP = P.partis ? P.partis.textes[code] : null;
+  const PARTIS = P.partis ? P.partis.liste.map((s) => ({ ...s, ...TP[s.id] })) : [];
 
   const CURSEURS = GROUPES.flatMap((g) => g.curseurs);
   let params = lireAdresse();
@@ -83,12 +86,12 @@
     }
   }
 
-  function construirePrereglages() {
-    const racine = document.getElementById('prereglages');
-    for (const s of PREREGLAGES) {
+  function construireBoutons(racine, liste, titre) {
+    for (const s of liste) {
       const b = document.createElement('button');
       b.type = 'button';
       b.textContent = s.nom;
+      if (titre) b.title = titre(s);
       b.addEventListener('click', () => {
         params = { ...DEFAUTS, ...s.p };
         for (const g of GROUPES) if (g.curseurs.some((c) => params[c.id] !== DEFAUTS[c.id])) g.bloc.open = true;
@@ -96,6 +99,41 @@
       });
       racine.appendChild(b);
     }
+  }
+
+  function construirePrereglages() {
+    construireBoutons(document.getElementById('prereglages'), PREREGLAGES);
+    const bloc = document.getElementById('partis');
+    if (!PARTIS.length || !bloc) return;
+    bloc.hidden = false;
+    document.getElementById('libelle-partis').textContent = TP.titre;
+    const groupe = document.getElementById('boutons-partis');
+    groupe.setAttribute('aria-label', TP.titre);
+    construireBoutons(groupe, PARTIS, (s) => s.titre);
+  }
+
+  // Les réglages courants correspondent-ils exactement à ce préréglage ?
+  // Un curseur inactif (année de crise sans crise, par exemple) ne compte pas.
+  function correspond(s) {
+    const cible = { ...DEFAUTS, ...s.p };
+    return CURSEURS.every((c) => params[c.id] === cible[c.id] || (c.actifSi && !c.actifSi(params) && !c.actifSi(cible)));
+  }
+
+  function majFicheParti() {
+    const fiche = document.getElementById('fiche-parti');
+    if (!fiche) return;
+    const s = PARTIS.find(correspond);
+    fiche.hidden = !s;
+    if (!s) return;
+    const liste = (items) => `<ul>${items.map((x) => `<li>${x}</li>`).join('')}</ul>`;
+    fiche.innerHTML = `
+      <header><h2>${s.titre}</h2></header>
+      <p class="date-parti">${s.date}</p>
+      <h3>${TP.mesures}</h3>${liste(s.mesures)}
+      <h3>${TP.nonModelise}</h3>${liste(s.nonModelise)}
+      <p class="avis-parti">${s.avis}</p>
+      <p class="note">${TP.avertissement}</p>
+      <p class="note">${TP.sources} : ${s.sources.map((x) => `<a href="${x.url}" target="_blank" rel="noopener">${x.nom}</a>`).join(' · ')}</p>`;
   }
 
   function majCurseurs() {
@@ -115,12 +153,9 @@
       pastille.title = C.modifies(modifies);
     }
     const boutons = document.querySelectorAll('#prereglages button');
-    PREREGLAGES.forEach((s, i) => {
-      const cible = { ...DEFAUTS, ...s.p };
-      // Un curseur inactif (année de crise sans crise, par exemple) ne compte pas.
-      const egal = CURSEURS.every((c) => params[c.id] === cible[c.id] || (c.actifSi && !c.actifSi(params) && !c.actifSi(cible)));
-      boutons[i].setAttribute('aria-pressed', egal);
-    });
+    PREREGLAGES.forEach((s, i) => boutons[i].setAttribute('aria-pressed', correspond(s)));
+    const boutonsPartis = document.querySelectorAll('#boutons-partis button');
+    PARTIS.forEach((s, i) => boutonsPartis[i].setAttribute('aria-pressed', correspond(s)));
   }
 
   function verdict(t) {
@@ -266,6 +301,7 @@
   function rendre() {
     const t = [pointDeDepart(), ...simuler(params)];
     majCurseurs();
+    majFicheParti();
     majTuiles(t);
     majGraphiques(t);
     majPostes(t);

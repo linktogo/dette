@@ -36,6 +36,7 @@ Ouvrez **http://localhost:8098**.
 - Curseurs pour la croissance, l'inflation, les taux d'emprunt et la productivité.
 - Réglages des dépenses par poste, des recettes fiscales, des retraites, de l'emploi, du SMIC et du revenu universel.
 - Scénarios préréglés, graphiques et tableau année par année.
+- France : programmes budgétaires de six partis (LFI, PS, Les Écologistes, Renaissance, LR, RN) en scénarios préréglés. Chaque programme reprend le chiffrage annoncé par le parti (contre-budgets et programmes de septembre à novembre 2026), traduit avec les curseurs et appliqué au tendanciel du simulateur. Une fiche liste les mesures reprises, celles qui ne le sont pas, les avis indépendants et les sources.
 - Explication de la méthode, de ses limites et des sources dans l'interface.
 - Partage d'un scénario en copiant l'URL : les réglages sont encodés dans son fragment, après `#`. Les anciens liens de partage à la racine sont redirigés vers `/fr/`, et `/espagne/` vers `/es/` (Nginx).
 
@@ -121,7 +122,7 @@ L'application sera disponible à l'adresse `http://<adresse-du-pi>:8098`.
 | [simulateur.js](./simulateur.js) | Moteur commun des simulateurs : curseurs, tuiles, graphiques, tableau, partage par URL |
 | [style.css](./style.css) | Présentation et mise en page, commune aux pages |
 | [charts.js](./charts.js) | Tracé des graphiques, commun aux simulateurs |
-| [fr/](./fr/) | Simulateur français : `index.html`, `model.js` (hypothèses et calculs, utilisables dans le navigateur et sous Node.js), `textes.js` (structure des curseurs et textes en 4 langues), `sources.js` (références traduites) |
+| [fr/](./fr/) | Simulateur français : `index.html`, `model.js` (hypothèses et calculs, utilisables dans le navigateur et sous Node.js), `textes.js` (structure des curseurs et textes en 4 langues), `sources.js` (références traduites), `partis.js` (programmes des partis : réglages, mesures et sources en 4 langues) |
 | [es/](./es/), [de/](./de/), [uk/](./uk/) | Simulateurs espagnol, allemand et britannique, même organisation |
 | [tests/](./tests/) | Tests des quatre modèles (`fr.test.js`, `es.test.js`, `de.test.js`, `uk.test.js`) et complétude des traductions (`i18n.test.js`) |
 | [dev-server.js](./dev-server.js) | Serveur local avec rechargement automatique |

@@ -268,3 +268,54 @@ test('aides aux entreprises : 37,5 Md€ nets pour tous les allègements, 7 Md�
   assert.ok(t.economie < ref.economie, 'imputées aux affaires économiques');
   proche(t.sante, ref.sante, 1e-9);
 });
+
+// Programmes des partis : réglages valides et cohérents avec les chiffrages annoncés.
+const P = require('../fr/textes.js')(require('../fr/model.js'), require('../fr/sources.js'));
+const I18N = require('../i18n.js');
+
+test('partis : six programmes, réglages dans les bornes des curseurs', () => {
+  assert.deepEqual(P.partis.liste.map((s) => s.id), ['lfi', 'ps', 'eco', 'ren', 'lr', 'rn']);
+  const curseurs = P.structure.groupes.flatMap((g) => g.curseurs || []);
+  for (const s of P.partis.liste) {
+    for (const [k, v] of Object.entries(s.p)) {
+      const c = curseurs.find((x) => x.id === k);
+      assert.ok(c, `${s.id} : curseur ${k}`);
+      assert.ok(v >= c.min && v <= c.max, `${s.id} : ${k}=${v} hors bornes`);
+      assert.ok(Math.abs((v - c.min) / c.pas - Math.round((v - c.min) / c.pas)) < 1e-9, `${s.id} : ${k}=${v} hors pas`);
+    }
+    assert.ok(s.sources.length > 0 && s.sources.every((x) => /^https:\/\//.test(x.url)), `${s.id} : sources`);
+  }
+});
+
+test('partis : textes complets dans les quatre langues', () => {
+  for (const code of I18N.CODES) {
+    const T = P.partis.textes[code];
+    for (const k of ['titre', 'mesures', 'nonModelise', 'sources', 'avertissement']) assert.ok(T[k], `${code} ${k}`);
+    for (const s of P.partis.liste) {
+      const t = T[s.id];
+      for (const k of ['nom', 'titre', 'date', 'avis']) assert.ok(t[k] && !/undefined|NaN/.test(t[k]), `${code} ${s.id} ${k}`);
+      assert.equal(t.mesures.length, P.partis.textes.fr[s.id].mesures.length, `${code} ${s.id} mesures`);
+      assert.equal(t.nonModelise.length, P.partis.textes.fr[s.id].nonModelise.length, `${code} ${s.id} non modélisé`);
+    }
+  }
+});
+
+test('partis : recettes et économies proches des chiffrages annoncés', () => {
+  const pt = BASE.pib / 100; // Md€ par point de PIB en 2026
+  const p = (id) => ({ ...DEFAUTS, ...P.partis.liste.find((s) => s.id === id).p });
+  const recettes = (q) => effetImpot(q) + q.prelevements * pt + H.nichesTotal * H.nichesRendement * q.niches / 100;
+  proche(recettes(p('lfi')), 106.4, 3, 'LFI : 106,4 Md€ de recettes');
+  proche(recettes(p('ps')), 39.5 + 4, 3, 'PS : 39,5 Md€ de recettes et 4 Md€ de niches');
+  proche(recettes(p('eco')), 38.5, 3, 'Écologistes : 28,5 + 10 Md€');
+  proche(p('lr').prelevements * pt, -51, 2, 'LR : 51 Md€ rendus');
+  proche(p('rn').prelevements * pt, -30, 2, 'RN : 30 Md€ de baisses d’impôts');
+});
+
+test('partis : les plans d’économies atteignent leur plein effet en 2032', () => {
+  const lr = P.partis.liste.find((s) => s.id === 'lr').p;
+  const sans = simuler({ ...DEFAUTS, ...lr, economies: 0, fraude: 0, prelevements: 0 });
+  const avec = simuler({ ...DEFAUTS, ...lr });
+  const ecart = (a) => (avec[a - 2027].depensesPrimaires - sans[a - 2027].depensesPrimaires) / (avec[a - 2027].pib / BASE.pib);
+  proche(ecart(2032), -190, 0.5, 'plein effet en 2032');
+  proche(ecart(2029), -190 * 3 / 6, 0.5, 'moitié en 2029');
+});

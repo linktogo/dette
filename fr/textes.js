@@ -1,9 +1,11 @@
 // Simulateur français : structure des curseurs (bornes, pas, préréglages) et textes
-// de l'interface en quatre langues. Les chiffres viennent du modèle (model.js).
+// de l'interface en quatre langues. Les chiffres viennent du modèle (model.js) ;
+// les programmes des partis, de partis.js.
 (function (racine, fabrique) {
-  if (typeof module === 'object' && module.exports) module.exports = fabrique;
-  else racine.PAYS = fabrique(racine.DetteModel, racine.SOURCES);
-})(globalThis, function (modele, sources) {
+  if (typeof module === 'object' && module.exports) {
+    module.exports = (modele, sources, partis = require('./partis.js')) => fabrique(modele, sources, partis);
+  } else racine.PAYS = fabrique(racine.DetteModel, racine.SOURCES, racine.PARTIS);
+})(globalThis, function (modele, sources, partis) {
   const actifIR = (p) => p.ir41 > 41 || p.ir45 > 45 || p.irSurtaxe > 0 || p.patrimoine > 0;
   const actifRU = (p) => p.ruAdulte > 0 || p.ruMineur > 0;
 
@@ -17,7 +19,9 @@
       ] },
       { id: 'depenses', curseurs: [
         { id: 'depenses', min: -1, max: 3, pas: 0.1 },
-        { id: 'economies', min: 0, max: 150, pas: 5 },
+        { id: 'economies', min: 0, max: 200, pas: 5 },
+        { id: 'nouvellesDepenses', min: 0, max: 150, pas: 1 },
+        { id: 'montee', min: 1, max: 8, pas: 1 },
       ] },
       { id: 'postes', postes: true, min: -4, max: 8, pas: 0.1 },
       { id: 'recettes', curseurs: [
@@ -150,7 +154,9 @@
           tauxMarche: { nom: 'Taux d’emprunt de l’État', f: (v) => pct(v), repere: 'Sénat : +1 point coûte 13,9 Md€ par an au bout de 3 ans, 32,6 Md€ au bout de 9 ans.' },
           productivite: { nom: 'Rattrapage de productivité', f: (v) => fmt(v, 0) + ' % de l’écart', repere: 'Banque de France : productivité 8,5 % sous sa tendance pré-Covid. Rattrapage étalé sur 10 ans.' },
           depenses: { nom: 'Dépense publique hors intérêts, en volume', f: (v) => pctAn(v), repere: 'Plan 2025-2029 : plafond de 1,2 % en valeur, soit environ −0,2 % en volume.' },
-          economies: { nom: 'Économies pérennes supplémentaires', f: (v) => mds(v), repere: 'En Md€ de 2026, atteints en 3 ans. Budget 2027 : 54 Md€ d’effort annoncés.' },
+          economies: { nom: 'Économies pérennes supplémentaires', f: (v) => mds(v), repere: 'En Md€ de 2026, atteints au bout de la montée en charge. Budget 2027 : 54 Md€ d’effort annoncés.' },
+          nouvellesDepenses: { nom: 'Dépenses nouvelles pérennes', f: (v) => mds(v), repere: 'En Md€ de 2026, non ventilées par poste. Sert à reprendre le total de dépenses nouvelles annoncé par un programme.' },
+          montee: { nom: 'Montée en charge des leviers budgétaires', f: (v) => u.annees(v), repere: 'Délai avant le plein effet des économies, dépenses nouvelles, impôts, niches, fraude, aides aux entreprises et SMIC. 3 ans par défaut ; 6 ans pour un objectif fixé à 2032.' },
           prelevements: { nom: 'Taux de recettes publiques', f: (v) => signe(v) + ' pt de PIB', repere: 'Insee : recettes à 52,1 % du PIB en 2025, dont 43,6 % de prélèvements obligatoires.' },
           niches: { nom: 'Niches fiscales supprimées', f: (v) => fmt(v, 0) + ' %', repere: 'PLF 2026 : 88,3 Md€. Gain net retenu : la moitié du coût affiché.' },
           fraude: { nom: 'Fraude recouvrée en plus', f: (v) => '+' + fmt(v) + ' Md€/an', repere: 'Contrôle fiscal 2025 : 17,1 Md€ notifiés, 11,4 Md€ encaissés.' },
@@ -233,7 +239,7 @@
             <li>Un point de chômage en moins rapporte ${fmt(H.chomagePoint[0] + H.chomagePoint[1])} Md€ par an, en ${H.monteeChomage} ans, sans effet ajouté sur le PIB.</li>
             <li>Les effets par point de hausse du SMIC (recettes, allègements, salaires publics) sont des estimations de l’application, fiables à 50 % près. Les emplois perdus sont convertis en chômage sur une population active de ${fmt(H.smic.populationActive, 0)} millions. L’effet sur la consommation et sur la prime d’activité n’est pas compté.</li>
             <li>Le revenu universel est versé à toute la population et imputé au poste « Autre protection sociale ». Les montants des aides qu’il remplace (${mds(k.totalAides)} au total) sont des ordres de grandeur DREES et CNAF ; leur réduction suit le rapport entre le revenu universel et l’aide moyenne par foyer. Ni l’effet sur l’offre de travail, ni l’imposition du revenu universel ne sont modélisés.</li>
-            <li>Les leviers budgétaires montent en charge sur ${H.montee} ans, puis suivent le PIB.</li>
+            <li>Les leviers budgétaires montent en charge sur ${m.DEFAUTS.montee} ans par défaut (durée réglable), puis suivent le PIB.</li>
             <li>Une crise réduit le PIB de 1 % par tranche de 100 Md€, dont la moitié est rattrapée l’année suivante.</li>
             <li>Le « tendanciel » maintient les dépenses hors intérêts au rythme de la croissance : ce n’est pas une prévision officielle.</li>
           </ul>
@@ -286,7 +292,9 @@
           tauxMarche: { nom: 'Government borrowing rate', f: (v) => pct(v), repere: 'Senate: +1 point costs €13.9bn a year after 3 years, €32.6bn after 9 years.' },
           productivite: { nom: 'Productivity catch-up', f: (v) => fmt(v, 0) + '% of the gap', repere: 'Banque de France: productivity 8.5% below its pre-Covid trend. Catch-up spread over 10 years.' },
           depenses: { nom: 'Primary public spending, real terms', f: (v) => pctAn(v), repere: '2025-2029 plan: cap of 1.2% in nominal terms, about −0.2% in real terms.' },
-          economies: { nom: 'Additional permanent savings', f: (v) => mds(v), repere: 'In 2026 €bn, reached over 3 years. 2027 budget: €54bn of effort announced.' },
+          economies: { nom: 'Additional permanent savings', f: (v) => mds(v), repere: 'In 2026 €bn, reached once phased in. 2027 budget: €54bn of effort announced.' },
+          nouvellesDepenses: { nom: 'Permanent new spending', f: (v) => mds(v), repere: 'In 2026 €bn, not allocated to a function. Used to carry over the total new spending announced by a programme.' },
+          montee: { nom: 'Phase-in of fiscal levers', f: (v) => u.annees(v), repere: 'Time before savings, new spending, taxes, tax breaks, fraud, business support and minimum wage reach full effect. 3 years by default; 6 years for a 2032 target.' },
           prelevements: { nom: 'Public revenue ratio', f: (v) => signe(v) + ' pp of GDP', repere: 'Insee: revenue at 52.1% of GDP in 2025, of which 43.6% taxes and social contributions.' },
           niches: { nom: 'Tax breaks removed', f: (v) => fmt(v, 0) + '%', repere: '2026 budget bill: €88.3bn. Net gain assumed: half of the stated cost.' },
           fraude: { nom: 'Extra tax fraud recovered', f: (v) => `+€${fmt(v)}bn/yr`, repere: 'Tax audits 2025: €17.1bn assessed, €11.4bn collected.' },
@@ -369,7 +377,7 @@
             <li>One point less unemployment yields €${fmt(H.chomagePoint[0] + H.chomagePoint[1])}bn a year, over ${H.monteeChomage} years, with no added effect on GDP.</li>
             <li>The per-point effects of a minimum-wage increase (revenue, relief, public wages) are the app’s estimates, reliable to within 50%. Lost jobs are converted into unemployment over a labour force of ${fmt(H.smic.populationActive, 0)} million. Effects on consumption and on the activity bonus are not counted.</li>
             <li>Universal basic income is paid to the whole population and booked under “Other social protection”. The amounts of the benefits it replaces (${mds(k.totalAides)} in total) are DREES and CNAF orders of magnitude; their reduction follows the ratio between basic income and the average benefit per household. Neither labour-supply effects nor taxation of the basic income are modelled.</li>
-            <li>Fiscal levers phase in over ${H.montee} years, then grow with GDP.</li>
+            <li>Fiscal levers phase in over ${m.DEFAUTS.montee} years by default (adjustable), then grow with GDP.</li>
             <li>A crisis cuts GDP by 1% per €100bn, half of which is recovered the following year.</li>
             <li>The “baseline” keeps primary spending growing with the economy: it is not an official forecast.</li>
           </ul>
@@ -422,7 +430,9 @@
           tauxMarche: { nom: 'Tipo de emisión del Estado', f: (v) => pct(v), repere: 'Senado: +1 punto cuesta 13,9 mil M€ al año a los 3 años y 32,6 mil M€ a los 9 años.' },
           productivite: { nom: 'Recuperación de la productividad', f: (v) => fmt(v, 0) + ' % de la brecha', repere: 'Banque de France: productividad un 8,5 % por debajo de su tendencia previa a la covid. Recuperación repartida en 10 años.' },
           depenses: { nom: 'Gasto público primario, en volumen', f: (v) => pctAn(v), repere: 'Plan 2025-2029: tope del 1,2 % nominal, es decir, en torno al −0,2 % en volumen.' },
-          economies: { nom: 'Ahorros permanentes adicionales', f: (v) => mds(v), repere: 'En mil M€ de 2026, alcanzados en 3 años. Presupuesto 2027: 54 mil M€ de esfuerzo anunciados.' },
+          economies: { nom: 'Ahorros permanentes adicionales', f: (v) => mds(v), repere: 'En mil M€ de 2026, alcanzados al final del despliegue. Presupuesto 2027: 54 mil M€ de esfuerzo anunciados.' },
+          nouvellesDepenses: { nom: 'Gasto nuevo permanente', f: (v) => mds(v), repere: 'En mil M€ de 2026, sin asignar a una función. Sirve para recoger el total de gasto nuevo anunciado por un programa.' },
+          montee: { nom: 'Despliegue de las palancas presupuestarias', f: (v) => u.annees(v), repere: 'Plazo hasta el pleno efecto de ahorros, gasto nuevo, impuestos, beneficios fiscales, fraude, ayudas a empresas y SMIC. 3 años por defecto; 6 años para un objetivo fijado en 2032.' },
           prelevements: { nom: 'Ratio de ingresos públicos', f: (v) => signe(v) + ' pp del PIB', repere: 'Insee: ingresos del 52,1 % del PIB en 2025, de los que el 43,6 % son impuestos y cotizaciones.' },
           niches: { nom: 'Beneficios fiscales suprimidos', f: (v) => fmt(v, 0) + ' %', repere: 'Proyecto de presupuesto 2026: 88,3 mil M€. Ganancia neta supuesta: la mitad del coste declarado.' },
           fraude: { nom: 'Fraude recuperado adicional', f: (v) => '+' + fmt(v) + ' mil M€/año', repere: 'Control fiscal 2025: 17,1 mil M€ liquidados, 11,4 mil M€ cobrados.' },
@@ -505,7 +515,7 @@
             <li>Un punto menos de paro aporta ${fmt(H.chomagePoint[0] + H.chomagePoint[1])} mil M€ al año, en ${H.monteeChomage} años, sin efecto adicional sobre el PIB.</li>
             <li>Los efectos por punto de subida del SMIC (ingresos, reducciones, salarios públicos) son estimaciones de la aplicación, fiables con un margen del 50 %. Los empleos perdidos se convierten en paro sobre una población activa de ${fmt(H.smic.populationActive, 0)} millones. No se cuenta el efecto sobre el consumo ni sobre la prima de actividad.</li>
             <li>La renta básica se paga a toda la población y se imputa a «Otra protección social». Los importes de las ayudas que sustituye (${mds(k.totalAides)} en total) son órdenes de magnitud de la DREES y la CNAF; su reducción sigue la relación entre la renta básica y la ayuda media por hogar. No se modelizan ni el efecto sobre la oferta de trabajo ni la tributación de la renta básica.</li>
-            <li>Las palancas presupuestarias se despliegan en ${H.montee} años y después siguen al PIB.</li>
+            <li>Las palancas presupuestarias se despliegan en ${m.DEFAUTS.montee} años por defecto (plazo ajustable) y después siguen al PIB.</li>
             <li>Una crisis reduce el PIB un 1 % por cada 100 mil M€, la mitad del cual se recupera al año siguiente.</li>
             <li>El «tendencial» mantiene el gasto primario al ritmo del crecimiento: no es una previsión oficial.</li>
           </ul>
@@ -558,7 +568,9 @@
           tauxMarche: { nom: 'Emissionszins des Staates', f: (v) => pct(v), repere: 'Senat: +1 Punkt kostet nach 3 Jahren 13,9 Mrd. € pro Jahr, nach 9 Jahren 32,6 Mrd. €.' },
           productivite: { nom: 'Aufholen der Produktivität', f: (v) => fmt(v, 0) + ' % der Lücke', repere: 'Banque de France: Produktivität 8,5 % unter dem Trend vor Covid. Aufholen über 10 Jahre verteilt.' },
           depenses: { nom: 'Primärausgaben, real', f: (v) => pctAn(v), repere: 'Plan 2025-2029: Obergrenze von 1,2 % nominal, also etwa −0,2 % real.' },
-          economies: { nom: 'Zusätzliche dauerhafte Einsparungen', f: (v) => mds(v), repere: 'In Mrd. € von 2026, in 3 Jahren erreicht. Haushalt 2027: 54 Mrd. € Anstrengung angekündigt.' },
+          economies: { nom: 'Zusätzliche dauerhafte Einsparungen', f: (v) => mds(v), repere: 'In Mrd. € von 2026, nach der Einführungsphase erreicht. Haushalt 2027: 54 Mrd. € Anstrengung angekündigt.' },
+          nouvellesDepenses: { nom: 'Dauerhafte neue Ausgaben', f: (v) => mds(v), repere: 'In Mrd. € von 2026, keinem Bereich zugeordnet. Übernimmt die Summe neuer Ausgaben, die ein Programm ankündigt.' },
+          montee: { nom: 'Einführungsphase der Haushaltshebel', f: (v) => u.annees(v), repere: 'Zeit bis zur vollen Wirkung von Einsparungen, neuen Ausgaben, Steuern, Steuervergünstigungen, Betrugsbekämpfung, Unternehmenshilfen und Mindestlohn. Standard 3 Jahre; 6 Jahre für ein Ziel im Jahr 2032.' },
           prelevements: { nom: 'Staatliche Einnahmenquote', f: (v) => signe(v) + ' Pp. des BIP', repere: 'Insee: Einnahmen 2025 bei 52,1 % des BIP, davon 43,6 % Steuern und Sozialabgaben.' },
           niches: { nom: 'Gestrichene Steuervergünstigungen', f: (v) => fmt(v, 0) + ' %', repere: 'Haushaltsentwurf 2026: 88,3 Mrd. €. Angenommener Nettoertrag: die Hälfte der ausgewiesenen Kosten.' },
           fraude: { nom: 'Zusätzlich eingetriebener Steuerbetrug', f: (v) => '+' + fmt(v) + ' Mrd. €/Jahr', repere: 'Steuerprüfungen 2025: 17,1 Mrd. € festgesetzt, 11,4 Mrd. € eingenommen.' },
@@ -641,7 +653,7 @@
             <li>Ein Punkt weniger Arbeitslosigkeit bringt ${fmt(H.chomagePoint[0] + H.chomagePoint[1])} Mrd. € pro Jahr, in ${H.monteeChomage} Jahren, ohne zusätzliche Wirkung auf das BIP.</li>
             <li>Die Wirkungen je Punkt SMIC-Erhöhung (Einnahmen, Entlastungen, öffentliche Löhne) sind Schätzungen der Anwendung, auf 50 % genau. Verlorene Stellen werden auf eine Erwerbsbevölkerung von ${fmt(H.smic.populationActive, 0)} Millionen in Arbeitslosigkeit umgerechnet. Wirkungen auf Konsum und Aktivitätsprämie werden nicht gezählt.</li>
             <li>Das Grundeinkommen wird an die gesamte Bevölkerung gezahlt und der „Sonstigen sozialen Sicherung“ zugeordnet. Die Beträge der ersetzten Leistungen (${mds(k.totalAides)} insgesamt) sind Größenordnungen von DREES und CNAF; ihre Kürzung folgt dem Verhältnis von Grundeinkommen und durchschnittlicher Leistung je Haushalt. Weder die Wirkung auf das Arbeitsangebot noch die Besteuerung des Grundeinkommens werden modelliert.</li>
-            <li>Haushaltshebel wirken schrittweise über ${H.montee} Jahre und folgen danach dem BIP.</li>
+            <li>Haushaltshebel wirken standardmäßig schrittweise über ${m.DEFAUTS.montee} Jahre (einstellbar) und folgen danach dem BIP.</li>
             <li>Eine Krise senkt das BIP um 1 % je 100 Mrd. €, wovon die Hälfte im Folgejahr aufgeholt wird.</li>
             <li>Das „Basisszenario“ lässt die Primärausgaben mit dem Wachstum steigen: Es ist keine offizielle Prognose.</li>
           </ul>
@@ -650,5 +662,5 @@
     },
   };
 
-  return { id: 'fr', modele, sources, pib2024: 2920, structure, textes };
+  return { id: 'fr', modele, sources, partis, pib2024: 2920, structure, textes };
 });
