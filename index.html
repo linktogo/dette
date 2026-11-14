@@ -6,24 +6,28 @@
   <title>Dette publique : France et Espagne</title>
   <script>
     // Anciens liens de partage du simulateur français (réglages après « # ») : redirection.
-    if (location.hash.length > 1) location.replace('fr/' + location.hash);
+    if (location.hash.length > 1) location.replace('fr/' + location.search + location.hash);
   </script>
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
   <header class="entete accueil-entete">
     <div>
-      <h1>Dette publique : projections 2027-2036</h1>
-      <p class="chapo">Deux simulateurs pédagogiques, même méthode : choisissez un pays, puis déplacez les curseurs pour tester vos hypothèses. Les projections ci-dessous sont les scénarios tendanciels, pas des prévisions.</p>
+      <div class="barre-nav">
+        <nav class="langues" id="langues" aria-label="Langue"></nav>
+      </div>
+      <h1 data-t="accueil.h1">Dette publique : projections 2027-2036</h1>
+      <p class="chapo" data-t="accueil.chapo"></p>
     </div>
   </header>
 
   <main class="accueil" id="pays" aria-live="polite"></main>
 
-  <p class="note accueil-note">Chiffres de 2025 mesurés (Insee ; Banco de España), 2026 estimés (Cour des comptes ; AIReF), 2036 calculés par les simulateurs sans modifier aucun réglage. Sources détaillées dans chaque simulateur.</p>
+  <p class="note accueil-note" data-t="accueil.note"></p>
 
-  <script src="fr/model.js?v=9"></script>
-  <script src="es/model.js?v=2"></script>
-  <script src="accueil.js?v=3"></script>
+  <script src="i18n.js?v=1"></script>
+  <script src="fr/model.js?v=10"></script>
+  <script src="es/model.js?v=3"></script>
+  <script src="accueil.js?v=4"></script>
 </body>
 </html>

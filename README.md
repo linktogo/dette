@@ -5,6 +5,8 @@ Application web pédagogique pour explorer l'évolution de la dette publique de 
 - **France** (`/fr/`) : dette de 115,6 % du PIB fin 2025 (Insee), point de départ 2026 d'après la Cour des comptes.
 - **Espagne** (`/es/`) : dette de 100,8 % du PIB fin 2025 (Banco de España), point de départ 2026 d'après l'AIReF, leviers adaptés (IVA à 21 / 10 / 4 %, barème de l'IRPF, âge légal de 67 ans, MEI, SMI, ingreso mínimo vital…).
 
+L'interface est disponible en **français, anglais, espagnol et allemand** : sélecteur FR · EN · ES · DE en haut de chaque page. La langue est choisie par le paramètre `?lang=` de l'adresse, sinon par le dernier choix mémorisé, sinon par la langue du navigateur ; nombres et unités suivent la langue (Md€, €bn, mil M€, Mrd. €).
+
 La page d'accueil présente une tuile par pays : dette mesurée fin 2025, scénario tendanciel en 2036 avec sa courbe, déficit, charge d'intérêts et solde stabilisant, calculés en direct par les modèles. Un lien en haut de chaque simulateur permet de passer d'un pays à l'autre.
 
 Modifiez les hypothèses économiques et budgétaires pour comparer les trajectoires de dette, de solde public et de charge d'intérêts. **Il s'agit d'une projection d'hypothèses, pas d'une prévision économique.**
@@ -113,11 +115,13 @@ L'application sera disponible à l'adresse `http://<adresse-du-pi>:8098`.
 | Fichier | Rôle |
 | --- | --- |
 | [index.html](./index.html), [accueil.js](./accueil.js) | Page d'accueil : une tuile par pays |
+| [i18n.js](./i18n.js) | Langues : détection, sélecteur, formats de nombres et textes communs aux pages |
+| [simulateur.js](./simulateur.js) | Moteur commun des simulateurs : curseurs, tuiles, graphiques, tableau, partage par URL |
 | [style.css](./style.css) | Présentation et mise en page, commune aux pages |
 | [charts.js](./charts.js) | Tracé des graphiques, commun aux simulateurs |
-| [fr/](./fr/) | Simulateur français : `index.html` (structure), `model.js` (hypothèses et calculs, utilisables dans le navigateur et sous Node.js), `app.js` (curseurs, scénarios, résultats, partage par URL), `sources.js` (références) |
+| [fr/](./fr/) | Simulateur français : `index.html`, `model.js` (hypothèses et calculs, utilisables dans le navigateur et sous Node.js), `textes.js` (structure des curseurs et textes en 4 langues), `sources.js` (références traduites) |
 | [es/](./es/) | Simulateur espagnol, même organisation |
-| [tests/fr.test.js](./tests/fr.test.js), [tests/es.test.js](./tests/es.test.js) | Tests des deux modèles |
+| [tests/](./tests/) | Tests des deux modèles (`fr.test.js`, `es.test.js`) et complétude des traductions (`i18n.test.js`) |
 | [dev-server.js](./dev-server.js) | Serveur local avec rechargement automatique |
 | [nginx.conf](./nginx.conf) | Service des fichiers statiques et revalidation du cache |
 | [docker-compose.yml](./docker-compose.yml) | Configuration du conteneur Nginx |

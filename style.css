@@ -47,13 +47,15 @@ a { color: inherit; }
   display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-end; justify-content: space-between;
   padding: 20px 24px 16px; max-width: 1440px; margin: 0 auto;
 }
-.pays { display: flex; gap: 4px; margin: 0 0 10px; }
-.pays a {
+.barre-nav { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; margin: 0 0 10px; }
+.pays, .langues { display: flex; flex-wrap: wrap; gap: 4px; }
+.pays a, .langues a {
   text-decoration: none; font-size: 13px; color: var(--encre-2);
   padding: 3px 10px; border: 1px solid var(--bordure); border-radius: 999px;
 }
-.pays a:hover { background: var(--lavis); }
-.pays a[aria-current="page"] { color: var(--encre); border-color: var(--serie-1); box-shadow: inset 0 0 0 1px var(--serie-1); }
+.pays a:hover, .langues a:hover { background: var(--lavis); }
+.langues a { font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+.pays a[aria-current="page"], .langues a[aria-current="true"] { color: var(--encre); border-color: var(--serie-1); box-shadow: inset 0 0 0 1px var(--serie-1); }
 .chapo { margin: 0; color: var(--encre-2); max-width: 70ch; }
 .prereglages { display: flex; flex-wrap: wrap; gap: 8px; }
 button {
