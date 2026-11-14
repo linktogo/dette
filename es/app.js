@@ -372,7 +372,7 @@ function majGraphiques(t) {
   const mesure = { x: 2025, y: COMPTES_2025.ratio };
   Graphiques.courbes(document.getElementById('g-ratio'), {
     description: 'Dette publique espagnole en pourcentage du PIB, de 2025 à 2036, votre scénario comparé au tendanciel',
-    format: (v) => pct(v), formatAxe: (v) => fmt(v, 0) + ' %',
+    format: (v) => pct(v), formatAxe: (v) => fmt(v, Number.isInteger(v) ? 0 : 1) + ' %',
     series: [
       { nom: 'Tendanciel', couleur: css('reference'), etiquette: !identique, points: [mesure, ...tendanciel.map((a) => ({ x: a.annee, y: a.ratio }))] },
       { nom: 'Votre scénario', couleur: css('serie-1'), points: [mesure, ...t.map((a) => ({ x: a.annee, y: a.ratio }))] },

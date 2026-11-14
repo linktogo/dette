@@ -379,7 +379,7 @@ function majGraphiques(t) {
   const mesure = { x: 2025, y: COMPTES_2025.ratio };
   Graphiques.courbes(document.getElementById('g-ratio'), {
     description: 'Dette publique en pourcentage du PIB, de 2025 à 2036, votre scénario comparé au tendanciel',
-    format: (v) => pct(v), formatAxe: (v) => fmt(v, 0) + ' %',
+    format: (v) => pct(v), formatAxe: (v) => fmt(v, Number.isInteger(v) ? 0 : 1) + ' %',
     series: [
       { nom: 'Tendanciel', couleur: css('reference'), etiquette: !identique, points: [mesure, ...tendanciel.map((a) => ({ x: a.annee, y: a.ratio }))] },
       { nom: 'Votre scénario', couleur: css('serie-1'), points: [mesure, ...t.map((a) => ({ x: a.annee, y: a.ratio }))] },
@@ -391,7 +391,7 @@ function majGraphiques(t) {
   Graphiques.courbes(document.getElementById('g-solde'), {
     hauteur: 260,
     description: 'Solde public et solde stabilisant en pourcentage du PIB, de 2027 à 2036',
-    format: (v) => signe(v) + ' %', formatAxe: (v) => signe(v, 0) + ' %',
+    format: (v) => signe(v) + ' %', formatAxe: (v) => signe(v, Number.isInteger(v) ? 0 : 1) + ' %',
     series: [
       { nom: 'Solde stabilisant', couleur: css('serie-2'), points: projete.map((a) => ({ x: a.annee, y: a.soldeStabilisant })) },
       { nom: 'Solde public', couleur: css('serie-1'), points: projete.map((a) => ({ x: a.annee, y: a.soldePib })) },
