@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dette espagnole : projection à 10 ans</title>
+  <link rel="stylesheet" href="../style.css?v=8">
+</head>
+<body>
+  <header class="entete">
+    <div>
+      <nav class="pays" aria-label="Pays"><a href="../">France</a><a href="./" aria-current="page">Espagne</a></nav>
+      <h1>Dette publique espagnole : projection 2027-2036</h1>
+      <p class="chapo">Déplacez les curseurs pour tester vos hypothèses. Projection pédagogique : un déroulé arithmétique d’hypothèses, pas une prévision.</p>
+    </div>
+    <div class="prereglages" id="prereglages" role="group" aria-label="Scénarios préréglés"></div>
+  </header>
+
+  <main class="page">
+    <aside class="curseurs" id="curseurs" aria-label="Hypothèses"></aside>
+
+    <div class="resultats">
+      <section class="tuiles" id="tuiles" aria-live="polite"></section>
+
+      <section class="carte">
+        <header>
+          <h2>Dette publique en % du PIB</h2>
+          <div class="legende" id="legende-ratio"></div>
+        </header>
+        <div class="graphique" id="g-ratio"></div>
+      </section>
+
+      <div class="duo">
+        <section class="carte">
+          <header>
+            <h2>Solde public en % du PIB</h2>
+            <div class="legende" id="legende-solde"></div>
+          </header>
+          <div class="graphique" id="g-solde"></div>
+          <p class="note">Quand le solde passe au-dessus du solde stabilisant, le ratio de dette recule.</p>
+        </section>
+        <section class="carte">
+          <header><h2>Charge d’intérêts de votre scénario, en Md€</h2></header>
+          <div class="graphique" id="g-interets"></div>
+          <p class="note" id="note-interets"></p>
+        </section>
+      </div>
+
+      <section class="carte">
+        <header>
+          <h2>Dépenses par poste en 2036, en % du PIB</h2>
+          <div class="legende"><span><i style="background:var(--serie-1);height:8px"></i>2036</span><span><i style="background:var(--encre);width:2px;height:12px"></i>2026</span></div>
+        </header>
+        <div id="postes"></div>
+      </section>
+
+      <section class="carte">
+        <details id="details-tableau">
+          <summary>Tableau année par année</summary>
+          <div class="tableau-defilant"><table id="tableau"></table></div>
+        </details>
+      </section>
+
+      <section class="carte">
+        <details>
+          <summary>Méthode et limites</summary>
+          <div class="texte" id="methode"></div>
+        </details>
+      </section>
+
+      <section class="carte">
+        <details>
+          <summary>Sources</summary>
+          <ul class="sources" id="sources"></ul>
+        </details>
+      </section>
+    </div>
+  </main>
+
+  <div class="infobulle" id="infobulle" hidden></div>
+
+  <script src="model.js?v=1"></script>
+  <script src="sources.js?v=1"></script>
+  <script src="../charts.js?v=8"></script>
+  <script src="app.js?v=1"></script>
+</body>
+</html>

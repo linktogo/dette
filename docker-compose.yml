@@ -13,3 +13,4 @@ services:
       - ./sources.js:/usr/share/nginx/html/sources.js:ro
       - ./charts.js:/usr/share/nginx/html/charts.js:ro
       - ./app.js:/usr/share/nginx/html/app.js:ro
+      - ./espagne:/usr/share/nginx/html/espagne:ro

@@ -4,6 +4,8 @@ Application web pédagogique pour explorer l'évolution de la dette publique fra
 
 Modifiez les hypothèses économiques et budgétaires pour comparer les trajectoires de dette, de solde public et de charge d'intérêts. **Il s'agit d'une projection d'hypothèses, pas d'une prévision économique.**
 
+Une version **espagnole**, sur le même principe, est disponible sous [`espagne/`](./espagne/) (lien « Espagne » en haut de page) : dette de 100,8 % du PIB fin 2025, point de départ fin 2026 estimé d'après l'AIReF, leviers adaptés (IVA à 21 / 10 / 4 %, barème de l'IRPF, âge légal de 67 ans, MEI, SMI, ingreso mínimo vital…).
+
 ## Lancer en local en une commande
 
 Depuis la racine du dépôt, avec Node.js :
@@ -114,6 +116,8 @@ L'application sera disponible à l'adresse `http://<adresse-du-pi>:8098`.
 | [charts.js](./charts.js) | Tracé des graphiques |
 | [sources.js](./sources.js) | Références, chiffres et usages dans le modèle |
 | [tests/model.test.js](./tests/model.test.js) | Tests du modèle |
+| [espagne/](./espagne/) | Version espagnole : `index.html`, `model.js`, `app.js`, `sources.js` (styles et graphiques partagés) |
+| [tests/espagne.test.js](./tests/espagne.test.js) | Tests du modèle espagnol |
 | [dev-server.js](./dev-server.js) | Serveur local avec rechargement automatique |
 | [nginx.conf](./nginx.conf) | Service des fichiers statiques et revalidation du cache |
 | [docker-compose.yml](./docker-compose.yml) | Configuration du conteneur Nginx |
