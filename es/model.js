@@ -1,7 +1,7 @@
 // Modèle de projection de la dette publique espagnole (périmètre de Maastricht, PDE).
 // Montants en Md€, taux et ratios en %. Aucune dépendance : utilisable dans le
 // navigateur (window.DetteEspagne) comme sous Node (require).
-// Même mécanique que le modèle français (../model.js), leviers adaptés à l'Espagne.
+// Même mécanique que le modèle français (../fr/model.js), leviers adaptés à l'Espagne.
 (function (racine, fabrique) {
   if (typeof module === 'object' && module.exports) module.exports = fabrique();
   else racine.DetteEspagne = fabrique();

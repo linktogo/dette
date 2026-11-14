@@ -2,7 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
   BASE, DEFAUTS, H, simuler, effetImpot, effetIVA, effetSmi, effetRevenuUniversel,
-} = require('../espagne/model.js');
+} = require('../es/model.js');
 
 const proche = (a, b, tol, msg) =>
   assert.ok(Math.abs(a - b) <= tol, `${msg || ''} attendu ${b} ± ${tol}, obtenu ${a}`);

@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { BASE, DEFAUTS, simuler } = require('../model.js');
+const { BASE, DEFAUTS, simuler } = require('../fr/model.js');
 
 const proche = (a, b, tol, msg) =>
   assert.ok(Math.abs(a - b) <= tol, `${msg || ''} attendu ${b} ± ${tol}, obtenu ${a}`);
@@ -133,7 +133,7 @@ test('chômage de 7,4 % à 5 % : environ 35 Md€ par an au bout de 5 ans', () =
 });
 
 // Dépenses par poste : Eurostat, dépenses par fonction 2024 (gov_10a_exp).
-const { H } = require('../model.js');
+const { H } = require('../fr/model.js');
 
 test('les postes de dépense couvrent la dépense hors intérêts de 2024', () => {
   const total = H.postes.reduce((s, q) => s + q.montant, 0);
@@ -168,7 +168,7 @@ test('un écart sur un poste ne touche pas les autres', () => {
 
 // Impôt sur le revenu et hauts patrimoines. Rendements par point : ordres de
 // grandeur de l'application, calés sur les chiffrages cités par le Sénat.
-const { effetImpot } = require('../model.js');
+const { effetImpot } = require('../fr/model.js');
 const impot = (p) => effetImpot({ ...DEFAUTS, erosion: 0, ...p });
 
 test('barème inchangé : aucun effet', () => {
@@ -194,7 +194,7 @@ test('nouvelle tranche : le rendement fond quand le seuil monte', () => {
 });
 
 // SMIC et revenu universel : hypothèses de l'application.
-const { effetSmic, effetRevenuUniversel } = require('../model.js');
+const { effetSmic, effetRevenuUniversel } = require('../fr/model.js');
 
 test('une hausse du SMIC dégrade le solde et accroît le chômage', () => {
   const s = effetSmic({ smic: 10 });
@@ -239,7 +239,7 @@ test('l’effet de l’impôt arrive dans les recettes en 3 ans', () => {
 });
 
 // TVA : DG Trésor, « Analyse de la composition des recettes de TVA » (sept. 2025).
-const { effetTVA } = require('../model.js');
+const { effetTVA } = require('../fr/model.js');
 
 test('TVA : rendement d’un point de chaque taux (7,5 / 1,6 / 2,0 / 0,4 Md€)', () => {
   proche(effetTVA(DEFAUTS), 0, 1e-9);

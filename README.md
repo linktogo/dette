@@ -1,10 +1,13 @@
-# Simulateur de dette publique française
+# Simulateurs de dette publique : France et Espagne
 
-Application web pédagogique pour explorer l'évolution de la dette publique française de **2027 à 2036**, à partir d'un point de départ estimé fin 2026.
+Application web pédagogique pour explorer l'évolution de la dette publique de **2027 à 2036**, à partir d'un point de départ estimé fin 2026, pour deux pays :
+
+- **France** (`/fr/`) : dette de 115,6 % du PIB fin 2025 (Insee), point de départ 2026 d'après la Cour des comptes.
+- **Espagne** (`/es/`) : dette de 100,8 % du PIB fin 2025 (Banco de España), point de départ 2026 d'après l'AIReF, leviers adaptés (IVA à 21 / 10 / 4 %, barème de l'IRPF, âge légal de 67 ans, MEI, SMI, ingreso mínimo vital…).
+
+La page d'accueil présente une tuile par pays : dette mesurée fin 2025, scénario tendanciel en 2036 avec sa courbe, déficit, charge d'intérêts et solde stabilisant, calculés en direct par les modèles. Un lien en haut de chaque simulateur permet de passer d'un pays à l'autre.
 
 Modifiez les hypothèses économiques et budgétaires pour comparer les trajectoires de dette, de solde public et de charge d'intérêts. **Il s'agit d'une projection d'hypothèses, pas d'une prévision économique.**
-
-Une version **espagnole**, sur le même principe, est disponible sous [`espagne/`](./espagne/) (lien « Espagne » en haut de page) : dette de 100,8 % du PIB fin 2025, point de départ fin 2026 estimé d'après l'AIReF, leviers adaptés (IVA à 21 / 10 / 4 %, barème de l'IRPF, âge légal de 67 ans, MEI, SMI, ingreso mínimo vital…).
 
 ## Lancer en local en une commande
 
@@ -30,7 +33,7 @@ Ouvrez **http://localhost:8098**.
 - Réglages des dépenses par poste, des recettes fiscales, des retraites, de l'emploi, du SMIC et du revenu universel.
 - Scénarios préréglés, graphiques et tableau année par année.
 - Explication de la méthode, de ses limites et des sources dans l'interface.
-- Partage d'un scénario en copiant l'URL : les réglages sont encodés dans son fragment, après `#`.
+- Partage d'un scénario en copiant l'URL : les réglages sont encodés dans son fragment, après `#`. Les anciens liens de partage à la racine sont redirigés vers `/fr/`, et `/espagne/` vers `/es/` (Nginx).
 
 L'application est écrite en HTML, CSS et JavaScript, sans framework ni dépendance à installer. Les calculs sont effectués dans le navigateur ; aucun serveur applicatif ni base de données n'est nécessaire.
 
@@ -109,15 +112,12 @@ L'application sera disponible à l'adresse `http://<adresse-du-pi>:8098`.
 
 | Fichier | Rôle |
 | --- | --- |
-| [index.html](./index.html) | Structure de la page |
-| [style.css](./style.css) | Présentation et mise en page |
-| [model.js](./model.js) | Hypothèses et calculs, utilisables dans le navigateur et sous Node.js |
-| [app.js](./app.js) | Curseurs, scénarios, affichage des résultats et partage par URL |
-| [charts.js](./charts.js) | Tracé des graphiques |
-| [sources.js](./sources.js) | Références, chiffres et usages dans le modèle |
-| [tests/model.test.js](./tests/model.test.js) | Tests du modèle |
-| [espagne/](./espagne/) | Version espagnole : `index.html`, `model.js`, `app.js`, `sources.js` (styles et graphiques partagés) |
-| [tests/espagne.test.js](./tests/espagne.test.js) | Tests du modèle espagnol |
+| [index.html](./index.html), [accueil.js](./accueil.js) | Page d'accueil : une tuile par pays |
+| [style.css](./style.css) | Présentation et mise en page, commune aux pages |
+| [charts.js](./charts.js) | Tracé des graphiques, commun aux simulateurs |
+| [fr/](./fr/) | Simulateur français : `index.html` (structure), `model.js` (hypothèses et calculs, utilisables dans le navigateur et sous Node.js), `app.js` (curseurs, scénarios, résultats, partage par URL), `sources.js` (références) |
+| [es/](./es/) | Simulateur espagnol, même organisation |
+| [tests/fr.test.js](./tests/fr.test.js), [tests/es.test.js](./tests/es.test.js) | Tests des deux modèles |
 | [dev-server.js](./dev-server.js) | Serveur local avec rechargement automatique |
 | [nginx.conf](./nginx.conf) | Service des fichiers statiques et revalidation du cache |
 | [docker-compose.yml](./docker-compose.yml) | Configuration du conteneur Nginx |
@@ -128,6 +128,6 @@ L'application sera disponible à l'adresse `http://<adresse-du-pi>:8098`.
 
 Chaque année, la dette augmente du déficit : dépenses hors intérêts, plus intérêts, moins recettes. Le PIB évolue avec la croissance en volume et l'inflation ; les recettes suivent le PIB et les dépenses suivent les hypothèses choisies. Les montants du modèle sont exprimés en milliards d'euros, les taux et ratios en pourcentage.
 
-Le modèle combine des références documentées dans [sources.js](./sources.js) et des hypothèses propres à l'application, détaillées dans la rubrique **Méthode et limites**. Le point de départ fin 2026 est estimé et le scénario tendanciel n'est pas une prévision officielle.
+Le modèle combine des références documentées dans [fr/sources.js](./fr/sources.js) et [es/sources.js](./es/sources.js) et des hypothèses propres à l'application, détaillées dans la rubrique **Méthode et limites**. Le point de départ fin 2026 est estimé et le scénario tendanciel n'est pas une prévision officielle.
 
 Le modèle ne représente notamment pas l'effet des économies ou des hausses d'impôts sur la croissance, la réaction des taux au niveau de dette, les titres indexés sur l'inflation, les cessions d'actifs ni les écarts entre déficit et variation de dette.
