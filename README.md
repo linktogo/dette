@@ -36,6 +36,7 @@ Ouvrez **http://localhost:8098**.
 - Curseurs pour la croissance, l'inflation, les taux d'emprunt et la productivité.
 - Réglages des dépenses par poste, des recettes fiscales, des retraites, de l'emploi, du SMIC et du revenu universel.
 - Scénarios préréglés, graphiques et tableau année par année.
+- Indicateurs par habitant, en plus des ratios au PIB : dette et charge d’intérêts par habitant (tuiles, infobulles, tableau, page d’accueil) et dépenses par poste par habitant. La population suit une projection démographique par pays (Eurostat, INE, Destatis, ONS) sans effet sur la trajectoire de dette.
 - Explication de la méthode, de ses limites et des sources dans l'interface.
 - Partage d'un scénario en copiant l'URL : les réglages sont encodés dans son fragment, après `#`. Les anciens liens de partage à la racine sont redirigés vers `/fr/`, et `/espagne/` vers `/es/` (Nginx).
 

@@ -89,7 +89,8 @@ button[aria-pressed="true"] { border-color: var(--serie-1); box-shadow: inset 0 
 .curseur.inactif { opacity: 0.45; }
 
 .resultats { display: grid; gap: 16px; min-width: 0; container-type: inline-size; }
-.tuiles { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 12px; }
+.tuiles { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 12px; }
+.tuiles .tuile.hero { grid-row: span 2; }
 .tuile {
   background: var(--surface); border: 1px solid var(--bordure); border-radius: 12px; padding: 14px 16px;
   min-width: 0;
@@ -153,13 +154,13 @@ tr.depart td { color: var(--encre-2); }
   .entete { padding: 16px; }
   .curseurs { position: static; max-height: none; }
   .tuiles { grid-template-columns: 1fr 1fr; }
-  .tuile.hero { grid-column: 1 / -1; }
+  .tuiles .tuile.hero { grid-column: 1 / -1; grid-row: auto; }
   .duo { grid-template-columns: 1fr; }
 }
 
 @container (max-width: 760px) {
-  .tuiles { grid-template-columns: 1fr 1fr 1fr; }
-  .tuile.hero { grid-column: 1 / -1; }
+  .tuiles { grid-template-columns: 1fr 1fr; }
+  .tuiles .tuile.hero { grid-column: 1 / -1; grid-row: auto; }
   .duo { grid-template-columns: 1fr; }
 }
 @container (max-width: 460px) {
@@ -167,7 +168,7 @@ tr.depart td { color: var(--encre-2); }
 }
 
 .groupe > .repere { font-size: 12px; color: var(--muet); margin: 4px 0 0; }
-.poste { display: grid; grid-template-columns: 200px minmax(60px, 1fr) 190px; gap: 12px; align-items: center; padding: 5px 0; font-size: 14px; }
+.poste { display: grid; grid-template-columns: 200px minmax(60px, 1fr) 270px; gap: 12px; align-items: center; padding: 5px 0; font-size: 14px; }
 .poste .piste { position: relative; height: 12px; }
 .poste .barre { position: absolute; left: 0; top: 0; bottom: 0; background: var(--serie-1); border-radius: 0 4px 4px 0; }
 .poste .repere-depart { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-left: -1px; background: var(--encre); box-shadow: 0 0 0 1px var(--surface); }
@@ -176,6 +177,7 @@ tr.depart td { color: var(--encre-2); }
 @container (max-width: 620px) {
   .poste { grid-template-columns: 1fr auto; gap: 2px 12px; }
   .poste .piste { grid-column: 1 / -1; grid-row: 2; }
+  .poste .chiffres { white-space: normal; }
 }
 
 .groupe > .resume { font-size: 13px; font-weight: 600; margin: 8px 0 0; }

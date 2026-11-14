@@ -292,5 +292,16 @@
       },
       usage: { fr: 'Origine de la sélection ci-dessus ; ordres de grandeur des crises passées (+200 à +600 Md€).', en: 'Origin of the selection above; orders of magnitude of past crises (+€200-600bn).', es: 'Origen de la selección anterior; órdenes de magnitud de las crisis pasadas (+200 a +600 mil M€).', de: 'Herkunft der obigen Auswahl; Größenordnungen vergangener Krisen (+200 bis +600 Mrd. €).' },
     },
+    {
+      nom: 'Eurostat, projections de population EUROPOP2023',
+      url: 'https://ec.europa.eu/eurostat/databrowser/view/proj_23np/default/table',
+      chiffre: {
+        fr: '68,6 millions d’habitants en 2026 ; croissance d’environ 0,15 % par an d’ici 2036.',
+        en: '68.6 million inhabitants in 2026; growth of about 0.15% a year to 2036.',
+        es: '68,6 millones de habitantes en 2026; crecimiento de en torno al 0,15 % anual hasta 2036.',
+        de: '68,6 Millionen Einwohner 2026; Wachstum von etwa 0,15 % pro Jahr bis 2036.',
+      },
+      usage: { fr: 'Indicateurs par habitant (dette, intérêts, dépenses par poste), sans effet sur la trajectoire.', en: 'Per-person indicators (debt, interest, spending by function), with no effect on the trajectory.', es: 'Indicadores por habitante (deuda, intereses, gasto por función), sin efecto en la trayectoria.', de: 'Pro-Kopf-Kennzahlen (Schulden, Zinsen, Ausgaben nach Aufgaben), ohne Einfluss auf den Pfad.' },
+    },
   ];
 });

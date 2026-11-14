@@ -8,6 +8,8 @@
   const { BASE, DEFAUTS, H, COMPTES_2025, simuler, pointDeDepart } = M;
   const L = P.textes[code](u, M, C);
   const { fmt, signe, pct, pctSigne, mds, points } = u;
+  // Montant par habitant, en unités de la devise : Md / millions d'habitants × 1000.
+  const parHab = (v, a) => (v / a.population) * 1000;
 
   document.title = L.titreDoc;
   document.getElementById('titre').textContent = L.h1;
@@ -156,6 +158,11 @@
         <div class="detail">${C.tuiles.enDixAns(u.mdsSigne(fin.dette - debut.dette, 0))}</div>
       </div>
       <div class="tuile">
+        <div class="libelle">${C.tuiles.parHabEn(fin.annee)}</div>
+        <div class="valeur">${u.euros(parHab(fin.dette, fin))}</div>
+        <div class="detail">${C.tuiles.parHabDetail(u.eurosSigne(parHab(fin.dette, fin) - parHab(debut.dette, debut)), debut.annee, u.euros(parHab(fin.interets, fin)))}</div>
+      </div>
+      <div class="tuile">
         <div class="libelle">${C.tuiles.chargeEn(fin.annee)}</div>
         <div class="valeur">${mds(fin.interets)}</div>
         <div class="detail">${C.tuiles.pibContre(pct(fin.interetsPib), pct(debut.interetsPib), debut.annee)}</div>
@@ -206,6 +213,7 @@
         x: a.annee, y: a.interets,
         detail: `<div><span>${C.graph.interets}</span><span>${mds(a.interets)}</span></div>
           <div><span>${C.graph.enPctPib}</span><span>${pct(a.interetsPib)}</span></div>
+          <div><span>${C.graph.parHab}</span><span>${u.euros(parHab(a.interets, a))}</span></div>
           <div><span>${C.graph.tauxMoyen}</span><span>${pct(a.tauxMoyen, 2)}</span></div>`,
       })),
     });
@@ -227,7 +235,7 @@
             <span class="barre" style="width:${(apres / max) * 100}%"></span>
             <span class="repere-depart" style="left:${(avant / max) * 100}%"></span>
           </span>
-          <span class="chiffres"><b>${pct(apres)}</b> ${signe(apres - avant)} ${u.mots.point} · ${mds(fin.postes[q.id])}</span>
+          <span class="chiffres"><b>${pct(apres)}</b> ${signe(apres - avant)} ${u.mots.point} · ${mds(fin.postes[q.id])} · ${u.euros(parHab(fin.postes[q.id], fin))}${u.mots.parHab}</span>
         </div>`;
     }).join('');
     const reste = fin.nonVentile;
@@ -250,6 +258,8 @@
         <td>${a.soldeStabilisant === null ? '–' : pctSigne(a.soldeStabilisant)}</td>
         <td>${fmt(a.dette, 0)}</td>
         <td>${pct(a.ratio)}</td>
+        <td>${fmt(parHab(a.dette, a), 0)}</td>
+        <td>${fmt(parHab(a.interets, a), 0)}</td>
       </tr>`).join('');
     document.getElementById('tableau').innerHTML = `
       <thead><tr>${C.tableau.entetes.map((h) => `<th>${h}</th>`).join('')}</tr></thead><tbody>${lignes}</tbody>`;

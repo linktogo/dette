@@ -30,6 +30,9 @@
   })();
 
   const H = {
+    // Croissance de la population, %/an. ONS, projections nationales : environ +0,5 % par an d'ici 2036, portée par l'immigration.
+    // Sert aux indicateurs par habitant, sans effet sur la trajectoire de dette.
+    croissancePopulation: 0.5,
     // Les gilts sont longs (14,6 ans en moyenne), mais les rachats de la Banque
     // d'Angleterre sont financés par des réserves rémunérées au taux directeur :
     // l'encours se refinance plus vite que sa maturité ne le laisse croire. Hypothèse.
@@ -89,6 +92,10 @@
       ],
     },
   };
+
+  // Population en millions : celle du revenu universel (2025-2026), puis rythme constant.
+  const habitants = (annee) =>
+    (H.ru.adultes + H.ru.mineurs) * Math.pow(1 + H.croissancePopulation / 100, annee - BASE.annee);
 
   const DEFAUTS = {
     croissance: 1.4,
@@ -234,7 +241,7 @@
       dette -= solde;
 
       trajectoire.push({
-        annee, pib, dette,
+        annee, pib, dette, population: habitants(annee),
         ratio: (dette / pib) * 100,
         recettes, depensesPrimaires, interets, soldePrimaire, solde,
         postes: parPoste, nonVentile,
@@ -256,7 +263,7 @@
     for (const q of H.postes) postes[q.id] = (base.depensesPrimaires * q.montant) / TOTAL_POSTES;
     return {
       postes, nonVentile: 0,
-      annee: base.annee, pib: base.pib, dette: base.dette,
+      annee: base.annee, pib: base.pib, dette: base.dette, population: habitants(base.annee),
       ratio: (base.dette / base.pib) * 100,
       recettes: base.recettes, depensesPrimaires: base.depensesPrimaires,
       interets: base.interets, soldePrimaire, solde,
@@ -268,5 +275,5 @@
     };
   }
 
-  return { COMPTES_2025, BASE, DEFAUTS, H, simuler, pointDeDepart, effetImpot, effetIVA, effetSmi, effetRevenuUniversel };
+  return { COMPTES_2025, BASE, DEFAUTS, H, habitants, simuler, pointDeDepart, effetImpot, effetIVA, effetSmi, effetRevenuUniversel };
 });
