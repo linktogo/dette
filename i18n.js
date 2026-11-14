@@ -35,28 +35,28 @@
   // Mots et unités propres à chaque langue.
   const MOTS = {
     fr: {
-      pctSuffixe: ' %', mds: (n, d) => `${n} Md${d}`, unite: (d) => `Md${d}`, milliards: (d) => (d === '£' ? 'milliards de livres' : 'milliards d’euros'), an: '/an', mois: '/mois', parAn: 'par an',
+      pctSuffixe: ' %', mds: (n, d) => `${n} Md${d}`, unite: (d) => `Md${d}`, milliards: (d) => (d === '£' ? 'milliards de livres' : 'milliards d’euros'), an: '/an', parHab: '/hab.', mois: '/mois', parAn: 'par an',
       duPib: 'du PIB', ptPib: 'pt de PIB', point: 'point', points: 'points',
       aucun: 'aucun', aucune: 'aucune', non: 'non',
       ansMois: (a, m) => `${a} ans${m ? ` et ${m} mois` : ''}`,
       annees: (n) => `${n} an${n > 1 ? 's' : ''}`,
     },
     en: {
-      pctSuffixe: '%', mds: (n, d) => `${d}${n}bn`, unite: (d) => `${d}bn`, milliards: (d) => (d === '£' ? 'billions of pounds' : 'billions of euros'), an: '/yr', mois: '/month', parAn: 'a year',
+      pctSuffixe: '%', mds: (n, d) => `${d}${n}bn`, unite: (d) => `${d}bn`, milliards: (d) => (d === '£' ? 'billions of pounds' : 'billions of euros'), an: '/yr', parHab: '/person', mois: '/month', parAn: 'a year',
       duPib: 'of GDP', ptPib: 'pp of GDP', point: 'pt', points: 'pts',
       aucun: 'none', aucune: 'none', non: 'no',
       ansMois: (a, m) => `${a} years${m ? ` ${m} month${m > 1 ? 's' : ''}` : ''}`,
       annees: (n) => `${n} year${n > 1 ? 's' : ''}`,
     },
     es: {
-      pctSuffixe: ' %', mds: (n, d) => `${n} mil M${d}`, unite: (d) => `mil M${d}`, milliards: (d) => (d === '£' ? 'miles de millones de libras' : 'miles de millones de euros'), an: '/año', mois: '/mes', parAn: 'al año',
+      pctSuffixe: ' %', mds: (n, d) => `${n} mil M${d}`, unite: (d) => `mil M${d}`, milliards: (d) => (d === '£' ? 'miles de millones de libras' : 'miles de millones de euros'), an: '/año', parHab: '/hab.', mois: '/mes', parAn: 'al año',
       duPib: 'del PIB', ptPib: 'pp del PIB', point: 'punto', points: 'puntos',
       aucun: 'ninguno', aucune: 'ninguna', non: 'no',
       ansMois: (a, m) => `${a} años${m ? ` y ${m} mes${m > 1 ? 'es' : ''}` : ''}`,
       annees: (n) => `${n} año${n > 1 ? 's' : ''}`,
     },
     de: {
-      pctSuffixe: ' %', mds: (n, d) => `${n} Mrd. ${d}`, unite: (d) => `Mrd. ${d}`, milliards: (d) => (d === '£' ? 'Milliarden Pfund' : 'Milliarden Euro'), an: '/Jahr', mois: '/Monat', parAn: 'pro Jahr',
+      pctSuffixe: ' %', mds: (n, d) => `${n} Mrd. ${d}`, unite: (d) => `Mrd. ${d}`, milliards: (d) => (d === '£' ? 'Milliarden Pfund' : 'Milliarden Euro'), an: '/Jahr', parHab: '/Einw.', mois: '/Monat', parAn: 'pro Jahr',
       duPib: 'des BIP', ptPib: 'Pp. des BIP', point: 'Punkt', points: 'Punkte',
       aucun: 'keiner', aucune: 'keine', non: 'nein',
       ansMois: (a, m) => `${a} Jahre${m ? ` und ${m} Monat${m > 1 ? 'e' : ''}` : ''}`,
@@ -82,6 +82,7 @@
     const mds = (v, d = 0) => w.mds(fmt(v, d), symbole);
     const mdsSigne = (v, d = 1) => marque(v, d) + w.mds(fmt(Math.abs(Number(v.toFixed(d))), d), symbole);
     const euros = (v) => new Intl.NumberFormat(langue.locale, { style: 'currency', currency: devise, maximumFractionDigits: 0 }).format(v);
+    const eurosSigne = (v) => marque(v, 0) + euros(Math.abs(Math.round(v)));
     const points = (v, d = 1) => `${signe(v, d)} ${Math.abs(v) >= 2 ? w.points : w.point}`;
     const ansMois = (v) => {
       const mois = Math.round(v * 12);
@@ -90,7 +91,7 @@
     return {
       code: langue.code, locale: langue.locale, mots: w, devise, symbole,
       unite: w.unite(symbole), milliards: w.milliards(symbole),
-      fmt, signe, pct, pctSigne, mds, mdsSigne, euros, points, ansMois,
+      fmt, signe, pct, pctSigne, mds, mdsSigne, euros, eurosSigne, points, ansMois,
       pctAn: (v, d = 1) => pct(v, d) + w.an,
       annees: w.annees,
     };
@@ -114,6 +115,10 @@
       details: { tableau: 'Tableau année par année', methode: 'Méthode et limites', sources: 'Sources' },
       usage: 'Usage :',
       modifies: (n) => `${n} curseur${n > 1 ? 's' : ''} modifié${n > 1 ? 's' : ''}`,
+      bandeau: {
+        dette: (a) => `Dette ${a}`, parHab: 'Par habitant', interets: 'Intérêts', solde: 'Solde public',
+        stab: (v) => `stabilisant : ${v}`,
+      },
       tuiles: {
         detteEn: (a) => `Dette en ${a}`,
         depuis: (pts, a, r) => `${pts} depuis ${a} (${r})`,
@@ -125,6 +130,8 @@
         pibContre: (p1, p0, a0) => `${p1} du PIB, contre ${p0} en ${a0}`,
         soldeEn: (a) => `Solde public en ${a}`,
         soldeStab: (v, ue = true) => `Solde stabilisant : ${v} du PIB${ue ? ' · seuil européen : −3 %' : ''}`,
+        parHabEn: (a) => `Dette par habitant en ${a}`,
+        parHabDetail: (v, a0, i) => `${v} depuis ${a0} · intérêts : ${i} par an`,
       },
       verdict: {
         baisseTout: 'Dette en baisse sur toute la période',
@@ -139,12 +146,13 @@
         descInterets: `Charge d’intérêts annuelle en ${u.milliards}, de 2026 à 2036`,
         interets: 'Intérêts', enPctPib: 'En % du PIB', tauxMoyen: 'Taux moyen de la dette',
         noteInterets: (t0, a0, t1, a1) => `Taux moyen payé sur la dette : ${t0} en ${a0}, ${t1} en ${a1}.`,
+        parHab: 'Par habitant',
       },
       postesRepere: (montant, part, note, annee) => `≈ ${montant} en ${annee}, soit ${part} du PIB. ${note}`,
       tableau: {
         depart: 'départ',
         entetes: [`Année`, `PIB (${u.unite})`, `Croissance en valeur`, `Recettes (${u.unite})`, `Dépenses hors intérêts (${u.unite})`, `Solde primaire`,
-          `Intérêts (${u.unite})`, `Taux moyen`, `Solde public`, `Solde stabilisant`, `Dette (${u.unite})`, `Dette / PIB`],
+          `Intérêts (${u.unite})`, `Taux moyen`, `Solde public`, `Solde stabilisant`, `Dette (${u.unite})`, `Dette / PIB`, `Dette par habitant (${u.symbole})`, `Intérêts par habitant (${u.symbole})`],
       },
       accueil: {
         titre: 'Dette publique : France, Espagne, Allemagne, Royaume-Uni',
@@ -158,6 +166,7 @@
         evolution: (pts, a0, r0, a1) => `${pts} entre ${a0} (${r0}) et ${a1}`,
         deficit: (a) => `Déficit ${a}`,
         interets: (a) => `Intérêts ${a}`,
+        detteHab: (a) => `Dette par habitant ${a}`,
         recettes: 'Recettes publiques',
         soldeStab: 'Solde stabilisant',
         courbeAria: (a0, a1, r0, r1) => `Dette en % du PIB de ${a0} à ${a1} : de ${r0} à ${r1}`,
@@ -187,6 +196,10 @@
       details: { tableau: 'Year-by-year table', methode: 'Method and limitations', sources: 'Sources' },
       usage: 'Use:',
       modifies: (n) => `${n} slider${n > 1 ? 's' : ''} changed`,
+      bandeau: {
+        dette: (a) => `Debt ${a}`, parHab: 'Per person', interets: 'Interest', solde: 'Budget balance',
+        stab: (v) => `stabilising: ${v}`,
+      },
       tuiles: {
         detteEn: (a) => `Debt in ${a}`,
         depuis: (pts, a, r) => `${pts} since ${a} (${r})`,
@@ -198,6 +211,8 @@
         pibContre: (p1, p0, a0) => `${p1} of GDP, against ${p0} in ${a0}`,
         soldeEn: (a) => `Budget balance in ${a}`,
         soldeStab: (v, ue = true) => `Debt-stabilising balance: ${v} of GDP${ue ? ' · EU threshold: −3%' : ''}`,
+        parHabEn: (a) => `Debt per person in ${a}`,
+        parHabDetail: (v, a0, i) => `${v} since ${a0} · interest: ${i} a year`,
       },
       verdict: {
         baisseTout: 'Debt falls throughout the period',
@@ -212,12 +227,13 @@
         descInterets: `Annual interest bill in ${u.milliards}, 2026 to 2036`,
         interets: 'Interest', enPctPib: '% of GDP', tauxMoyen: 'Average interest rate on debt',
         noteInterets: (t0, a0, t1, a1) => `Average rate paid on the debt: ${t0} in ${a0}, ${t1} in ${a1}.`,
+        parHab: 'Per person',
       },
       postesRepere: (montant, part, note, annee) => `≈ ${montant} in ${annee}, i.e. ${part} of GDP. ${note}`,
       tableau: {
         depart: 'start',
         entetes: [`Year`, `GDP (${u.unite})`, `Nominal growth`, `Revenue (${u.unite})`, `Primary spending (${u.unite})`, `Primary balance`,
-          `Interest (${u.unite})`, `Average rate`, `Budget balance`, `Stabilising balance`, `Debt (${u.unite})`, `Debt / GDP`],
+          `Interest (${u.unite})`, `Average rate`, `Budget balance`, `Stabilising balance`, `Debt (${u.unite})`, `Debt / GDP`, `Debt per person (${u.symbole})`, `Interest per person (${u.symbole})`],
       },
       accueil: {
         titre: 'Public debt: France, Spain, Germany, United Kingdom',
@@ -231,6 +247,7 @@
         evolution: (pts, a0, r0, a1) => `${pts} between ${a0} (${r0}) and ${a1}`,
         deficit: (a) => `Deficit ${a}`,
         interets: (a) => `Interest ${a}`,
+        detteHab: (a) => `Debt per person ${a}`,
         recettes: 'Public revenue',
         soldeStab: 'Debt-stabilising balance',
         courbeAria: (a0, a1, r0, r1) => `Debt as % of GDP from ${a0} to ${a1}: from ${r0} to ${r1}`,
@@ -260,6 +277,10 @@
       details: { tableau: 'Tabla año por año', methode: 'Método y limitaciones', sources: 'Fuentes' },
       usage: 'Uso:',
       modifies: (n) => `${n} control${n > 1 ? 'es' : ''} modificado${n > 1 ? 's' : ''}`,
+      bandeau: {
+        dette: (a) => `Deuda ${a}`, parHab: 'Por habitante', interets: 'Intereses', solde: 'Saldo público',
+        stab: (v) => `estabilizador: ${v}`,
+      },
       tuiles: {
         detteEn: (a) => `Deuda en ${a}`,
         depuis: (pts, a, r) => `${pts} desde ${a} (${r})`,
@@ -271,6 +292,8 @@
         pibContre: (p1, p0, a0) => `${p1} del PIB, frente al ${p0} en ${a0}`,
         soldeEn: (a) => `Saldo público en ${a}`,
         soldeStab: (v, ue = true) => `Saldo estabilizador: ${v} del PIB${ue ? ' · umbral europeo: −3 %' : ''}`,
+        parHabEn: (a) => `Deuda por habitante en ${a}`,
+        parHabDetail: (v, a0, i) => `${v} desde ${a0} · intereses: ${i} al año`,
       },
       verdict: {
         baisseTout: 'Deuda a la baja en todo el periodo',
@@ -285,12 +308,13 @@
         descInterets: `Gasto anual en intereses en ${u.milliards}, de 2026 a 2036`,
         interets: 'Intereses', enPctPib: 'En % del PIB', tauxMoyen: 'Tipo medio de la deuda',
         noteInterets: (t0, a0, t1, a1) => `Tipo medio pagado por la deuda: ${t0} en ${a0}, ${t1} en ${a1}.`,
+        parHab: 'Por habitante',
       },
       postesRepere: (montant, part, note, annee) => `≈ ${montant} en ${annee}, es decir, el ${part} del PIB. ${note}`,
       tableau: {
         depart: 'inicio',
         entetes: [`Año`, `PIB (${u.unite})`, `Crecimiento nominal`, `Ingresos (${u.unite})`, `Gasto primario (${u.unite})`, `Saldo primario`,
-          `Intereses (${u.unite})`, `Tipo medio`, `Saldo público`, `Saldo estabilizador`, `Deuda (${u.unite})`, `Deuda / PIB`],
+          `Intereses (${u.unite})`, `Tipo medio`, `Saldo público`, `Saldo estabilizador`, `Deuda (${u.unite})`, `Deuda / PIB`, `Deuda por habitante (${u.symbole})`, `Intereses por habitante (${u.symbole})`],
       },
       accueil: {
         titre: 'Deuda pública: Francia, España, Alemania, Reino Unido',
@@ -304,6 +328,7 @@
         evolution: (pts, a0, r0, a1) => `${pts} entre ${a0} (${r0}) y ${a1}`,
         deficit: (a) => `Déficit ${a}`,
         interets: (a) => `Intereses ${a}`,
+        detteHab: (a) => `Deuda por habitante ${a}`,
         recettes: 'Ingresos públicos',
         soldeStab: 'Saldo estabilizador',
         courbeAria: (a0, a1, r0, r1) => `Deuda en % del PIB de ${a0} a ${a1}: del ${r0} al ${r1}`,
@@ -333,6 +358,10 @@
       details: { tableau: 'Tabelle Jahr für Jahr', methode: 'Methode und Grenzen', sources: 'Quellen' },
       usage: 'Verwendung:',
       modifies: (n) => `${n} Regler geändert`,
+      bandeau: {
+        dette: (a) => `Schulden ${a}`, parHab: 'Je Einwohner', interets: 'Zinsen', solde: 'Finanzierungssaldo',
+        stab: (v) => `stabilisierend: ${v}`,
+      },
       tuiles: {
         detteEn: (a) => `Schulden ${a}`,
         depuis: (pts, a, r) => `${pts} seit ${a} (${r})`,
@@ -344,6 +373,8 @@
         pibContre: (p1, p0, a0) => `${p1} des BIP, gegenüber ${p0} im Jahr ${a0}`,
         soldeEn: (a) => `Finanzierungssaldo ${a}`,
         soldeStab: (v, ue = true) => `Stabilisierender Saldo: ${v} des BIP${ue ? ' · EU-Grenze: −3 %' : ''}`,
+        parHabEn: (a) => `Schulden je Einwohner ${a}`,
+        parHabDetail: (v, a0, i) => `${v} seit ${a0} · Zinsen: ${i} pro Jahr`,
       },
       verdict: {
         baisseTout: 'Schulden sinken im gesamten Zeitraum',
@@ -358,12 +389,13 @@
         descInterets: `Jährliche Zinsausgaben in ${u.milliards}, 2026 bis 2036`,
         interets: 'Zinsen', enPctPib: 'In % des BIP', tauxMoyen: 'Durchschnittszins der Schulden',
         noteInterets: (t0, a0, t1, a1) => `Durchschnittlicher Zins auf die Schulden: ${t0} im Jahr ${a0}, ${t1} im Jahr ${a1}.`,
+        parHab: 'Je Einwohner',
       },
       postesRepere: (montant, part, note, annee) => `≈ ${montant} im Jahr ${annee}, also ${part} des BIP. ${note}`,
       tableau: {
         depart: 'Start',
         entetes: [`Jahr`, `BIP (${u.unite})`, `Nominales Wachstum`, `Einnahmen (${u.unite})`, `Primärausgaben (${u.unite})`, `Primärsaldo`,
-          `Zinsen (${u.unite})`, `Durchschnittszins`, `Finanzierungssaldo`, `Stabilisierender Saldo`, `Schulden (${u.unite})`, `Schulden / BIP`],
+          `Zinsen (${u.unite})`, `Durchschnittszins`, `Finanzierungssaldo`, `Stabilisierender Saldo`, `Schulden (${u.unite})`, `Schulden / BIP`, `Schulden je Einwohner (${u.symbole})`, `Zinsen je Einwohner (${u.symbole})`],
       },
       accueil: {
         titre: 'Staatsschulden: Frankreich, Spanien, Deutschland, Vereinigtes Königreich',
@@ -377,6 +409,7 @@
         evolution: (pts, a0, r0, a1) => `${pts} zwischen ${a0} (${r0}) und ${a1}`,
         deficit: (a) => `Defizit ${a}`,
         interets: (a) => `Zinsen ${a}`,
+        detteHab: (a) => `Schulden je Einwohner ${a}`,
         recettes: 'Staatseinnahmen',
         soldeStab: 'Stabilisierender Saldo',
         courbeAria: (a0, a1, r0, r1) => `Schulden in % des BIP von ${a0} bis ${a1}: von ${r0} auf ${r1}`,

@@ -100,3 +100,24 @@ for (const [id, P] of Object.entries(PAYS)) {
     }
   });
 }
+
+// Indicateurs par habitant : population présente sur chaque année, sans effet
+// sur la trajectoire de dette, et ordre de grandeur plausible.
+for (const [id, P] of Object.entries(PAYS)) {
+  const m = P.modele;
+  test(`${id} : population et dette par habitant`, () => {
+    const t = [m.pointDeDepart(), ...m.simuler(m.DEFAUTS)];
+    const pop0 = m.H.ru.adultes + m.H.ru.mineurs;
+    assert.equal(t[0].population, pop0);
+    for (const a of t) assert.ok(a.population > 40 && a.population < 90, `${a.annee} : ${a.population}`);
+    const parHab = (t[0].dette / t[0].population) * 1000;
+    assert.ok(parHab > 20000 && parHab < 70000, `dette par habitant 2026 : ${parHab}`);
+    // Accélérer la croissance démographique ne change pas la dette.
+    const avant = m.simuler(m.DEFAUTS).map((a) => a.dette);
+    m.H.croissancePopulation += 1;
+    try {
+      assert.deepEqual(m.simuler(m.DEFAUTS).map((a) => a.dette), avant);
+      assert.ok(m.simuler(m.DEFAUTS)[9].population > t[10].population);
+    } finally { m.H.croissancePopulation -= 1; }
+  });
+}

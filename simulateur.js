@@ -8,6 +8,8 @@
   const { BASE, DEFAUTS, H, COMPTES_2025, simuler, pointDeDepart } = M;
   const L = P.textes[code](u, M, C);
   const { fmt, signe, pct, pctSigne, mds, points } = u;
+  // Montant par habitant, en unités de la devise : Md / millions d'habitants × 1000.
+  const parHab = (v, a) => (v / a.population) * 1000;
 
   document.title = L.titreDoc;
   document.getElementById('titre').textContent = L.h1;
@@ -172,12 +174,60 @@
     return { etat: 'critique', icone: '×', texte: C.verdict.derive(points(fin.ratio - avant.ratio), fin.annee) };
   }
 
+  // Bandeau fixe : les chiffres clés restent visibles quand les tuiles sortent
+  // de l'écran (curseurs au-dessus des résultats sur mobile, défilement).
+  const bandeau = document.createElement('div');
+  bandeau.className = 'bandeau';
+  bandeau.setAttribute('aria-hidden', 'true'); // les tuiles annoncent déjà les résultats
+  document.body.prepend(bandeau);
+  // Visible quand ni la navigation du haut ni les tuiles ne sont à l'écran.
+  const vus = new Map();
+  const observateur = new IntersectionObserver((entrees) => {
+    for (const e of entrees) vus.set(e.target, e.isIntersecting);
+    const visible = ![...vus.values()].some(Boolean);
+    bandeau.classList.toggle('visible', visible);
+    document.body.classList.toggle('avec-bandeau', visible);
+  });
+  for (const el of [document.getElementById('tuiles'), document.querySelector('.barre-nav')]) observateur.observe(el);
+
+  function majBandeau(t, v, vsTendanciel) {
+    const debut = t[0], fin = t[t.length - 1];
+    const cases = [
+      ['ratio', C.bandeau.dette(fin.annee), `${pct(fin.ratio)} <small>${u.mots.duPib}</small>`, vsTendanciel],
+      ['hab', C.bandeau.parHab, u.euros(parHab(fin.dette, fin)), u.eurosSigne(parHab(fin.dette, fin) - parHab(debut.dette, debut))],
+      ['interets', C.bandeau.interets, mds(fin.interets), pct(fin.interetsPib)],
+      ['solde', C.bandeau.solde, pctSigne(fin.soldePib), C.bandeau.stab(pctSigne(fin.soldeStabilisant))],
+    ];
+    if (!bandeau.firstChild) {
+      bandeau.innerHTML = `<div class="bandeau-contenu"><span class="verdict" data-etat=""><span class="pastille"></span></span>${
+        cases.map(([id]) => `<div class="bandeau-case" data-id="${id}"><span class="libelle"></span><b></b><span class="detail"></span></div>`).join('')}</div>`;
+    }
+    const pastille = bandeau.querySelector('.verdict');
+    pastille.dataset.etat = v.etat;
+    pastille.title = v.texte;
+    pastille.firstChild.textContent = v.icone;
+    for (const [id, libelle, valeur, detail] of cases) {
+      const c = bandeau.querySelector(`[data-id="${id}"]`);
+      c.querySelector('.libelle').textContent = libelle;
+      const b = c.querySelector('b');
+      if (b.innerHTML !== valeur) {
+        b.innerHTML = valeur;
+        // Petit éclair pour signaler le chiffre qui vient de bouger.
+        b.classList.remove('flash');
+        void b.offsetWidth;
+        b.classList.add('flash');
+      }
+      c.querySelector('.detail').textContent = detail;
+    }
+  }
+
   function majTuiles(t) {
     const debut = t[0], fin = t[t.length - 1];
     const ref = tendanciel[tendanciel.length - 1];
     const v = verdict(t);
     const ecart = fin.ratio - ref.ratio;
     const vsTendanciel = Math.abs(ecart) < 0.05 ? C.tuiles.identique : C.tuiles.vsTendanciel(points(ecart));
+    majBandeau(t, v, vsTendanciel);
     document.getElementById('tuiles').innerHTML = `
       <div class="tuile hero">
         <div class="libelle">${C.tuiles.detteEn(fin.annee)}</div>
@@ -189,6 +239,11 @@
         <div class="libelle">${C.tuiles.encoursEn(fin.annee)}</div>
         <div class="valeur">${mds(fin.dette)}</div>
         <div class="detail">${C.tuiles.enDixAns(u.mdsSigne(fin.dette - debut.dette, 0))}</div>
+      </div>
+      <div class="tuile">
+        <div class="libelle">${C.tuiles.parHabEn(fin.annee)}</div>
+        <div class="valeur">${u.euros(parHab(fin.dette, fin))}</div>
+        <div class="detail">${C.tuiles.parHabDetail(u.eurosSigne(parHab(fin.dette, fin) - parHab(debut.dette, debut)), debut.annee, u.euros(parHab(fin.interets, fin)))}</div>
       </div>
       <div class="tuile">
         <div class="libelle">${C.tuiles.chargeEn(fin.annee)}</div>
@@ -241,6 +296,7 @@
         x: a.annee, y: a.interets,
         detail: `<div><span>${C.graph.interets}</span><span>${mds(a.interets)}</span></div>
           <div><span>${C.graph.enPctPib}</span><span>${pct(a.interetsPib)}</span></div>
+          <div><span>${C.graph.parHab}</span><span>${u.euros(parHab(a.interets, a))}</span></div>
           <div><span>${C.graph.tauxMoyen}</span><span>${pct(a.tauxMoyen, 2)}</span></div>`,
       })),
     });
@@ -262,7 +318,7 @@
             <span class="barre" style="width:${(apres / max) * 100}%"></span>
             <span class="repere-depart" style="left:${(avant / max) * 100}%"></span>
           </span>
-          <span class="chiffres"><b>${pct(apres)}</b> ${signe(apres - avant)} ${u.mots.point} · ${mds(fin.postes[q.id])}</span>
+          <span class="chiffres"><b>${pct(apres)}</b> ${signe(apres - avant)} ${u.mots.point} · ${mds(fin.postes[q.id])} · ${u.euros(parHab(fin.postes[q.id], fin))}${u.mots.parHab}</span>
         </div>`;
     }).join('');
     const reste = fin.nonVentile;
@@ -285,6 +341,8 @@
         <td>${a.soldeStabilisant === null ? '–' : pctSigne(a.soldeStabilisant)}</td>
         <td>${fmt(a.dette, 0)}</td>
         <td>${pct(a.ratio)}</td>
+        <td>${fmt(parHab(a.dette, a), 0)}</td>
+        <td>${fmt(parHab(a.interets, a), 0)}</td>
       </tr>`).join('');
     document.getElementById('tableau').innerHTML = `
       <thead><tr>${C.tableau.entetes.map((h) => `<th>${h}</th>`).join('')}</tr></thead><tbody>${lignes}</tbody>`;

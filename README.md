@@ -37,6 +37,8 @@ Ouvrez **http://localhost:8098**.
 - Réglages des dépenses par poste, des recettes fiscales, des retraites, de l'emploi, du SMIC et du revenu universel.
 - Scénarios préréglés, graphiques et tableau année par année.
 - France : programmes budgétaires de six partis (LFI, PS, Les Écologistes, Renaissance, LR, RN) en scénarios préréglés. Chaque programme reprend le chiffrage annoncé par le parti (contre-budgets et programmes de septembre à novembre 2026), traduit avec les curseurs et appliqué au tendanciel du simulateur. Une fiche liste les mesures reprises, celles qui ne le sont pas, les avis indépendants et les sources.
+- Bandeau fixe en haut de l’écran : dès que les tuiles de résultats sortent de la vue (curseurs sur mobile, défilement), les chiffres clés de 2036 restent affichés et se mettent à jour à chaque mouvement de curseur.
+- Indicateurs par habitant, en plus des ratios au PIB : dette et charge d’intérêts par habitant (tuiles, infobulles, tableau, page d’accueil) et dépenses par poste par habitant. La population suit une projection démographique par pays (Eurostat, INE, Destatis, ONS) sans effet sur la trajectoire de dette.
 - Explication de la méthode, de ses limites et des sources dans l'interface.
 - Partage d'un scénario en copiant l'URL : les réglages sont encodés dans son fragment, après `#`. Les anciens liens de partage à la racine sont redirigés vers `/fr/`, et `/espagne/` vers `/es/` (Nginx).
 

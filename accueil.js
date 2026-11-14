@@ -37,7 +37,7 @@
 
   function carte(p, echelle) {
     const m = p.modele;
-    const mds = I18N.outils(code, p.devise).mds; // montants dans la devise du pays
+    const { mds, euros: eu } = I18N.outils(code, p.devise); // montants dans la devise du pays
     const { depart, t, courbe } = trajectoire(m);
     const fin = t[t.length - 1];
     const c25 = m.COMPTES_2025;
@@ -73,6 +73,8 @@
           <div><dt>${A.deficit(fin.annee)}</dt><dd>${pct(-fin.soldePib)} ${u.mots.duPib}</dd></div>
           <div><dt>${A.interets(depart.annee)}</dt><dd>${mds(depart.interets)} · ${pct(depart.interetsPib)}</dd></div>
           <div><dt>${A.interets(fin.annee)}</dt><dd>${mds(fin.interets)} · ${pct(fin.interetsPib)}</dd></div>
+          <div><dt>${A.detteHab(depart.annee)}</dt><dd>${eu(depart.dette / depart.population * 1000)}</dd></div>
+          <div><dt>${A.detteHab(fin.annee)}</dt><dd>${eu(fin.dette / fin.population * 1000)}</dd></div>
           <div><dt>${A.recettes}</dt><dd>${pct(c25.recettesPib)} ${u.mots.duPib}</dd></div>
           <div><dt>${A.soldeStab}</dt><dd>${pctSigne(t[0].soldeStabilisant)} ${u.mots.duPib}</dd></div>
         </dl>
