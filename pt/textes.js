@@ -1,0 +1,131 @@
+// Simulateur portugais : particularités du pays en quatre langues. Le reste des textes
+// et la structure des curseurs viennent de ../textes-communs.js.
+(function (racine, fabrique) {
+  if (typeof module === 'object' && module.exports) {
+    module.exports = (modele, sources) => fabrique(require('../textes-communs.js'), modele, sources);
+  } else racine.PAYS = fabrique(racine.PaysCommun, racine.DettePortugal, racine.SOURCES);
+})(globalThis, function (commun, modele, sources) {
+  const options = {
+    economiesMax: 15, economiesPas: 0.5, fraudeMax: 4, criseMax: 30, ruAdulte: 400,
+    prereglages: [{ id: 'relance', p: { depenses: 2.5 } }],
+  };
+  const specifique = {
+    fr: (u) => ({
+      titreDoc: 'Dette portugaise : projection à 10 ans',
+      h1: 'Dette publique portugaise : projection 2027-2036',
+      tva: [
+        { nom: 'Taux normal', note: 'La plupart des biens et services.' },
+        { nom: 'Taux intermédiaire', note: 'Restauration, certains produits alimentaires.' },
+        { nom: 'Taux réduit', note: 'Produits de base, médicaments, livres.' },
+      ],
+      irZone: 'Échelons de l’IRS sous 48 %',
+      groupes: { ir: { intro: 'IRS : taux progressifs d’environ 12,5 % à 48 %, ce dernier au-delà de 83 696 € (seuil 2025).' } },
+      ageRef: 66.75, ageRefCourt: 67,
+      ageNote: 'Référence : 66 ans et 9 mois en 2026, 66 ans et 11 mois en 2027 : l’âge suit l’espérance de vie à 65 ans.',
+      deriveNote: 'Dérive des pensions : +0,8 point de PIB en 2036 et +1,5 en 2050 par rapport à 2026 (hypothèse de l’application, vieillissement rapide).',
+      chomageSource: 'INE, septembre 2026',
+      smiNote: '920 € sur 14 mois ; 970 € envisagés en 2027.',
+      aides: 'revenu social d’insertion, complément solidaire pour personnes âgées, prestation d’inclusion, la moitié des aides au logement, allocations familiales',
+      criseNote: 'Crise de 2011 : dette passée d’environ 100 % à plus de 130 % du PIB, sous programme d’aide.',
+      depart: 'Prévision du gouvernement d’avril 2026 : dette de 87,5 % du PIB, solde nul. Dernier chiffre mesuré : 89,2 % du PIB fin 2025, avec un excédent de 0,7 %.',
+      hypotheses: ['Le FMI prévoit que 2026 ouvre plusieurs années de déficits ; le tendanciel, qui maintient les dépenses au rythme de la croissance, n’en tient pas compte.'],
+      ignore: 'Il ignore aussi la fin des fonds européens du plan de relance en 2026.',
+      postes: {
+        defense: 'Environ 1 % du PIB ; objectif OTAN relevé.', enseignement: 'Du primaire au supérieur.', sante: 'Service national de santé.',
+        retraites: 'Pensions de vieillesse et de réversion. Les curseurs du groupe « Retraites » s’y ajoutent.',
+        social: 'Chômage, famille, invalidité, exclusion. Le revenu universel, net des aides qu’il remplace, s’y ajoute.',
+        securite: 'Police, garde nationale républicaine, justice.', economie: 'Transports, énergie, aides aux entreprises, fonds européens.',
+        general: 'Administration générale. Hors intérêts.', cadre: 'Logement, environnement, culture et sport.',
+      },
+      prereglages: { relance: 'Dépenses dynamiques' },
+    }),
+    en: (u) => ({
+      titreDoc: 'Portuguese public debt: 10-year projection',
+      h1: 'Portuguese public debt: projection 2027-2036',
+      tva: [
+        { nom: 'Standard rate', note: 'Most goods and services.' },
+        { nom: 'Intermediate rate', note: 'Restaurants, some foods.' },
+        { nom: 'Reduced rate', note: 'Basic goods, medicines, books.' },
+      ],
+      irZone: 'IRS brackets below 48%',
+      groupes: { ir: { intro: 'IRS (income tax): progressive rates from about 12.5% to 48%, the latter above €83,696 (2025 threshold).' } },
+      ageRef: 66.75, ageRefCourt: 67,
+      ageNote: 'Reference: 66 years 9 months in 2026, 66 years 11 months in 2027: the age follows life expectancy at 65.',
+      deriveNote: 'Pension drift: +0.8 pp of GDP in 2036 and +1.5 in 2050 relative to 2026 (app assumption, fast ageing).',
+      chomageSource: 'INE, September 2026',
+      smiNote: '€920 over 14 payments; €970 being considered for 2027.',
+      aides: 'social integration income, solidarity supplement for older people, social inclusion benefit, half of housing support, family allowances',
+      criseNote: '2011 crisis: debt rose from about 100% to over 130% of GDP, under an assistance programme.',
+      depart: 'Government forecast of April 2026: debt of 87.5% of GDP, balanced budget. Latest outturn: 89.2% of GDP at end-2025, with a 0.7% surplus.',
+      hypotheses: ['The IMF expects 2026 to open several years of deficits; the baseline, which keeps spending growing with the economy, does not include this.'],
+      ignore: 'It also ignores the end of the EU recovery-plan funds in 2026.',
+      postes: {
+        defense: 'About 1% of GDP; NATO target raised.', enseignement: 'Primary to higher education.', sante: 'National Health Service.',
+        retraites: 'Old-age and survivors’ pensions. The “Pensions” sliders add to it.',
+        social: 'Unemployment, family, disability, exclusion. Universal basic income, net of the benefits it replaces, is added here.',
+        securite: 'Police, Republican National Guard, courts.', economie: 'Transport, energy, business support, EU funds.',
+        general: 'General administration. Excluding interest.', cadre: 'Housing, environment, culture and sport.',
+      },
+      prereglages: { relance: 'Faster spending' },
+    }),
+    es: (u) => ({
+      titreDoc: 'Deuda pública portuguesa: proyección a 10 años',
+      h1: 'Deuda pública portuguesa: proyección 2027-2036',
+      tva: [
+        { nom: 'Tipo general', note: 'La mayoría de bienes y servicios.' },
+        { nom: 'Tipo intermedio', note: 'Restauración, algunos alimentos.' },
+        { nom: 'Tipo reducido', note: 'Productos básicos, medicamentos, libros.' },
+      ],
+      irZone: 'Tramos del IRS por debajo del 48 %',
+      groupes: { ir: { intro: 'IRS (impuesto sobre la renta): tipos progresivos de en torno al 12,5 % al 48 %, este por encima de 83 696 € (umbral de 2025).' } },
+      ageRef: 66.75, ageRefCourt: 67,
+      ageNote: 'Referencia: 66 años y 9 meses en 2026 y 66 años y 11 meses en 2027: la edad sigue la esperanza de vida a los 65 años.',
+      deriveNote: 'Deriva de las pensiones: +0,8 puntos del PIB en 2036 y +1,5 en 2050 respecto a 2026 (hipótesis de la aplicación, envejecimiento rápido).',
+      chomageSource: 'INE, septiembre de 2026',
+      smiNote: '920 € en 14 pagas; se contemplan 970 € en 2027.',
+      aides: 'renta social de inserción, complemento solidario para mayores, prestación social de inclusión, la mitad de las ayudas a la vivienda, prestaciones familiares',
+      criseNote: 'Crisis de 2011: la deuda pasó de en torno al 100 % a más del 130 % del PIB, bajo un programa de asistencia.',
+      depart: 'Previsión del Gobierno de abril de 2026: deuda del 87,5 % del PIB, saldo nulo. Último dato observado: 89,2 % del PIB a finales de 2025, con un superávit del 0,7 %.',
+      hypotheses: ['El FMI prevé que 2026 abra varios años de déficits; el tendencial, que mantiene el gasto al ritmo del crecimiento, no lo recoge.'],
+      ignore: 'Tampoco tiene en cuenta el final de los fondos europeos del plan de recuperación en 2026.',
+      postes: {
+        defense: 'En torno al 1 % del PIB; objetivo OTAN elevado.', enseignement: 'De primaria a universidad.', sante: 'Servicio Nacional de Salud.',
+        retraites: 'Pensiones de jubilación y de supervivencia. Los controles del grupo «Pensiones» se suman aquí.',
+        social: 'Desempleo, familia, invalidez, exclusión. La renta básica, neta de las ayudas que sustituye, se suma aquí.',
+        securite: 'Policía, Guardia Nacional Republicana, justicia.', economie: 'Transporte, energía, ayudas a empresas, fondos europeos.',
+        general: 'Administración general. Sin intereses.', cadre: 'Vivienda, medio ambiente, cultura y deporte.',
+      },
+      prereglages: { relance: 'Gasto dinámico' },
+    }),
+    de: (u) => ({
+      titreDoc: 'Portugiesische Staatsschulden: Projektion über 10 Jahre',
+      h1: 'Portugiesische Staatsschulden: Projektion 2027-2036',
+      tva: [
+        { nom: 'Regelsatz', note: 'Die meisten Waren und Dienstleistungen.' },
+        { nom: 'Zwischensatz', note: 'Gastronomie, einige Lebensmittel.' },
+        { nom: 'Ermäßigter Satz', note: 'Grundgüter, Arzneimittel, Bücher.' },
+      ],
+      irZone: 'IRS-Stufen unter 48 %',
+      groupes: { ir: { intro: 'IRS (Einkommensteuer): progressive Sätze von etwa 12,5 % bis 48 %, Letzterer ab 83 696 € (Schwelle 2025).' } },
+      ageRef: 66.75, ageRefCourt: 67,
+      ageNote: 'Referenz: 66 Jahre und 9 Monate im Jahr 2026, 66 Jahre und 11 Monate im Jahr 2027: Das Alter folgt der Lebenserwartung mit 65.',
+      deriveNote: 'Anstieg der Rentenausgaben: +0,8 Pp. des BIP im Jahr 2036 und +1,5 im Jahr 2050 gegenüber 2026 (Annahme der Anwendung, schnelle Alterung).',
+      chomageSource: 'INE, September 2026',
+      smiNote: '920 € bei 14 Zahlungen; für 2027 sind 970 € im Gespräch.',
+      aides: 'soziales Eingliederungseinkommen, Solidaritätszuschlag für Ältere, Inklusionsleistung, die Hälfte der Wohnhilfen, Familienleistungen',
+      criseNote: 'Krise von 2011: Die Schulden stiegen unter einem Hilfsprogramm von etwa 100 % auf über 130 % des BIP.',
+      depart: 'Regierungsprognose vom April 2026: Schulden von 87,5 % des BIP, ausgeglichener Haushalt. Letzter gemessener Wert: 89,2 % des BIP Ende 2025, mit einem Überschuss von 0,7 %.',
+      hypotheses: ['Der IWF erwartet, dass 2026 mehrere Defizitjahre einleitet; das Basisszenario, das die Ausgaben mit dem Wachstum steigen lässt, bildet das nicht ab.'],
+      ignore: 'Es ignoriert auch das Auslaufen der EU-Mittel aus dem Aufbauplan im Jahr 2026.',
+      postes: {
+        defense: 'Etwa 1 % des BIP; NATO-Ziel angehoben.', enseignement: 'Von der Grundschule bis zur Hochschule.', sante: 'Nationaler Gesundheitsdienst.',
+        retraites: 'Alters- und Hinterbliebenenrenten. Die Regler der Gruppe „Renten“ kommen hinzu.',
+        social: 'Arbeitslosigkeit, Familie, Invalidität, Ausgrenzung. Das Grundeinkommen, abzüglich der ersetzten Leistungen, kommt hinzu.',
+        securite: 'Polizei, Republikanische Nationalgarde, Justiz.', economie: 'Verkehr, Energie, Unternehmenshilfen, EU-Fonds.',
+        general: 'Allgemeine Verwaltung. Ohne Zinsen.', cadre: 'Wohnen, Umwelt, Kultur und Sport.',
+      },
+      prereglages: { relance: 'Dynamische Ausgaben' },
+    }),
+  };
+  return commun.creerPays({ id: 'pt', modele, sources, pib2024: 285, options, specifique });
+});

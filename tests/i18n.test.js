@@ -9,6 +9,9 @@ const PAYS = {
   es: require('../es/textes.js')(require('../es/model.js'), require('../es/sources.js')),
   de: require('../de/textes.js')(require('../de/model.js'), require('../de/sources.js')),
   uk: require('../uk/textes.js')(require('../uk/model.js'), require('../uk/sources.js')),
+  it: require('../it/textes.js')(require('../it/model.js'), require('../it/sources.js')),
+  pt: require('../pt/textes.js')(require('../pt/model.js'), require('../pt/sources.js')),
+  gr: require('../gr/textes.js')(require('../gr/model.js'), require('../gr/sources.js')),
 };
 
 const propre = (texte, ou) => {
