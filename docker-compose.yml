@@ -23,3 +23,5 @@ services:
       - ./pt:/usr/share/nginx/html/pt:ro
       - ./gr:/usr/share/nginx/html/gr:ro
       - ./at:/usr/share/nginx/html/at:ro
+      - ./be:/usr/share/nginx/html/be:ro
+      - ./nl:/usr/share/nginx/html/nl:ro

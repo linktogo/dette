@@ -1,6 +1,6 @@
-# Simulateurs de dette publique : huit pays européens
+# Simulateurs de dette publique : dix pays européens
 
-Application web pédagogique pour explorer l'évolution de la dette publique de **2027 à 2036**, à partir d'un point de départ estimé fin 2026, pour huit pays :
+Application web pédagogique pour explorer l'évolution de la dette publique de **2027 à 2036**, à partir d'un point de départ estimé fin 2026, pour dix pays :
 
 - **France** (`/fr/`) : dette de 115,6 % du PIB fin 2025 (Insee), point de départ 2026 d'après la Cour des comptes.
 - **Espagne** (`/es/`) : dette de 100,8 % du PIB fin 2025 (Banco de España), point de départ 2026 d'après l'AIReF, leviers adaptés (IVA à 21 / 10 / 4 %, barème de l'IRPF, âge légal de 67 ans, MEI, SMI, ingreso mínimo vital…).
@@ -10,8 +10,10 @@ Application web pédagogique pour explorer l'évolution de la dette publique de 
 - **Portugal** (`/pt/`) : dette de 89,2 % du PIB fin 2025 (INE), excédent de 0,7 % ; âge légal indexé sur l'espérance de vie, salaire minimum de 920 €.
 - **Grèce** (`/gr/`) : dette de 146,1 % du PIB fin 2025 (ELSTAT), excédent primaire de 4,9 % ; dette surtout faite de prêts européens à taux fixe et longue échéance.
 - **Autriche** (`/at/`) : dette de 81,5 % du PIB fin 2025 (Statistik Austria), déficit de 4,2 % ; point de départ 2026 d'après le ministère des Finances et le Fiskalrat, pas de salaire minimum légal.
+- **Belgique** (`/be/`) : dette de 107,9 % du PIB fin 2025, déficit de 5,2 % (Banque nationale) ; point de départ 2026 d'après les projections de juin 2026 de la BNB (déficit 5,3 %, dette 111,3 %).
+- **Pays-Bas** (`/nl/`) : dette de 44,7 % du PIB fin 2025, déficit de 1,6 % (CBS) ; point de départ 2026 d'après le CPB (déficit 2,7 %, dette 46,1 %), le gouvernement retenant 2,3 % et 45,6 %.
 
-L'Italie, le Portugal, la Grèce et l'Autriche reposent sur un modèle commun paramétrable ([modele.js](./modele.js)) et des textes communs ([textes-communs.js](./textes-communs.js)) : chaque pays n'apporte que ses chiffres et ses particularités.
+L'Italie, le Portugal, la Grèce, l'Autriche, la Belgique et les Pays-Bas reposent sur un modèle commun paramétrable ([modele.js](./modele.js)) et des textes communs ([textes-communs.js](./textes-communs.js)) : chaque pays n'apporte que ses chiffres et ses particularités.
 
 L'interface est disponible en **français, anglais, espagnol et allemand** : sélecteur FR · EN · ES · DE en haut de chaque page. La langue est choisie par le paramètre `?lang=` de l'adresse, sinon par le dernier choix mémorisé, sinon par la langue du navigateur ; nombres et unités suivent la langue (Md€, €bn, mil M€, Mrd. €) et la devise du pays (livres sterling pour le Royaume-Uni).
 
@@ -133,8 +135,8 @@ L'application sera disponible à l'adresse `http://<adresse-du-pi>:8098`.
 | [fr/](./fr/) | Simulateur français : `index.html`, `model.js` (hypothèses et calculs, utilisables dans le navigateur et sous Node.js), `textes.js` (structure des curseurs et textes en 4 langues), `sources.js` (références traduites), `partis.js` (programmes des partis : réglages, mesures et sources en 4 langues) |
 | [es/](./es/), [de/](./de/), [uk/](./uk/) | Simulateurs espagnol, allemand et britannique, même organisation |
 | [modele.js](./modele.js), [textes-communs.js](./textes-communs.js) | Modèle et textes communs, paramétrés par pays |
-| [it/](./it/), [pt/](./pt/), [gr/](./gr/), [at/](./at/) | Simulateurs italien, portugais, grec et autrichien : `model.js` (configuration du modèle commun), `textes.js` (particularités en 4 langues), `sources.js` |
-| [tests/](./tests/) | Tests des modèles (`fr`, `es`, `de`, `uk`, et `modele-commun.test.js` pour l'Italie, le Portugal, la Grèce et l'Autriche) et complétude des traductions (`i18n.test.js`) |
+| [it/](./it/), [pt/](./pt/), [gr/](./gr/), [at/](./at/), [be/](./be/), [nl/](./nl/) | Simulateurs italien, portugais, grec, autrichien, belge et néerlandais : `model.js` (configuration du modèle commun), `textes.js` (particularités en 4 langues), `sources.js` |
+| [tests/](./tests/) | Tests des modèles (`fr`, `es`, `de`, `uk`, et `modele-commun.test.js` pour l'Italie, le Portugal, la Grèce, l'Autriche, la Belgique et les Pays-Bas) et complétude des traductions (`i18n.test.js`) |
 | [dev-server.js](./dev-server.js) | Serveur local avec rechargement automatique |
 | [nginx.conf](./nginx.conf) | Service des fichiers statiques et revalidation du cache |
 | [docker-compose.yml](./docker-compose.yml) | Configuration du conteneur Nginx |

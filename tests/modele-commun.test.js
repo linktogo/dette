@@ -1,4 +1,4 @@
-// Portugal, Grèce et Italie : pays construits sur le modèle commun (modele.js).
+// Portugal, Grèce, Italie, Autriche, Belgique et Pays-Bas : pays construits sur le modèle commun (modele.js).
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -11,6 +11,8 @@ const PAYS = {
   gr: { ratio: 140.7, solde: 0.3, recettes: 50.0, dette2025: 146.1 },
   it: { ratio: 138.0, solde: -3.0, recettes: 47.4, dette2025: 136.7 },
   at: { ratio: 82.4, solde: -4.0, recettes: 51.0, dette2025: 81.5 },
+  be: { ratio: 111.3, solde: -5.3, recettes: 49.2, dette2025: 107.9 },
+  nl: { ratio: 46.1, solde: -2.7, recettes: 43.6, dette2025: 44.7 },
 };
 
 for (const [id, attendu] of Object.entries(PAYS)) {
@@ -81,4 +83,21 @@ test('Italie : pas de salaire minimum légal, donc pas de levier correspondant',
 test('Autriche : dette proche des 88 % du PIB prévus par le Fiskalrat en 2030', () => {
   const a = require('../at/model.js').simuler({}).find((x) => x.annee === 2030);
   assert.ok(a.ratio > 85 && a.ratio < 93, `dette 2030 ${a.ratio}`);
+});
+
+test('Belgique : déficit proche des 5,7 % projetés par la BNB en 2028', () => {
+  const b = require('../be/model.js').simuler({}).find((x) => x.annee === 2028);
+  assert.ok(b.soldePib < -5.2 && b.soldePib > -6.4, `solde 2028 ${b.soldePib}`);
+  assert.ok(b.ratio > 112 && b.ratio < 118, `dette 2028 ${b.ratio}`);
+});
+
+test('Belgique : le préréglage « Déficit vers 3 % » ramène le déficit sous 4 % en 2029', () => {
+  const m = require('../be/model.js');
+  const b = m.simuler({ ...m.DEFAUTS, economies: 16 }).find((x) => x.annee === 2029);
+  assert.ok(b.soldePib > -4, `solde 2029 ${b.soldePib}`);
+});
+
+test('Pays-Bas : dette sous 60 % du PIB jusqu’en 2031 dans le tendanciel', () => {
+  const n = require('../nl/model.js').simuler({}).find((x) => x.annee === 2031);
+  assert.ok(n.ratio > 47 && n.ratio < 60, `dette 2031 ${n.ratio}`);
 });
