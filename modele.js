@@ -51,6 +51,11 @@
     for (const q of H.postes) DEFAUTS['poste_' + q.id] = 0;
     const TOTAL_POSTES = H.postes.reduce((s, q) => s + q.montant, 0);
 
+    // Population en millions : celle du revenu universel en 2026, puis rythme constant.
+    // Sert aux indicateurs par habitant, sans effet sur la trajectoire de dette.
+    const habitants = (annee) =>
+      (H.ru.adultes + H.ru.mineurs) * Math.pow(1 + H.croissancePopulation / 100, annee - BASE.annee);
+
     // Impôts directs : zone générale (sans érosion) et hauts revenus, sociétés, patrimoines.
     function effetImpot(params) {
       const p = { ...DEFAUTS, ...params };
@@ -157,7 +162,7 @@
         dette -= solde;
 
         trajectoire.push({
-          annee, pib: pibC, dette,
+          annee, pib: pibC, dette, population: habitants(annee),
           ratio: (dette / pibC) * 100,
           recettes, depensesPrimaires, interets, soldePrimaire, solde,
           postes: parPoste, nonVentile,
@@ -179,7 +184,7 @@
       for (const q of H.postes) postes[q.id] = (base.depensesPrimaires * q.montant) / TOTAL_POSTES;
       return {
         postes, nonVentile: 0,
-        annee: base.annee, pib: base.pib, dette: base.dette,
+        annee: base.annee, pib: base.pib, dette: base.dette, population: habitants(base.annee),
         ratio: (base.dette / base.pib) * 100,
         recettes: base.recettes, depensesPrimaires: base.depensesPrimaires,
         interets: base.interets, soldePrimaire, solde,
@@ -191,6 +196,6 @@
       };
     }
 
-    return { COMPTES_2025, BASE, DEFAUTS, H, simuler, pointDeDepart, effetImpot, effetIVA, effetSmi, effetRevenuUniversel };
+    return { COMPTES_2025, BASE, DEFAUTS, H, habitants, simuler, pointDeDepart, effetImpot, effetIVA, effetSmi, effetRevenuUniversel };
   };
 });

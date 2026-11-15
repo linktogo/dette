@@ -12,6 +12,8 @@
     depart: { croissanceValeur: 4.5, ratio: 87.5, solde: 0, interets: 7.0 },
     defauts: { croissance: 1.8, inflation: 2.0, tauxMarche: 3.2, chomage: 5.6, dependance: 0.9, irSeuil: 250000 },
     H: {
+      // Population : légère hausse portée par l'immigration (hypothèse de l'application).
+      croissancePopulation: 0.3,
       refinancement: 0.16, // vie moyenne proche de 7,5 ans (hypothèse)
       // Dépenses par fonction 2024, Md€, hors intérêts : ordres de grandeur de l'application.
       postes: [

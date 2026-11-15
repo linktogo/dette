@@ -54,7 +54,7 @@ for (const [id, P] of Object.entries(PAYS)) {
   const m = P.modele;
   const d = m.pointDeDepart();
   const idsCurseurs = P.structure.groupes.flatMap((g) => (g.postes ? [] : g.curseurs.map((c) => c.id)));
-  const essais = [m.DEFAUTS, ...P.structure.prereglages.map((s) => ({ ...m.DEFAUTS, ...s.p }))];
+  const essais = [m.DEFAUTS, ...[...P.structure.prereglages, ...(P.partis ? P.partis.liste : [])].map((s) => ({ ...m.DEFAUTS, ...s.p }))];
 
   test(`${id} : chaque curseur existe dans le modèle`, () => {
     for (const c of idsCurseurs) assert.ok(c in m.DEFAUTS, c);
@@ -101,5 +101,26 @@ for (const [id, P] of Object.entries(PAYS)) {
         propre(s.usage[code], `usage ${s.url} ${code}`);
       }
     }
+  });
+}
+
+// Indicateurs par habitant : population présente sur chaque année, sans effet
+// sur la trajectoire de dette, et ordre de grandeur plausible.
+for (const [id, P] of Object.entries(PAYS)) {
+  const m = P.modele;
+  test(`${id} : population et dette par habitant`, () => {
+    const t = [m.pointDeDepart(), ...m.simuler(m.DEFAUTS)];
+    const pop0 = m.H.ru.adultes + m.H.ru.mineurs;
+    assert.equal(t[0].population, pop0);
+    for (const a of t) assert.ok(a.population > 5 && a.population < 100, `${a.annee} : ${a.population}`);
+    const parHab = (t[0].dette / t[0].population) * 1000;
+    assert.ok(parHab > 20000 && parHab < 70000, `dette par habitant 2026 : ${parHab}`);
+    // Accélérer la croissance démographique ne change pas la dette.
+    const avant = m.simuler(m.DEFAUTS).map((a) => a.dette);
+    m.H.croissancePopulation += 1;
+    try {
+      assert.deepEqual(m.simuler(m.DEFAUTS).map((a) => a.dette), avant);
+      assert.ok(m.simuler(m.DEFAUTS)[9].population > t[10].population);
+    } finally { m.H.croissancePopulation -= 1; }
   });
 }

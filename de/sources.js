@@ -198,5 +198,16 @@
       },
       usage: { fr: 'Curseurs « salaire minimum ». Rendements par point estimés par l’application.', en: '“Minimum wage” sliders. Per-point yields estimated by the app.', es: 'Controles «salario mínimo». Rendimientos por punto estimados por la aplicación.', de: 'Regler „Mindestlohn“. Erträge je Punkt von der Anwendung geschätzt.' },
     },
+    {
+      nom: 'Destatis, 15. koordinierte Bevölkerungsvorausberechnung',
+      url: 'https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Bevoelkerungsvorausberechnung/_inhalt.html',
+      chiffre: {
+        fr: '83,6 millions d’habitants en 2026 ; population quasi stable d’ici 2036 (variante moyenne).',
+        en: '83.6 million inhabitants in 2026; population roughly stable to 2036 (central variant).',
+        es: '83,6 millones de habitantes en 2026; población casi estable hasta 2036 (variante central).',
+        de: '83,6 Millionen Einwohner 2026; Bevölkerung bis 2036 nahezu stabil (mittlere Variante).',
+      },
+      usage: { fr: 'Indicateurs par habitant (dette, intérêts, dépenses par poste), sans effet sur la trajectoire.', en: 'Per-person indicators (debt, interest, spending by function), with no effect on the trajectory.', es: 'Indicadores por habitante (deuda, intereses, gasto por función), sin efecto en la trayectoria.', de: 'Pro-Kopf-Kennzahlen (Schulden, Zinsen, Ausgaben nach Aufgaben), ohne Einfluss auf den Pfad.' },
+    },
   ];
 });

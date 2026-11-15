@@ -198,5 +198,16 @@
       },
       usage: { fr: 'Curseurs « salaire minimum ». Rendements par point estimés par l’application.', en: '“Minimum wage” sliders. Per-point yields estimated by the app.', es: 'Controles «salario mínimo». Rendimientos por punto estimados por la aplicación.', de: 'Regler „Mindestlohn“. Erträge je Punkt von der Anwendung geschätzt.' },
     },
+    {
+      nom: 'ONS, National population projections',
+      url: 'https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationprojections',
+      chiffre: {
+        fr: '69,3 millions d’habitants en 2026 ; croissance d’environ 0,5 % par an d’ici 2036, portée par l’immigration.',
+        en: '69.3 million inhabitants in 2026; growth of about 0.5% a year to 2036, driven by net migration.',
+        es: '69,3 millones de habitantes en 2026; crecimiento de en torno al 0,5 % anual hasta 2036, impulsado por la inmigración.',
+        de: '69,3 Millionen Einwohner 2026; Wachstum von etwa 0,5 % pro Jahr bis 2036, getragen von Zuwanderung.',
+      },
+      usage: { fr: 'Indicateurs par habitant (dette, intérêts, dépenses par poste), sans effet sur la trajectoire.', en: 'Per-person indicators (debt, interest, spending by function), with no effect on the trajectory.', es: 'Indicadores por habitante (deuda, intereses, gasto por función), sin efecto en la trayectoria.', de: 'Pro-Kopf-Kennzahlen (Schulden, Zinsen, Ausgaben nach Aufgaben), ohne Einfluss auf den Pfad.' },
+    },
   ];
 });

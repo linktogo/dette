@@ -13,6 +13,8 @@
     depart: { croissanceValeur: 2.8, ratio: 138.0, solde: -3.0, interets: 90 },
     defauts: { croissance: 0.7, inflation: 2.0, tauxMarche: 3.0, chomage: 6.3, dependance: 2.0, irSeuil: 500000 },
     H: {
+      // Population en légère baisse (hypothèse de l'application).
+      croissancePopulation: -0.2,
       // Vie moyenne des titres d'État : 6,92 ans fin 2025 (Trésor).
       refinancement: 0.18,
       postes: [

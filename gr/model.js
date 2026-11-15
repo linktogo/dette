@@ -13,6 +13,8 @@
     depart: { croissanceValeur: 4.6, ratio: 140.7, solde: 0.3, interets: 8.0 },
     defauts: { croissance: 1.5, inflation: 2.0, tauxMarche: 3.5, chomage: 7.6, dependance: 0.4, irSeuil: 200000 },
     H: {
+      // Population en baisse, vieillissement et émigration (hypothèse de l'application).
+      croissancePopulation: -0.4,
       // Dette surtout composée de prêts européens à taux fixe et très longue maturité :
       // une faible part se refinance chaque année au taux de marché (hypothèse).
       refinancement: 0.06,

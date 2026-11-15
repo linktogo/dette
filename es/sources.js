@@ -386,5 +386,16 @@
         de: 'Referenz für den Bereich „Verteidigung“ (NATO-Abgrenzung weiter als die Eurostat-Verteidigungsfunktion).',
       },
     },
+    {
+      nom: 'INE, Proyecciones de población 2024-2074',
+      url: 'https://www.ine.es/dyngs/INEbase/es/operacion.htm?c=Estadistica_C&cid=1254736176953&menu=ultiDatos&idp=1254735572981',
+      chiffre: {
+        fr: '49,6 millions d’habitants en 2026 ; croissance d’environ 0,6 % par an d’ici 2036, portée par l’immigration.',
+        en: '49.6 million inhabitants in 2026; growth of about 0.6% a year to 2036, driven by immigration.',
+        es: '49,6 millones de habitantes en 2026; crecimiento de en torno al 0,6 % anual hasta 2036, impulsado por la inmigración.',
+        de: '49,6 Millionen Einwohner 2026; Wachstum von etwa 0,6 % pro Jahr bis 2036, getragen von Zuwanderung.',
+      },
+      usage: { fr: 'Indicateurs par habitant (dette, intérêts, dépenses par poste), sans effet sur la trajectoire.', en: 'Per-person indicators (debt, interest, spending by function), with no effect on the trajectory.', es: 'Indicadores por habitante (deuda, intereses, gasto por función), sin efecto en la trayectoria.', de: 'Pro-Kopf-Kennzahlen (Schulden, Zinsen, Ausgaben nach Aufgaben), ohne Einfluss auf den Pfad.' },
+    },
   ];
 });
