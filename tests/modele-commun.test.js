@@ -10,6 +10,7 @@ const PAYS = {
   pt: { ratio: 87.5, solde: 0, recettes: 43.4, dette2025: 89.2 },
   gr: { ratio: 140.7, solde: 0.3, recettes: 50.0, dette2025: 146.1 },
   it: { ratio: 138.0, solde: -3.0, recettes: 47.4, dette2025: 136.7 },
+  at: { ratio: 82.4, solde: -4.0, recettes: 51.0, dette2025: 81.5 },
 };
 
 for (const [id, attendu] of Object.entries(PAYS)) {
@@ -75,4 +76,9 @@ test('Italie : intérêts proches de 4 % du PIB, ratio stable autour de 137 %', 
 test('Italie : pas de salaire minimum légal, donc pas de levier correspondant', () => {
   const P = require('../it/textes.js')(require('../it/model.js'), require('../it/sources.js'));
   assert.ok(!P.structure.groupes.some((g) => g.id === 'smi'));
+});
+
+test('Autriche : dette proche des 88 % du PIB prévus par le Fiskalrat en 2030', () => {
+  const a = require('../at/model.js').simuler({}).find((x) => x.annee === 2030);
+  assert.ok(a.ratio > 85 && a.ratio < 93, `dette 2030 ${a.ratio}`);
 });

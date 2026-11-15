@@ -12,6 +12,7 @@
     { id: 'it', drapeau: '🇮🇹', modele: globalThis.DetteItalie },
     { id: 'pt', drapeau: '🇵🇹', modele: globalThis.DettePortugal },
     { id: 'gr', drapeau: '🇬🇷', modele: globalThis.DetteGrece },
+    { id: 'at', drapeau: '🇦🇹', modele: globalThis.DetteAutriche },
     { id: 'uk', drapeau: '🇬🇧', modele: globalThis.DetteRoyaumeUni, devise: 'GBP' },
   ];
 

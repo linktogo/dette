@@ -100,7 +100,7 @@
   // Textes communs aux deux simulateurs et à l'accueil.
   const COMMUN = {
     fr: (u) => ({
-      pays: { fr: 'France', es: 'Espagne', de: 'Allemagne', uk: 'Royaume-Uni', it: 'Italie', pt: 'Portugal', gr: 'Grèce' },
+      pays: { fr: 'France', es: 'Espagne', de: 'Allemagne', uk: 'Royaume-Uni', it: 'Italie', pt: 'Portugal', gr: 'Grèce', at: 'Autriche' },
       nav: { accueil: 'Accueil', pays: 'Pays', langue: 'Langue' },
       chapo: 'Déplacez les curseurs pour tester vos hypothèses. Projection pédagogique : un déroulé arithmétique d’hypothèses, pas une prévision.',
       aria: { prereglages: 'Scénarios préréglés', hypotheses: 'Hypothèses' },
@@ -155,9 +155,9 @@
           `Intérêts (${u.unite})`, `Taux moyen`, `Solde public`, `Solde stabilisant`, `Dette (${u.unite})`, `Dette / PIB`, `Dette par habitant (${u.symbole})`, `Intérêts par habitant (${u.symbole})`],
       },
       accueil: {
-        titre: 'Dette publique en Europe : sept pays',
+        titre: 'Dette publique en Europe : huit pays',
         h1: 'Dette publique : projections 2027-2036',
-        chapo: 'Sept simulateurs pédagogiques, même méthode : choisissez un pays, puis déplacez les curseurs pour tester vos hypothèses. Les projections ci-dessous sont les scénarios tendanciels, pas des prévisions.',
+        chapo: 'Huit simulateurs pédagogiques, même méthode : choisissez un pays, puis déplacez les curseurs pour tester vos hypothèses. Les projections ci-dessous sont les scénarios tendanciels, pas des prévisions.',
         ouvrir: 'Ouvrir le simulateur →',
         detteFin2025: 'Dette fin 2025',
         tendanciel: (a) => `Tendanciel ${a}`,
@@ -175,17 +175,18 @@
         resume: {
           fr: 'Dette au-dessus de 115 % du PIB et déficit d’environ 5 % : sans mesures, la dette continue de monter.',
           es: 'Dette repassée sous 100 % du PIB grâce à une forte croissance, mais les retraites et les intérêts la font remonter après 2030.',
-          de: 'Dette la plus faible des sept, mais le fonds d’infrastructure et le réarmement font passer le déficit au-dessus de 3 % : la dette monte vite.',
+          de: 'Dette la plus faible des huit, mais le fonds d’infrastructure et le réarmement font passer le déficit au-dessus de 3 % : la dette monte vite.',
           uk: 'Dette nette proche de 95 % du PIB et charge d’intérêts parmi les plus lourdes, gonflée par les titres indexés sur l’inflation.',
           it: 'Dette proche de 137 % du PIB, intérêts proches de 4 % du PIB : malgré un excédent primaire, le ratio ne baisse pas.',
           pt: 'Excédents budgétaires et forte croissance : la dette est passée sous 90 % du PIB et continue de baisser.',
+          at: 'Déficit au-dessus de 4 % malgré la consolidation : la dette, proche de 82 % du PIB, continue de monter.',
           gr: 'Dette la plus élevée de l’UE, mais en baisse rapide grâce à de gros excédents primaires et à des prêts européens bon marché.',
         },
       },
     }),
 
     en: (u) => ({
-      pays: { fr: 'France', es: 'Spain', de: 'Germany', uk: 'United Kingdom', it: 'Italy', pt: 'Portugal', gr: 'Greece' },
+      pays: { fr: 'France', es: 'Spain', de: 'Germany', uk: 'United Kingdom', it: 'Italy', pt: 'Portugal', gr: 'Greece', at: 'Austria' },
       nav: { accueil: 'Home', pays: 'Country', langue: 'Language' },
       chapo: 'Move the sliders to test your assumptions. An educational projection: the arithmetic consequences of assumptions, not a forecast.',
       aria: { prereglages: 'Preset scenarios', hypotheses: 'Assumptions' },
@@ -240,9 +241,9 @@
           `Interest (${u.unite})`, `Average rate`, `Budget balance`, `Stabilising balance`, `Debt (${u.unite})`, `Debt / GDP`, `Debt per person (${u.symbole})`, `Interest per person (${u.symbole})`],
       },
       accueil: {
-        titre: 'Public debt in Europe: seven countries',
+        titre: 'Public debt in Europe: eight countries',
         h1: 'Public debt: projections 2027-2036',
-        chapo: 'Seven educational simulators using the same method: pick a country, then move the sliders to test your assumptions. The projections below are baseline scenarios, not forecasts.',
+        chapo: 'Eight educational simulators using the same method: pick a country, then move the sliders to test your assumptions. The projections below are baseline scenarios, not forecasts.',
         ouvrir: 'Open the simulator →',
         detteFin2025: 'Debt at end-2025',
         tendanciel: (a) => `Baseline ${a}`,
@@ -260,17 +261,18 @@
         resume: {
           fr: 'Debt above 115% of GDP and a deficit of around 5%: without action, debt keeps rising.',
           es: 'Debt back below 100% of GDP thanks to strong growth, but pensions and interest push it up again after 2030.',
-          de: 'The lowest debt of the seven, but the infrastructure fund and rearmament push the deficit above 3%: debt rises fast.',
+          de: 'The lowest debt of the eight, but the infrastructure fund and rearmament push the deficit above 3%: debt rises fast.',
           uk: 'Net debt close to 95% of GDP and one of the heaviest interest bills, swollen by inflation-linked gilts.',
           it: 'Debt close to 137% of GDP and interest near 4% of GDP: despite a primary surplus, the ratio is not falling.',
           pt: 'Budget surpluses and strong growth: debt has fallen below 90% of GDP and keeps falling.',
+          at: 'A deficit above 4% despite consolidation: debt, close to 82% of GDP, keeps rising.',
           gr: 'The highest debt in the EU, but falling fast thanks to large primary surpluses and cheap European loans.',
         },
       },
     }),
 
     es: (u) => ({
-      pays: { fr: 'Francia', es: 'España', de: 'Alemania', uk: 'Reino Unido', it: 'Italia', pt: 'Portugal', gr: 'Grecia' },
+      pays: { fr: 'Francia', es: 'España', de: 'Alemania', uk: 'Reino Unido', it: 'Italia', pt: 'Portugal', gr: 'Grecia', at: 'Austria' },
       nav: { accueil: 'Inicio', pays: 'País', langue: 'Idioma' },
       chapo: 'Mueva los controles para probar sus hipótesis. Proyección didáctica: el desarrollo aritmético de unas hipótesis, no una previsión.',
       aria: { prereglages: 'Escenarios predefinidos', hypotheses: 'Hipótesis' },
@@ -325,9 +327,9 @@
           `Intereses (${u.unite})`, `Tipo medio`, `Saldo público`, `Saldo estabilizador`, `Deuda (${u.unite})`, `Deuda / PIB`, `Deuda por habitante (${u.symbole})`, `Intereses por habitante (${u.symbole})`],
       },
       accueil: {
-        titre: 'Deuda pública en Europa: siete países',
+        titre: 'Deuda pública en Europa: ocho países',
         h1: 'Deuda pública: proyecciones 2027-2036',
-        chapo: 'Siete simuladores didácticos con el mismo método: elija un país y mueva los controles para probar sus hipótesis. Las proyecciones siguientes son escenarios tendenciales, no previsiones.',
+        chapo: 'Ocho simuladores didácticos con el mismo método: elija un país y mueva los controles para probar sus hipótesis. Las proyecciones siguientes son escenarios tendenciales, no previsiones.',
         ouvrir: 'Abrir el simulador →',
         detteFin2025: 'Deuda a finales de 2025',
         tendanciel: (a) => `Tendencial ${a}`,
@@ -345,17 +347,18 @@
         resume: {
           fr: 'Deuda por encima del 115 % del PIB y déficit cercano al 5 %: sin medidas, la deuda sigue subiendo.',
           es: 'Deuda de nuevo por debajo del 100 % del PIB gracias a un fuerte crecimiento, pero las pensiones y los intereses la hacen repuntar después de 2030.',
-          de: 'La deuda más baja de los siete, pero el fondo de infraestructuras y el rearme llevan el déficit por encima del 3 %: la deuda sube deprisa.',
+          de: 'La deuda más baja de los ocho, pero el fondo de infraestructuras y el rearme llevan el déficit por encima del 3 %: la deuda sube deprisa.',
           uk: 'Deuda neta cercana al 95 % del PIB y uno de los mayores gastos en intereses, inflado por los bonos indexados a la inflación.',
           it: 'Deuda cercana al 137 % del PIB e intereses cercanos al 4 % del PIB: pese al superávit primario, la ratio no baja.',
           pt: 'Superávits presupuestarios y fuerte crecimiento: la deuda ha bajado del 90 % del PIB y sigue bajando.',
+          at: 'Déficit por encima del 4 % pese a la consolidación: la deuda, cercana al 82 % del PIB, sigue subiendo.',
           gr: 'La deuda más alta de la UE, pero bajando deprisa gracias a grandes superávits primarios y a préstamos europeos baratos.',
         },
       },
     }),
 
     de: (u) => ({
-      pays: { fr: 'Frankreich', es: 'Spanien', de: 'Deutschland', uk: 'Vereinigtes Königreich', it: 'Italien', pt: 'Portugal', gr: 'Griechenland' },
+      pays: { fr: 'Frankreich', es: 'Spanien', de: 'Deutschland', uk: 'Vereinigtes Königreich', it: 'Italien', pt: 'Portugal', gr: 'Griechenland', at: 'Österreich' },
       nav: { accueil: 'Start', pays: 'Land', langue: 'Sprache' },
       chapo: 'Bewegen Sie die Regler, um Ihre Annahmen zu testen. Eine didaktische Projektion: die rechnerische Folge von Annahmen, keine Prognose.',
       aria: { prereglages: 'Voreingestellte Szenarien', hypotheses: 'Annahmen' },
@@ -410,9 +413,9 @@
           `Zinsen (${u.unite})`, `Durchschnittszins`, `Finanzierungssaldo`, `Stabilisierender Saldo`, `Schulden (${u.unite})`, `Schulden / BIP`, `Schulden je Einwohner (${u.symbole})`, `Zinsen je Einwohner (${u.symbole})`],
       },
       accueil: {
-        titre: 'Staatsschulden in Europa: sieben Länder',
+        titre: 'Staatsschulden in Europa: acht Länder',
         h1: 'Staatsschulden: Projektionen 2027-2036',
-        chapo: 'Sieben didaktische Simulatoren mit derselben Methode: Wählen Sie ein Land und bewegen Sie die Regler, um Ihre Annahmen zu testen. Die folgenden Projektionen sind Basisszenarien, keine Prognosen.',
+        chapo: 'Acht didaktische Simulatoren mit derselben Methode: Wählen Sie ein Land und bewegen Sie die Regler, um Ihre Annahmen zu testen. Die folgenden Projektionen sind Basisszenarien, keine Prognosen.',
         ouvrir: 'Simulator öffnen →',
         detteFin2025: 'Schulden Ende 2025',
         tendanciel: (a) => `Basisszenario ${a}`,
@@ -430,10 +433,11 @@
         resume: {
           fr: 'Schulden über 115 % des BIP und ein Defizit von rund 5 %: Ohne Maßnahmen steigen die Schulden weiter.',
           es: 'Schulden dank starken Wachstums wieder unter 100 % des BIP, doch Renten und Zinsen lassen sie nach 2030 wieder steigen.',
-          de: 'Die niedrigsten Schulden der sieben, doch Infrastrukturfonds und Aufrüstung treiben das Defizit über 3 %: Die Schulden steigen schnell.',
+          de: 'Die niedrigsten Schulden der acht, doch Infrastrukturfonds und Aufrüstung treiben das Defizit über 3 %: Die Schulden steigen schnell.',
           uk: 'Nettoschulden nahe 95 % des BIP und mit die höchsten Zinsausgaben, aufgebläht durch inflationsindexierte Anleihen.',
           it: 'Schulden nahe 137 % des BIP und Zinsen von fast 4 % des BIP: Trotz Primärüberschuss sinkt die Quote nicht.',
           pt: 'Haushaltsüberschüsse und starkes Wachstum: Die Schulden liegen unter 90 % des BIP und sinken weiter.',
+          at: 'Defizit über 4 % trotz Konsolidierung: Die Schulden nahe 82 % des BIP steigen weiter.',
           gr: 'Die höchsten Schulden der EU, aber schnell sinkend dank hoher Primärüberschüsse und günstiger europäischer Kredite.',
         },
       },
