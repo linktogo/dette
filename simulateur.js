@@ -291,7 +291,7 @@
 
     Graphiques.colonnes(document.getElementById('g-interets'), {
       description: C.graph.descInterets,
-      couleur: css('serie-1'), format: (v) => fmt(v, 0), formatAxe: (v) => fmt(v, 0),
+      couleur: css('serie-1'), format: (v) => fmt(v, 0), formatAxe: (v) => fmt(v, dec(v)),
       points: t.map((a) => ({
         x: a.annee, y: a.interets,
         detail: `<div><span>${C.graph.interets}</span><span>${mds(a.interets)}</span></div>

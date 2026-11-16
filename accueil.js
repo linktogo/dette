@@ -9,6 +9,12 @@
     { id: 'fr', drapeau: '🇫🇷', modele: globalThis.DetteModel },
     { id: 'es', drapeau: '🇪🇸', modele: globalThis.DetteEspagne },
     { id: 'de', drapeau: '🇩🇪', modele: globalThis.DetteAllemagne },
+    { id: 'it', drapeau: '🇮🇹', modele: globalThis.DetteItalie },
+    { id: 'pt', drapeau: '🇵🇹', modele: globalThis.DettePortugal },
+    { id: 'gr', drapeau: '🇬🇷', modele: globalThis.DetteGrece },
+    { id: 'at', drapeau: '🇦🇹', modele: globalThis.DetteAutriche },
+    { id: 'be', drapeau: '🇧🇪', modele: globalThis.DetteBelgique },
+    { id: 'nl', drapeau: '🇳🇱', modele: globalThis.DettePaysBas },
     { id: 'uk', drapeau: '🇬🇧', modele: globalThis.DetteRoyaumeUni, devise: 'GBP' },
   ];
 
@@ -69,8 +75,8 @@
         ${sparkline(courbe, echelle.min, echelle.max)}
         <div class="verdict" data-etat="${tendance.etat}"><span class="pastille" aria-hidden="true">${tendance.icone}</span>${tendance.texte}</div>
         <dl class="pays-chiffres">
-          <div><dt>${A.deficit(depart.annee)}</dt><dd>${pct(-depart.soldePib)} ${u.mots.duPib}</dd></div>
-          <div><dt>${A.deficit(fin.annee)}</dt><dd>${pct(-fin.soldePib)} ${u.mots.duPib}</dd></div>
+          <div><dt>${A.solde(depart.annee)}</dt><dd>${pctSigne(depart.soldePib)} ${u.mots.duPib}</dd></div>
+          <div><dt>${A.solde(fin.annee)}</dt><dd>${pctSigne(fin.soldePib)} ${u.mots.duPib}</dd></div>
           <div><dt>${A.interets(depart.annee)}</dt><dd>${mds(depart.interets)} · ${pct(depart.interetsPib)}</dd></div>
           <div><dt>${A.interets(fin.annee)}</dt><dd>${mds(fin.interets)} · ${pct(fin.interetsPib)}</dd></div>
           <div><dt>${A.detteHab(depart.annee)}</dt><dd>${eu(depart.dette / depart.population * 1000)}</dd></div>

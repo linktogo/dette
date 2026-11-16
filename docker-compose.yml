@@ -11,9 +11,17 @@ services:
       - ./accueil.js:/usr/share/nginx/html/accueil.js:ro
       - ./i18n.js:/usr/share/nginx/html/i18n.js:ro
       - ./simulateur.js:/usr/share/nginx/html/simulateur.js:ro
+      - ./modele.js:/usr/share/nginx/html/modele.js:ro
+      - ./textes-communs.js:/usr/share/nginx/html/textes-communs.js:ro
       - ./style.css:/usr/share/nginx/html/style.css:ro
       - ./charts.js:/usr/share/nginx/html/charts.js:ro
       - ./fr:/usr/share/nginx/html/fr:ro
       - ./es:/usr/share/nginx/html/es:ro
       - ./de:/usr/share/nginx/html/de:ro
       - ./uk:/usr/share/nginx/html/uk:ro
+      - ./it:/usr/share/nginx/html/it:ro
+      - ./pt:/usr/share/nginx/html/pt:ro
+      - ./gr:/usr/share/nginx/html/gr:ro
+      - ./at:/usr/share/nginx/html/at:ro
+      - ./be:/usr/share/nginx/html/be:ro
+      - ./nl:/usr/share/nginx/html/nl:ro

@@ -9,6 +9,12 @@ const PAYS = {
   es: require('../es/textes.js')(require('../es/model.js'), require('../es/sources.js')),
   de: require('../de/textes.js')(require('../de/model.js'), require('../de/sources.js')),
   uk: require('../uk/textes.js')(require('../uk/model.js'), require('../uk/sources.js')),
+  it: require('../it/textes.js')(require('../it/model.js'), require('../it/sources.js')),
+  pt: require('../pt/textes.js')(require('../pt/model.js'), require('../pt/sources.js')),
+  gr: require('../gr/textes.js')(require('../gr/model.js'), require('../gr/sources.js')),
+  at: require('../at/textes.js')(require('../at/model.js'), require('../at/sources.js')),
+  be: require('../be/textes.js')(require('../be/model.js'), require('../be/sources.js')),
+  nl: require('../nl/textes.js')(require('../nl/model.js'), require('../nl/sources.js')),
 };
 
 const propre = (texte, ou) => {
@@ -109,7 +115,7 @@ for (const [id, P] of Object.entries(PAYS)) {
     const t = [m.pointDeDepart(), ...m.simuler(m.DEFAUTS)];
     const pop0 = m.H.ru.adultes + m.H.ru.mineurs;
     assert.equal(t[0].population, pop0);
-    for (const a of t) assert.ok(a.population > 40 && a.population < 90, `${a.annee} : ${a.population}`);
+    for (const a of t) assert.ok(a.population > 5 && a.population < 100, `${a.annee} : ${a.population}`);
     const parHab = (t[0].dette / t[0].population) * 1000;
     assert.ok(parHab > 20000 && parHab < 70000, `dette par habitant 2026 : ${parHab}`);
     // Accélérer la croissance démographique ne change pas la dette.
