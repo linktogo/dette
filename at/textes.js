@@ -31,8 +31,8 @@
       chomageSource: 'AMS, définition nationale, octobre 2026 ; 6,3 % au sens d’Eurostat',
       aides: 'aide sociale, complément de pension minimale (Ausgleichszulage), allocation de chômage d’assistance (Notstandshilfe), la moitié des aides au logement, allocations familiales',
       criseNote: 'Covid : la dette est passée d’environ 71 % à 83 % du PIB en 2020.',
-      depart: 'Prévisions du ministère des Finances (octobre 2026) pour la dette, 82,4 % du PIB, et du Fiskalrat (automne 2026) pour le déficit, 4,0 %, et les intérêts, 2,0 % du PIB. Dernier chiffre mesuré : 81,5 % du PIB fin 2025 (418,1 Md€), déficit de 4,2 % : l’Autriche est en procédure pour déficit excessif.',
-      hypotheses: ['Le Fiskalrat prévoit une dette de 88 % du PIB en 2030 malgré les mesures de consolidation ; le préréglage « Consolidation votée » en donne une approximation (environ 3,5 Md€).'],
+      depart: 'Ministère des Finances (octobre 2026) : dette de 82,4 % du PIB et déficit de 4,1 % en 2026, puis 83,2 % et 3,6 % en 2027 ; le Fiskalrat prévoit 4,0 % de déficit en 2026. Intérêts d’environ 2,0 % du PIB (hypothèse de l’application). Dernier chiffre mesuré : 81,5 % du PIB fin 2025 (418,1 Md€), déficit de 4,2 % : l’Autriche est en procédure pour déficit excessif.',
+      hypotheses: ['Le Fiskalrat prévoit une dette de 87,8 % du PIB en 2030 malgré les mesures de consolidation ; le préréglage « Consolidation votée » en donne une approximation (environ 3,5 Md€).'],
       ignore: 'Il ignore aussi le pacte de stabilité interne entre l’État fédéral, les Länder et les communes.',
       postes: {
         defense: 'Pays neutre ; la dépense doit être portée progressivement vers 2 % du PIB.', enseignement: 'Du primaire au supérieur.', sante: 'Assurance maladie, hôpitaux des Länder.',
@@ -62,8 +62,8 @@
       chomageSource: 'AMS, national definition, October 2026; 6.3% on Eurostat’s definition',
       aides: 'social assistance, minimum-pension supplement (Ausgleichszulage), unemployment assistance (Notstandshilfe), half of housing support, family allowances',
       criseNote: 'Covid: debt rose from about 71% to 83% of GDP in 2020.',
-      depart: 'Finance Ministry forecast (October 2026) for debt, 82.4% of GDP, and Fiscal Council forecast (autumn 2026) for the deficit, 4.0%, and interest, 2.0% of GDP. Latest outturn: 81.5% of GDP at end-2025 (€418.1bn), a 4.2% deficit: Austria is under the excessive deficit procedure.',
-      hypotheses: ['The Fiscal Council expects debt of 88% of GDP in 2030 despite the consolidation measures; the “Adopted consolidation” preset approximates them (about €3.5bn).'],
+      depart: 'Finance Ministry (October 2026): debt of 82.4% of GDP and a 4.1% deficit in 2026, then 83.2% and 3.6% in 2027; the Fiscal Council expects a 4.0% deficit in 2026. Interest of about 2.0% of GDP (app assumption). Latest outturn: 81.5% of GDP at end-2025 (€418.1bn), a 4.2% deficit: Austria is under the excessive deficit procedure.',
+      hypotheses: ['The Fiscal Council expects debt of 87.8% of GDP in 2030 despite the consolidation measures; the “Adopted consolidation” preset approximates them (about €3.5bn).'],
       ignore: 'It also ignores the internal stability pact between the federal government, the Länder and municipalities.',
       postes: {
         defense: 'Neutral country; spending is to rise gradually towards 2% of GDP.', enseignement: 'Primary to higher education.', sante: 'Health insurance, Länder hospitals.',
@@ -93,8 +93,8 @@
       chomageSource: 'AMS, definición nacional, octubre de 2026; 6,3 % según Eurostat',
       aides: 'asistencia social, complemento de pensión mínima (Ausgleichszulage), subsidio de desempleo asistencial (Notstandshilfe), la mitad de las ayudas a la vivienda, prestaciones familiares',
       criseNote: 'Covid: la deuda pasó de en torno al 71 % al 83 % del PIB en 2020.',
-      depart: 'Previsiones del Ministerio de Finanzas (octubre de 2026) para la deuda, 82,4 % del PIB, y del Consejo Fiscal (otoño de 2026) para el déficit, 4,0 %, y los intereses, 2,0 % del PIB. Último dato observado: 81,5 % del PIB a finales de 2025 (418,1 mil M€) y déficit del 4,2 %: Austria está en procedimiento por déficit excesivo.',
-      hypotheses: ['El Consejo Fiscal prevé una deuda del 88 % del PIB en 2030 pese a las medidas de consolidación; el escenario «Consolidación aprobada» las aproxima (unos 3,5 mil M€).'],
+      depart: 'Ministerio de Finanzas (octubre de 2026): deuda del 82,4 % del PIB y déficit del 4,1 % en 2026, y después 83,2 % y 3,6 % en 2027; el Consejo Fiscal prevé un déficit del 4,0 % en 2026. Intereses de en torno al 2,0 % del PIB (hipótesis de la aplicación). Último dato observado: 81,5 % del PIB a finales de 2025 (418,1 mil M€) y déficit del 4,2 %: Austria está en procedimiento por déficit excesivo.',
+      hypotheses: ['El Consejo Fiscal prevé una deuda del 87,8 % del PIB en 2030 pese a las medidas de consolidación; el escenario «Consolidación aprobada» las aproxima (unos 3,5 mil M€).'],
       ignore: 'Tampoco tiene en cuenta el pacto de estabilidad interno entre el Estado federal, los Länder y los municipios.',
       postes: {
         defense: 'País neutral; el gasto debe subir progresivamente hacia el 2 % del PIB.', enseignement: 'De primaria a universidad.', sante: 'Seguro de enfermedad, hospitales de los Länder.',
@@ -124,8 +124,8 @@
       chomageSource: 'AMS, nationale Definition, Oktober 2026; 6,3 % nach Eurostat',
       aides: 'Sozialhilfe, Ausgleichszulage, Notstandshilfe, die Hälfte der Wohnbeihilfen, Familienbeihilfe',
       criseNote: 'Covid: Die Schulden stiegen 2020 von etwa 71 % auf 83 % des BIP.',
-      depart: 'Prognose des Finanzministeriums (Oktober 2026) für die Schulden, 82,4 % des BIP, und des Fiskalrats (Herbst 2026) für das Defizit, 4,0 %, und die Zinsen, 2,0 % des BIP. Letzter gemessener Wert: 81,5 % des BIP Ende 2025 (418,1 Mrd. €), Defizit 4,2 %: Österreich ist im Defizitverfahren.',
-      hypotheses: ['Der Fiskalrat erwartet trotz der Konsolidierungsmaßnahmen eine Schuldenquote von 88 % im Jahr 2030; das Szenario „Beschlossene Konsolidierung“ bildet diese Maßnahmen näherungsweise ab (etwa 3,5 Mrd. €).'],
+      depart: 'Finanzministerium (Oktober 2026): Schulden von 82,4 % des BIP und Defizit von 4,1 % im Jahr 2026, dann 83,2 % und 3,6 % im Jahr 2027; der Fiskalrat erwartet 2026 ein Defizit von 4,0 %. Zinsen von etwa 2,0 % des BIP (Annahme der Anwendung). Letzter gemessener Wert: 81,5 % des BIP Ende 2025 (418,1 Mrd. €), Defizit 4,2 %: Österreich ist im Defizitverfahren.',
+      hypotheses: ['Der Fiskalrat erwartet trotz der Konsolidierungsmaßnahmen eine Schuldenquote von 87,8 % im Jahr 2030; das Szenario „Beschlossene Konsolidierung“ bildet diese Maßnahmen näherungsweise ab (etwa 3,5 Mrd. €).'],
       ignore: 'Es ignoriert auch den innerösterreichischen Stabilitätspakt zwischen Bund, Ländern und Gemeinden.',
       postes: {
         defense: 'Neutrales Land; die Ausgaben sollen schrittweise gegen 2 % des BIP steigen.', enseignement: 'Von der Volksschule bis zur Hochschule.', sante: 'Krankenversicherung, Landeskrankenhäuser.',

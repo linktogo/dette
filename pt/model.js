@@ -5,11 +5,11 @@
 })(globalThis, function (creerModele) {
   return creerModele({
     // 2025 : dette 89,2 % du PIB (2e notification PDE), excédent 0,7 % du PIB,
-    // recettes 132,7 Md€ soit 43,4 % du PIB (INE, CFP).
+    // recettes 43,4 % du PIB (CFP).
     comptes2025: { dette: 272.8, ratio: 89.2, solde: 0.7, recettesPib: 43.4 },
-    // Fin 2026 : dette 87,5 % et solde nul (gouvernement, avril 2026) ; PIB +4,5 % en
-    // valeur (environ 2 % en volume) ; intérêts ~7 Md€ (budget 2025 : près de 7 Md€).
-    depart: { croissanceValeur: 4.5, ratio: 87.5, solde: 0, interets: 7.0 },
+    // Fin 2026 : dette 87,5 % et solde nul (gouvernement, rapport du budget 2027, octobre 2026) ;
+    // PIB +4,5 % en valeur (hypothèse) ; intérêts 2,0 % du PIB (CFP), soit ~6,4 Md€.
+    depart: { croissanceValeur: 4.5, ratio: 87.5, solde: 0, interets: 6.4 },
     defauts: { croissance: 1.8, inflation: 2.0, tauxMarche: 3.2, chomage: 5.6, dependance: 0.9, irSeuil: 250000 },
     H: {
       // Population : légère hausse portée par l'immigration (hypothèse de l'application).

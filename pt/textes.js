@@ -27,8 +27,8 @@
       smiNote: '920 € sur 14 mois ; 970 € envisagés en 2027.',
       aides: 'revenu social d’insertion, complément solidaire pour personnes âgées, prestation d’inclusion, la moitié des aides au logement, allocations familiales',
       criseNote: 'Crise de 2011 : dette passée d’environ 100 % à plus de 130 % du PIB, sous programme d’aide.',
-      depart: 'Prévision du gouvernement d’avril 2026 : dette de 87,5 % du PIB, solde nul. Dernier chiffre mesuré : 89,2 % du PIB fin 2025, avec un excédent de 0,7 %.',
-      hypotheses: ['Le FMI prévoit que 2026 ouvre plusieurs années de déficits ; le tendanciel, qui maintient les dépenses au rythme de la croissance, n’en tient pas compte.'],
+      depart: 'Gouvernement (budget 2027, octobre 2026) : dette de 87,5 % du PIB et solde nul en 2026, puis 84,5 % et excédent de 0,1 % en 2027. Dernier chiffre mesuré : 89,2 % du PIB fin 2025, avec un excédent de 0,7 %.',
+      hypotheses: ['Le Conseil des finances publiques (CFP) souligne que la charge d’intérêts passe de 2,0 % à 2,4 % du PIB en 2027 et que l’excédent repose sur la Sécurité sociale, l’État central restant en déficit.'],
       ignore: 'Il ignore aussi la fin des fonds européens du plan de relance en 2026.',
       postes: {
         defense: 'Environ 1 % du PIB ; objectif OTAN relevé.', enseignement: 'Du primaire au supérieur.', sante: 'Service national de santé.',
@@ -56,8 +56,8 @@
       smiNote: '€920 over 14 payments; €970 being considered for 2027.',
       aides: 'social integration income, solidarity supplement for older people, social inclusion benefit, half of housing support, family allowances',
       criseNote: '2011 crisis: debt rose from about 100% to over 130% of GDP, under an assistance programme.',
-      depart: 'Government forecast of April 2026: debt of 87.5% of GDP, balanced budget. Latest outturn: 89.2% of GDP at end-2025, with a 0.7% surplus.',
-      hypotheses: ['The IMF expects 2026 to open several years of deficits; the baseline, which keeps spending growing with the economy, does not include this.'],
+      depart: 'Government (2027 budget, October 2026): debt of 87.5% of GDP and a balanced budget in 2026, then 84.5% and a 0.1% surplus in 2027. Latest outturn: 89.2% of GDP at end-2025, with a 0.7% surplus.',
+      hypotheses: ['The Public Finance Council (CFP) notes that interest rises from 2.0% to 2.4% of GDP in 2027 and that the surplus relies on Social Security, with central government still in deficit.'],
       ignore: 'It also ignores the end of the EU recovery-plan funds in 2026.',
       postes: {
         defense: 'About 1% of GDP; NATO target raised.', enseignement: 'Primary to higher education.', sante: 'National Health Service.',
@@ -85,8 +85,8 @@
       smiNote: '920 € en 14 pagas; se contemplan 970 € en 2027.',
       aides: 'renta social de inserción, complemento solidario para mayores, prestación social de inclusión, la mitad de las ayudas a la vivienda, prestaciones familiares',
       criseNote: 'Crisis de 2011: la deuda pasó de en torno al 100 % a más del 130 % del PIB, bajo un programa de asistencia.',
-      depart: 'Previsión del Gobierno de abril de 2026: deuda del 87,5 % del PIB, saldo nulo. Último dato observado: 89,2 % del PIB a finales de 2025, con un superávit del 0,7 %.',
-      hypotheses: ['El FMI prevé que 2026 abra varios años de déficits; el tendencial, que mantiene el gasto al ritmo del crecimiento, no lo recoge.'],
+      depart: 'Gobierno (presupuesto 2027, octubre de 2026): deuda del 87,5 % del PIB y saldo nulo en 2026, y después 84,5 % y superávit del 0,1 % en 2027. Último dato observado: 89,2 % del PIB a finales de 2025, con un superávit del 0,7 %.',
+      hypotheses: ['El Consejo de Finanzas Públicas (CFP) señala que los intereses pasan del 2,0 % al 2,4 % del PIB en 2027 y que el superávit descansa en la Seguridad Social, mientras el Estado central sigue en déficit.'],
       ignore: 'Tampoco tiene en cuenta el final de los fondos europeos del plan de recuperación en 2026.',
       postes: {
         defense: 'En torno al 1 % del PIB; objetivo OTAN elevado.', enseignement: 'De primaria a universidad.', sante: 'Servicio Nacional de Salud.',
@@ -114,8 +114,8 @@
       smiNote: '920 € bei 14 Zahlungen; für 2027 sind 970 € im Gespräch.',
       aides: 'soziales Eingliederungseinkommen, Solidaritätszuschlag für Ältere, Inklusionsleistung, die Hälfte der Wohnhilfen, Familienleistungen',
       criseNote: 'Krise von 2011: Die Schulden stiegen unter einem Hilfsprogramm von etwa 100 % auf über 130 % des BIP.',
-      depart: 'Regierungsprognose vom April 2026: Schulden von 87,5 % des BIP, ausgeglichener Haushalt. Letzter gemessener Wert: 89,2 % des BIP Ende 2025, mit einem Überschuss von 0,7 %.',
-      hypotheses: ['Der IWF erwartet, dass 2026 mehrere Defizitjahre einleitet; das Basisszenario, das die Ausgaben mit dem Wachstum steigen lässt, bildet das nicht ab.'],
+      depart: 'Regierung (Haushalt 2027, Oktober 2026): Schulden von 87,5 % des BIP und ausgeglichener Haushalt 2026, dann 84,5 % und 0,1 % Überschuss 2027. Letzter gemessener Wert: 89,2 % des BIP Ende 2025, mit einem Überschuss von 0,7 %.',
+      hypotheses: ['Der Rat für öffentliche Finanzen (CFP) weist darauf hin, dass die Zinsen 2027 von 2,0 % auf 2,4 % des BIP steigen und der Überschuss auf der Sozialversicherung beruht, während der Zentralstaat im Defizit bleibt.'],
       ignore: 'Es ignoriert auch das Auslaufen der EU-Mittel aus dem Aufbauplan im Jahr 2026.',
       postes: {
         defense: 'Etwa 1 % des BIP; NATO-Ziel angehoben.', enseignement: 'Von der Grundschule bis zur Hochschule.', sante: 'Nationaler Gesundheitsdienst.',

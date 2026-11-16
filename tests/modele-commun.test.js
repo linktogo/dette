@@ -8,8 +8,8 @@ const proche = (a, b, tol, msg) =>
 // Point de départ fin 2026 attendu (sources dans chaque sources.js).
 const PAYS = {
   pt: { ratio: 87.5, solde: 0, recettes: 43.4, dette2025: 89.2 },
-  gr: { ratio: 140.7, solde: 0.3, recettes: 50.0, dette2025: 146.1 },
-  it: { ratio: 138.0, solde: -3.0, recettes: 47.4, dette2025: 136.7 },
+  gr: { ratio: 136.7, solde: 0.6, recettes: 50.0, dette2025: 146.1 },
+  it: { ratio: 138.1, solde: -2.9, recettes: 48.0, dette2025: 136.7 },
   at: { ratio: 82.4, solde: -4.0, recettes: 51.0, dette2025: 81.5 },
   be: { ratio: 111.3, solde: -5.3, recettes: 49.2, dette2025: 107.9 },
   nl: { ratio: 46.1, solde: -2.7, recettes: 43.6, dette2025: 44.7 },
@@ -63,7 +63,7 @@ for (const [id, attendu] of Object.entries(PAYS)) {
   });
 }
 
-test('Grèce : dette en baisse rapide, cohérente avec le FMI (vers 111 % du PIB)', () => {
+test('Grèce : dette en baisse rapide (vers 111 % du PIB en 2031)', () => {
   const t = require('../gr/model.js').simuler({});
   const a2031 = t.find((a) => a.annee === 2031);
   assert.ok(a2031.ratio > 105 && a2031.ratio < 125, `dette 2031 ${a2031.ratio}`);

@@ -1,4 +1,4 @@
-// Sources du modèle grec (consultées en novembre 2026).
+// Sources du modèle grec (sites officiels, consultés en novembre 2026).
 (function (racine, fabrique) {
   if (typeof module === 'object' && module.exports) module.exports = fabrique();
   else racine.SOURCES = fabrique();
@@ -6,65 +6,69 @@
   const usage = (fr, en, es, de) => ({ fr, en, es, de });
   return [
     {
-      nom: { fr: 'ELSTAT, dette publique 2025, via ered.gr', en: 'ELSTAT, 2025 public debt, via ered.gr', es: 'ELSTAT, deuda pública de 2025, vía ered.gr', de: 'ELSTAT, Staatsschulden 2025, über ered.gr' },
-      url: 'https://ered.gr/en/greeces-public-debt-moves-higher-in-2025/',
+      nom: { fr: 'ELSTAT, données budgétaires 2022-2025 (notification d’avril 2026)', en: 'ELSTAT, fiscal data 2022-2025 (April 2026 notification)', es: 'ELSTAT, datos presupuestarios 2022-2025 (notificación de abril de 2026)', de: 'ELSTAT, Haushaltsdaten 2022-2025 (Meldung vom April 2026)' },
+      url: 'https://www.statistics.gr/en/statistics/-/publication/SEL03/-',
       chiffre: {
-        fr: 'Dette de 362,9 Md€ fin 2025, soit 146,1 % du PIB (154,2 % en 2024, 164,3 % en 2023) ; excédent primaire de 4,9 % du PIB.',
-        en: 'Debt of €362.9bn at end-2025, i.e. 146.1% of GDP (154.2% in 2024, 164.3% in 2023); primary surplus of 4.9% of GDP.',
-        es: 'Deuda de 362,9 mil M€ a finales de 2025, el 146,1 % del PIB (154,2 % en 2024, 164,3 % en 2023); superávit primario del 4,9 % del PIB.',
-        de: 'Schulden von 362,9 Mrd. € Ende 2025, also 146,1 % des BIP (154,2 % im Jahr 2024, 164,3 % im Jahr 2023); Primärüberschuss von 4,9 % des BIP.',
+        fr: 'Excédent de 4,29 Md€ en 2025, soit 1,7 % du PIB ; dette de 362,9 Md€, soit 146,1 % du PIB ; recettes de 124,2 Md€ et dépenses de 119,9 Md€ (48,3 % du PIB), soit des recettes d’environ 50 % du PIB.',
+        en: 'Surplus of €4.29bn in 2025, i.e. 1.7% of GDP; debt of €362.9bn, i.e. 146.1% of GDP; revenue of €124.2bn and expenditure of €119.9bn (48.3% of GDP), so revenue of about 50% of GDP.',
+        es: 'Superávit de 4,29 mil M€ en 2025, el 1,7 % del PIB; deuda de 362,9 mil M€, el 146,1 % del PIB; ingresos de 124,2 mil M€ y gasto de 119,9 mil M€ (48,3 % del PIB), es decir, ingresos de en torno al 50 % del PIB.',
+        de: 'Überschuss von 4,29 Mrd. € im Jahr 2025, also 1,7 % des BIP; Schulden von 362,9 Mrd. €, also 146,1 % des BIP; Einnahmen von 124,2 Mrd. € und Ausgaben von 119,9 Mrd. € (48,3 % des BIP), also Einnahmen von etwa 50 % des BIP.',
       },
-      usage: usage('Point de départ de la projection.', 'Starting point of the projection.', 'Punto de partida de la proyección.', 'Ausgangspunkt der Projektion.'),
+      usage: usage('Point de départ de la projection et taux de recettes.', 'Starting point of the projection and revenue ratio.', 'Punto de partida de la proyección y ratio de ingresos.', 'Ausgangspunkt der Projektion und Einnahmenquote.'),
     },
     {
-      nom: { fr: 'FMI, article IV 2026, via Greek City Times', en: 'IMF, 2026 Article IV, via Greek City Times', es: 'FMI, artículo IV de 2026, vía Greek City Times', de: 'IWF, Artikel-IV-Bericht 2026, über Greek City Times' },
-      url: 'https://greekcitytimes.com/2026/10/14/imf-forecasts-greek-public-debt-to-fall-to-111-1-of-gdp/',
+      nom: { fr: 'Ministère des Finances, projet de plan budgétaire 2027 (octobre 2026)', en: 'Ministry of Finance, 2027 draft budgetary plan (October 2026)', es: 'Ministerio de Finanzas, proyecto de plan presupuestario 2027 (octubre de 2026)', de: 'Finanzministerium, Übersicht über die Haushaltsplanung 2027 (Oktober 2026)' },
+      url: 'https://minfin.gov.gr/wp-content/uploads/2026/10/Greece_DBP_2027_final.pdf',
       chiffre: {
-        fr: 'Excédent de 1,7 % du PIB en 2025, 0,3 % prévu en 2026 ; recettes d’environ 50 % du PIB ; dette ramenée vers 111 % du PIB à l’horizon de la prévision.',
-        en: 'Surplus of 1.7% of GDP in 2025, 0.3% forecast for 2026; revenue of about 50% of GDP; debt falling towards 111% of GDP by the end of the forecast.',
-        es: 'Superávit del 1,7 % del PIB en 2025 y del 0,3 % previsto en 2026; ingresos de en torno al 50 % del PIB; deuda hacia el 111 % del PIB al final de la previsión.',
-        de: 'Überschuss von 1,7 % des BIP im Jahr 2025, 0,3 % für 2026 erwartet; Einnahmen von etwa 50 % des BIP; Schulden sinken bis zum Ende der Prognose gegen 111 % des BIP.',
+        fr: 'Excédent de 0,6 % du PIB et excédent primaire de 3,6 % en 2026 ; dette de 136,7 % fin 2026 puis 128,8 % fin 2027 ; intérêts de 3,0 % du PIB en 2026 et 3,1 % en 2027.',
+        en: 'Surplus of 0.6% of GDP and primary surplus of 3.6% in 2026; debt of 136.7% at end-2026 then 128.8% at end-2027; interest of 3.0% of GDP in 2026 and 3.1% in 2027.',
+        es: 'Superávit del 0,6 % del PIB y superávit primario del 3,6 % en 2026; deuda del 136,7 % a finales de 2026 y del 128,8 % a finales de 2027; intereses del 3,0 % del PIB en 2026 y del 3,1 % en 2027.',
+        de: 'Überschuss von 0,6 % des BIP und Primärüberschuss von 3,6 % im Jahr 2026; Schulden von 136,7 % Ende 2026, dann 128,8 % Ende 2027; Zinsen von 3,0 % des BIP 2026 und 3,1 % 2027.',
       },
-      usage: usage('Solde de départ ; vraisemblance du tendanciel.', 'Starting balance; plausibility of the baseline.', 'Saldo de partida; verosimilitud del tendencial.', 'Saldo zu Beginn; Plausibilität des Basisszenarios.'),
+      usage: usage('Point de départ fin 2026 et intérêts.', 'End-2026 starting point and interest.', 'Punto de partida a finales de 2026 e intereses.', 'Ausgangspunkt Ende 2026 und Zinsen.'),
     },
     {
-      nom: { fr: 'Commission européenne, prévisions économiques pour la Grèce (mai 2026)', en: 'European Commission, economic forecast for Greece (May 2026)', es: 'Comisión Europea, previsiones económicas para Grecia (mayo de 2026)', de: 'Europäische Kommission, Wirtschaftsprognose für Griechenland (Mai 2026)' },
-      url: 'https://economy-finance.ec.europa.eu/economic-surveillance-eu-member-states/country-pages/greece/economic-forecast-greece_en',
+      nom: { fr: 'Banque de Grèce, note sur l’économie grecque (23 octobre 2026)', en: 'Bank of Greece, note on the Greek economy (23 October 2026)', es: 'Banco de Grecia, nota sobre la economía griega (23 de octubre de 2026)', de: 'Bank von Griechenland, Notiz zur griechischen Wirtschaft (23. Oktober 2026)' },
+      url: 'https://www.bankofgreece.gr/Publications/Note_on_the_Greek_economy_23_10_2026.pdf',
       chiffre: {
-        fr: 'Excédent de 0,8 % du PIB en 2026 ; dette de 140,7 % du PIB, puis 134,4 % en 2027.',
-        en: 'Surplus of 0.8% of GDP in 2026; debt of 140.7% of GDP, then 134.4% in 2027.',
-        es: 'Superávit del 0,8 % del PIB en 2026; deuda del 140,7 % del PIB y del 134,4 % en 2027.',
-        de: 'Überschuss von 0,8 % des BIP im Jahr 2026; Schulden von 140,7 % des BIP, dann 134,4 % im Jahr 2027.',
+        fr: 'Dette ramenée à 136,1 % du PIB fin juin 2026 ; le projet de budget 2027 révise à la hausse l’excédent primaire et à la baisse la dette.',
+        en: 'Debt down to 136.1% of GDP at end-June 2026; the draft 2027 budget revises the primary surplus up and debt down.',
+        es: 'Deuda reducida al 136,1 % del PIB a finales de junio de 2026; el proyecto de presupuesto 2027 revisa al alza el superávit primario y a la baja la deuda.',
+        de: 'Schulden Ende Juni 2026 auf 136,1 % des BIP gesunken; der Haushaltsentwurf 2027 revidiert den Primärüberschuss nach oben und die Schulden nach unten.',
       },
-      usage: usage('Dette de départ fin 2026.', 'Starting debt at end-2026.', 'Deuda de partida a finales de 2026.', 'Schulden zu Beginn Ende 2026.'),
+      usage: usage('Vraisemblance du point de départ.', 'Plausibility of the starting point.', 'Verosimilitud del punto de partida.', 'Plausibilität des Ausgangspunkts.'),
     },
     {
-      nom: { fr: 'To Vima, budget 2026', en: 'To Vima, 2026 budget', es: 'To Vima, presupuesto de 2026', de: 'To Vima, Haushalt 2026' },
-      url: 'https://www.tovima.com/finance/2026-budget-greece-aims-for-2-4-growth-2-2-inflation/amp/',
+      nom: { fr: 'ELSTAT, enquête sur les forces de travail (septembre 2026)', en: 'ELSTAT, labour force survey (September 2026)', es: 'ELSTAT, encuesta de población activa (septiembre de 2026)', de: 'ELSTAT, Arbeitskräfteerhebung (September 2026)' },
+      url: 'https://www.statistics.gr/en/statistics/-/publication/SJO02/-',
       chiffre: {
-        fr: 'Budget 2026 : croissance de 2,4 %, inflation de 2,2 %.',
-        en: '2026 budget: growth of 2.4%, inflation of 2.2%.',
-        es: 'Presupuesto de 2026: crecimiento del 2,4 %, inflación del 2,2 %.',
-        de: 'Haushalt 2026: Wachstum von 2,4 %, Inflation von 2,2 %.',
+        fr: 'Taux de chômage de 7,6 % en septembre 2026 (7,4 % en août).',
+        en: 'Unemployment rate of 7.6% in September 2026 (7.4% in August).',
+        es: 'Tasa de paro del 7,6 % en septiembre de 2026 (7,4 % en agosto).',
+        de: 'Arbeitslosenquote von 7,6 % im September 2026 (7,4 % im August).',
       },
-      usage: usage('Croissance du PIB en 2026.', '2026 GDP growth.', 'Crecimiento del PIB en 2026.', 'BIP-Wachstum 2026.'),
-    },
-    {
-      nom: { fr: 'ELSTAT, chômage de septembre 2026, via To Vima', en: 'ELSTAT, unemployment in September 2026, via To Vima', es: 'ELSTAT, paro de septiembre de 2026, vía To Vima', de: 'ELSTAT, Arbeitslosigkeit im September 2026, über To Vima' },
-      url: 'https://www.tovima.com/finance/unemployment-rate-falls-to-7-6-in-september/',
-      chiffre: { fr: 'Taux de chômage de 7,6 % (8,8 % un an plus tôt), 359 609 chômeurs.', en: 'Unemployment rate of 7.6% (8.8% a year earlier), 359,609 unemployed.', es: 'Tasa de paro del 7,6 % (8,8 % un año antes), 359 609 parados.', de: 'Arbeitslosenquote von 7,6 % (8,8 % ein Jahr zuvor), 359 609 Arbeitslose.' },
       usage: usage('Curseur « taux de chômage ».', '“Unemployment rate” slider.', 'Control «tasa de paro».', 'Regler „Arbeitslosenquote“.'),
     },
     {
-      nom: { fr: 'JD Supra, hausse du salaire minimum grec en avril 2026', en: 'JD Supra, Greek minimum wage rise in April 2026', es: 'JD Supra, subida del salario mínimo griego en abril de 2026', de: 'JD Supra, Erhöhung des griechischen Mindestlohns im April 2026' },
-      url: 'https://www.jdsupra.com/legalnews/greece-minimum-wage-rises-in-april-2026-7948107/',
-      chiffre: { fr: 'Salaire minimum porté de 880 € à 920 € bruts par mois au 1er avril 2026 ; 950 € visés en 2027.', en: 'Minimum wage raised from €880 to €920 gross a month on 1 April 2026; €950 targeted for 2027.', es: 'Salario mínimo elevado de 880 € a 920 € brutos al mes el 1 de abril de 2026; objetivo de 950 € en 2027.', de: 'Mindestlohn am 1. April 2026 von 880 € auf 920 € brutto pro Monat angehoben; 950 € für 2027 angestrebt.' },
+      nom: { fr: 'Ministère du Travail, salaire minimum', en: 'Ministry of Labour, minimum wage', es: 'Ministerio de Trabajo, salario mínimo', de: 'Arbeitsministerium, Mindestlohn' },
+      url: 'https://ypergasias.gov.gr/en/labour-relations/collective-employment-relations/minimum-wage/',
+      chiffre: {
+        fr: 'Salaire minimum porté de 880 € à 920 € bruts par mois au 1er avril 2026 ; 950 € visés en 2027.',
+        en: 'Minimum wage raised from €880 to €920 gross a month on 1 April 2026; €950 targeted for 2027.',
+        es: 'Salario mínimo elevado de 880 € a 920 € brutos al mes el 1 de abril de 2026; 950 € previstos en 2027.',
+        de: 'Mindestlohn am 1. April 2026 von 880 € auf 920 € brutto pro Monat angehoben; 950 € für 2027 angestrebt.',
+      },
       usage: usage('Curseurs « salaire minimum ». Rendements estimés par l’application.', '“Minimum wage” sliders. Yields estimated by the app.', 'Controles «salario mínimo». Rendimientos estimados por la aplicación.', 'Regler „Mindestlohn“. Erträge von der Anwendung geschätzt.'),
     },
     {
-      nom: { fr: 'Protothema, impôts et salaires en 2026', en: 'Protothema, taxes and wages in 2026', es: 'Protothema, impuestos y salarios en 2026', de: 'Protothema, Steuern und Löhne 2026' },
-      url: 'https://en.protothema.gr/2026/01/02/what-changes-in-taxes-and-wages-in-2026-who-gains-and-who-loses/',
-      chiffre: { fr: 'Nouvelle tranche à 39 % entre 40 000 et 60 000 € ; baisse de 2 points pour les revenus moyens au-dessus de 10 000 €.', en: 'New 39% bracket between €40,000 and €60,000; 2-point cut for middle incomes above €10,000.', es: 'Nuevo tramo del 39 % entre 40 000 y 60 000 €; rebaja de 2 puntos para las rentas medias por encima de 10 000 €.', de: 'Neue Stufe von 39 % zwischen 40 000 und 60 000 €; Senkung um 2 Punkte für mittlere Einkommen über 10 000 €.' },
+      nom: { fr: 'Ministère des Finances, réforme fiscale (loi 5246/2025)', en: 'Ministry of Finance, tax reform (Law 5246/2025)', es: 'Ministerio de Finanzas, reforma fiscal (Ley 5246/2025)', de: 'Finanzministerium, Steuerreform (Gesetz 5246/2025)' },
+      url: 'https://minfin.gov.gr/en/tax-policy/tax-guide/income-taxation/',
+      chiffre: {
+        fr: 'Barème 2026 : 9 % jusqu’à 10 000 €, 20 %, 26 % (contre 28 %), 34 % (contre 36 %), nouvelle tranche à 39 % de 40 000 à 60 000 €, 44 % au-delà.',
+        en: '2026 scale: 9% up to €10,000, 20%, 26% (down from 28%), 34% (down from 36%), a new 39% bracket from €40,000 to €60,000, 44% above.',
+        es: 'Escala 2026: 9 % hasta 10 000 €, 20 %, 26 % (antes 28 %), 34 % (antes 36 %), nuevo tramo del 39 % de 40 000 a 60 000 €, 44 % por encima.',
+        de: 'Tarif 2026: 9 % bis 10 000 €, 20 %, 26 % (zuvor 28 %), 34 % (zuvor 36 %), neue Stufe von 39 % zwischen 40 000 und 60 000 €, darüber 44 %.',
+      },
       usage: usage('Groupe « impôt sur le revenu ».', '“Income tax” group.', 'Grupo «impuesto sobre la renta».', 'Gruppe „Einkommensteuer“.'),
     },
   ];

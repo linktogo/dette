@@ -7,8 +7,9 @@
     // 2025 : dette 418,1 Md€ soit 81,5 % du PIB, déficit 4,2 %, recettes 261,5 Md€
     // (Statistik Austria, mars 2026), soit environ 51 % du PIB.
     comptes2025: { dette: 418.1, ratio: 81.5, solde: -4.2, recettesPib: 51.0 },
-    // Fin 2026 : dette 82,4 % (ministère des Finances, octobre 2026), déficit 4,0 % et
-    // intérêts 2,0 % du PIB (Fiskalrat, automne 2026) ; PIB +3,3 % en valeur (hypothèse).
+    // Fin 2026 : dette 82,4 % (ministère des Finances, octobre 2026 ; déficit 4,1 %) et
+    // déficit 4,0 % (Fiskalrat, octobre 2026) ; intérêts ~2,0 % du PIB et PIB +3,3 % en
+    // valeur (hypothèses de l'application).
     depart: { croissanceValeur: 3.3, ratio: 82.4, solde: -4.0, interets: 10.6 },
     defauts: { croissance: 1.0, inflation: 2.2, tauxMarche: 3.0, chomage: 7.3, dependance: 2.4, irSeuil: 2000000 },
     H: {

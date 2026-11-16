@@ -4,18 +4,18 @@
   else racine.DetteItalie = fabrique(racine.CreerModele);
 })(globalThis, function (creerModele) {
   return creerModele({
-    // 2025 : déficit 69,7 Md€ soit 3,1 % du PIB, dette 136,7 % du PIB, excédent primaire
-    // 0,7 à 0,8 % (Istat, notifications d'avril et d'octobre 2026). Recettes : estimation
-    // (pression fiscale 42,9 % du PIB, plus les recettes non fiscales).
-    comptes2025: { dette: 3075, ratio: 136.7, solde: -3.1, recettesPib: 47.4 },
-    // Fin 2026 : dette 138 % et déficit 3,0 % (prévisions de Moody's) ; PIB +2,8 % en
-    // valeur ; intérêts ~3,9 % du PIB.
-    depart: { croissanceValeur: 2.8, ratio: 138.0, solde: -3.0, interets: 90 },
-    defauts: { croissance: 0.7, inflation: 2.0, tauxMarche: 3.0, chomage: 6.3, dependance: 2.0, irSeuil: 500000 },
+    // 2025 (Istat) : déficit 3,1 % du PIB, dette 136,7 % (notification d'octobre 2026),
+    // recettes 48,0 % du PIB, PIB 2 265 Md€ (comptes nationaux, septembre 2026) ;
+    // intérêts 87,1 Md€, 3,9 % du PIB (notification d'avril 2026).
+    comptes2025: { dette: 3096, ratio: 136.7, solde: -3.1, recettesPib: 48.0 },
+    // Fin 2026 : dette 138,1 % et déficit 2,9 % (MEF, Documento programmatico di bilancio 2027) ;
+    // PIB +2,8 % en valeur (hypothèse) ; intérêts ~4,0 % du PIB, en hausse selon l'UPB.
+    depart: { croissanceValeur: 2.8, ratio: 138.1, solde: -2.9, interets: 93 },
+    defauts: { croissance: 0.7, inflation: 2.0, tauxMarche: 3.1, chomage: 6.3, dependance: 2.0, irSeuil: 500000 },
     H: {
       // Population en légère baisse (hypothèse de l'application).
       croissancePopulation: -0.2,
-      // Vie moyenne des titres d'État : 6,92 ans fin 2025 (Trésor).
+      // Vie moyenne des titres d'État : 6,87 ans fin octobre 2026 (Trésor) ; émissions à 3,08 %.
       refinancement: 0.18,
       postes: [
         { id: 'defense', montant: 28 }, { id: 'enseignement', montant: 88 }, { id: 'sante', montant: 140 },
@@ -25,7 +25,7 @@
       // IVA 22 / 10 / 5 / 4 % : Md€ par point, estimations de l'application.
       tva: { ids: ['tva22', 'tva10', 'tva5', 'tva4'], taux: [22, 10, 5, 4], parPoint: [4.5, 1.6, 0.1, 0.6] },
       // IRPEF 23 / 33 / 43 % : zone = les deux premières tranches ; top = 43 % au-delà de 50 000 €.
-      // Passer de 35 à 33 % coûte 2,8 Md€ (loi de budget 2026).
+      // Passer de 35 à 33 % coûte 2,9 Md€ en 2026 (Ragioneria, loi de budget 2026).
       ir: { zone: 6.4, top: { id: 'ir43', taux: 43, parPoint: 2.0, seuil: 50000 }, pareto: 1.5 },
       societes: { taux: 24, parPoint: 1.6 },
       age: { plus: [10, 4], moins: [10, 4] },

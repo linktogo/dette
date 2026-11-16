@@ -5,12 +5,12 @@
 })(globalThis, function (creerModele) {
   return creerModele({
     // 2025 : dette 362,9 Md€ soit 146,1 % du PIB, excédent 1,7 %, recettes ~50 % du PIB
-    // (ELSTAT, FMI).
+    // (ELSTAT, notification d'avril 2026).
     comptes2025: { dette: 362.9, ratio: 146.1, solde: 1.7, recettesPib: 50.0 },
-    // Fin 2026 : dette 140,7 % (Commission, mai 2026), excédent 0,3 % (FMI, octobre 2026) ;
-    // PIB +4,6 % en valeur (budget 2026 : 2,4 % de croissance, 2,2 % d'inflation) ;
-    // intérêts ~8 Md€ (7,84 Md€ en 2025).
-    depart: { croissanceValeur: 4.6, ratio: 140.7, solde: 0.3, interets: 8.0 },
+    // Fin 2026 : dette 136,7 %, excédent 0,6 %, intérêts 3,0 % du PIB, soit ~7,8 Md€
+    // (projet de plan budgétaire 2027, ministère des Finances, octobre 2026) ;
+    // PIB +4,6 % en valeur (hypothèse).
+    depart: { croissanceValeur: 4.6, ratio: 136.7, solde: 0.6, interets: 7.8 },
     defauts: { croissance: 1.5, inflation: 2.0, tauxMarche: 3.5, chomage: 7.6, dependance: 0.4, irSeuil: 200000 },
     H: {
       // Population en baisse, vieillissement et émigration (hypothèse de l'application).
