@@ -8,7 +8,7 @@
     // Anciens liens de partage du simulateur français (réglages après « # ») : redirection.
     if (location.hash.length > 1) location.replace('fr/' + location.search + location.hash);
   </script>
-  <link rel="stylesheet" href="style.css?v=14">
+  <link rel="stylesheet" href="style.css?v=15">
 </head>
 <body>
   <header class="entete accueil-entete">
@@ -22,6 +22,8 @@
   </header>
 
   <main class="accueil" id="pays" aria-live="polite"></main>
+
+  <section class="transpositions" id="transpositions"></section>
 
   <p class="note accueil-note" data-t="accueil.note"></p>
 
@@ -37,6 +39,7 @@
   <script src="at/model.js?v=2"></script>
   <script src="be/model.js?v=1"></script>
   <script src="nl/model.js?v=1"></script>
-  <script src="accueil.js?v=10"></script>
+  <script src="transpositions.js?v=1"></script>
+  <script src="accueil.js?v=11"></script>
 </body>
 </html>

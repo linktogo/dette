@@ -90,4 +90,34 @@
   const valeurs = PAYS.flatMap((p) => trajectoire(p.modele).courbe.map((c) => c.y));
   const echelle = { min: Math.min(...valeurs) - 2, max: Math.max(...valeurs) + 2 };
   document.getElementById('pays').innerHTML = PAYS.map((p) => carte(p, echelle)).join('');
+
+  // Panneau des configurations transposées : pour chaque pays, les scénarios propres
+  // aux autres pays recalculés avec son modèle, leurs réglages et leur effet en 2036.
+  function transpositions(p) {
+    const ut = I18N.outils(code, p.devise);
+    const TT = Transpositions.TEXTES[code](ut);
+    const liste = Transpositions.pour(p.id, p.modele);
+    const items = liste.map((s) => {
+      const hash = new URLSearchParams(Object.entries(s.p).map(([k, v]) => [k, String(v)]));
+      const sens = s.effet < -0.05 ? 'baisse' : s.effet > 0.05 ? 'hausse' : '';
+      return `<li>
+        <span><b>${TT.configs[s.id]}</b> · ${TT.origine(s.origines.map((o) => T.pays[o]).join(', '))}</span>
+        <span class="effet" data-sens="${sens}">${u.points(s.effet)}</span>
+        <span class="detail">${Transpositions.detail(TT, s.p, p.id)}${s.limite ? ` (${TT.limite})` : ''} · <a href="${I18N.lien(p.id + '/', code)}#${hash}">${TT.ouvrirAvec}</a></span>
+      </li>`;
+    }).join('');
+    return `<details>
+      <summary><span aria-hidden="true">${p.drapeau}</span> ${T.pays[p.id]}<span class="resume-pays">${TT.nombre(liste.length)}</span></summary>
+      <ul>${items}</ul>
+    </details>`;
+  }
+
+  if (globalThis.Transpositions) {
+    const TT = Transpositions.TEXTES[code](u);
+    document.getElementById('transpositions').innerHTML = `<div class="carte">
+      <header><h2>${TT.accueilTitre}</h2></header>
+      <p>${TT.accueilIntro}</p>
+      ${PAYS.map(transpositions).join('')}
+    </div>`;
+  }
 })();
