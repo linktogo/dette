@@ -1,9 +1,10 @@
 // Simulateur britannique : structure des curseurs (bornes, pas, préréglages) et textes
 // de l'interface en quatre langues. Montants en livres sterling (Md£).
 (function (racine, fabrique) {
-  if (typeof module === 'object' && module.exports) module.exports = fabrique;
-  else racine.PAYS = fabrique(racine.DetteRoyaumeUni, racine.SOURCES);
-})(globalThis, function (modele, sources) {
+  if (typeof module === 'object' && module.exports) {
+    module.exports = (modele, sources, partis = require('./partis.js')) => fabrique(modele, sources, partis);
+  } else racine.PAYS = fabrique(racine.DetteRoyaumeUni, racine.SOURCES, racine.PARTIS);
+})(globalThis, function (modele, sources, partis) {
   const actifIR = (p) => p.ir40 > 40 || p.ir45 > 45 || p.irSurtaxe > 0 || p.societes > 25;
   const actifRU = (p) => p.ruAdulte > 0 || p.ruMineur > 0;
 
@@ -511,5 +512,5 @@
     },
   };
 
-  return { id: 'uk', modele, sources, pib2024: 3070, anneePostes: '2025-26', devise: 'GBP', horsUE: true, structure, textes };
+  return { id: 'uk', modele, sources, partis, pib2024: 3070, anneePostes: '2025-26', devise: 'GBP', horsUE: true, structure, textes };
 });

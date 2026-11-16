@@ -1,5 +1,5 @@
-// Programmes des partis espagnols et allemands : réglages valides, textes complets
-// et traduction cohérente avec les chiffrages annoncés.
+// Programmes des partis (hors France, testée dans fr.test.js) : réglages valides,
+// textes complets et traduction cohérente avec les chiffrages annoncés.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const I18N = require('../i18n.js');
@@ -10,7 +10,16 @@ const proche = (a, b, tol, msg) =>
 const PAYS = {
   es: { M: require('../es/model.js'), ids: ['psoe', 'pp', 'vox', 'sumar'] },
   de: { M: require('../de/model.js'), ids: ['koalition', 'afd', 'gruene', 'linke'] },
+  uk: { M: require('../uk/model.js'), ids: ['labour', 'conservateurs', 'reform'] },
+  it: { M: require('../it/model.js'), ids: ['governo'] },
+  pt: { M: require('../pt/model.js'), ids: ['governo', 'ps', 'chega', 'il'] },
+  gr: { M: require('../gr/model.js'), ids: ['nd', 'pasok', 'syriza'] },
+  at: { M: require('../at/model.js'), ids: ['koalition', 'gruene'] },
+  be: { M: require('../be/model.js'), ids: ['arizona', 'ptb'] },
+  nl: { M: require('../nl/model.js'), ids: ['coalitie', 'glpvda'] },
 };
+// Le Royaume-Uni n'a pas les curseurs de dépenses nouvelles et de montée en charge.
+const SANS_NOUVEAUX = ['uk'];
 for (const [code, x] of Object.entries(PAYS)) {
   x.P = require(`../${code}/textes.js`)(x.M, require(`../${code}/sources.js`));
   x.reglage = (id) => ({ ...x.M.DEFAUTS, ...x.P.partis.liste.find((s) => s.id === id).p });
@@ -51,7 +60,7 @@ for (const [code, { P, ids }] of Object.entries(PAYS)) {
     }
   });
 
-  test(`${code} partis : nouveaux curseurs nommés dans les quatre langues`, () => {
+  if (!SANS_NOUVEAUX.includes(code)) test(`${code} partis : nouveaux curseurs nommés dans les quatre langues`, () => {
     for (const lang of I18N.CODES) {
       const u = I18N.outils(lang, P.devise);
       const L = P.textes[lang](u, P.modele, I18N.COMMUN[lang](u));
@@ -85,4 +94,23 @@ test('de partis : traduction des chiffrages annoncés', () => {
   proche(reglage('linke').prelevements * pt, 100, 3, 'Linke : impôt sur la fortune selon le DIW');
   proche(gain('koalition', 2030), 10 + 0.1 * pt, 0.5, 'coalition : économies et impôts');
   proche(gain('gruene', 2030), -3, 0.01, 'Verts : 3 Md€');
+});
+
+test('autres pays : traduction des chiffrages annoncés', () => {
+  const pt = (c) => PAYS[c].M.BASE.pib / 100;
+  const r = (c, id) => PAYS[c].reglage(id);
+  proche(r('uk', 'labour').prelevements * pt('uk'), 6.5, 0.5, 'Labour : 0,2 % du PIB');
+  proche(-r('uk', 'reform').prelevements * pt('uk'), 22.5, 2.5, 'Reform : 20 à 25 Md£');
+  proche(PAYS.it.gain('governo', 2027), -13, 0.01, 'Italie : 13 Md€ dès 2027');
+  proche(-r('pt', 'governo').prelevements * pt('pt'), 0.3, 0.05, 'Portugal : IRC 300 M€');
+  proche(-r('pt', 'il').prelevements * pt('pt'), 1.6, 0.1, 'IL : 1,6 Md€');
+  proche(-r('gr', 'syriza').prelevements * pt('gr'), 3, 0.2, 'SYRIZA : 3 Md€');
+  proche(PAYS.gr.gain('pasok', 2031), -3.1, 0.01, 'PASOK : 3,1 Md€ à terme');
+  proche(PAYS.gr.gain('pasok', 2027), -3.1 / 4, 0.01, 'PASOK : un quart la première année');
+  proche(r('at', 'gruene').prelevements * pt('at'), 1.75, 0.25, 'Verts autrichiens : 1,5 à 2 Md€');
+  proche(PAYS.at.gain('koalition', 2028), 2.5, 0.01, 'Autriche : 2,5 Md€ en 2028');
+  proche(PAYS.be.gain('arizona', 2029), 10, 0.3, 'Arizona : 10 Md€ en 2029');
+  proche(r('be', 'ptb').prelevements * pt('be'), 8, 0.2, 'PTB : 8 Md€');
+  proche(PAYS.nl.gain('coalitie', 2030), 0.2 * pt('nl'), 0.3, 'coalition : +0,2 point de PIB selon le CPB');
+  proche(r('nl', 'glpvda').prelevements * pt('nl'), 13.2, 0.3, 'GL-PvdA : 13,2 Md€');
 });

@@ -2,9 +2,9 @@
 // et la structure des curseurs viennent de ../textes-communs.js.
 (function (racine, fabrique) {
   if (typeof module === 'object' && module.exports) {
-    module.exports = (modele, sources) => fabrique(require('../textes-communs.js'), modele, sources);
-  } else racine.PAYS = fabrique(racine.PaysCommun, racine.DetteBelgique, racine.SOURCES);
-})(globalThis, function (commun, modele, sources) {
+    module.exports = (modele, sources, partis = require('./partis.js')) => fabrique(require('../textes-communs.js'), modele, sources, partis);
+  } else racine.PAYS = fabrique(racine.PaysCommun, racine.DetteBelgique, racine.SOURCES, racine.PARTIS);
+})(globalThis, function (commun, modele, sources, partis) {
   const options = {
     economiesMax: 30, economiesPas: 1, fraudeMax: 6, criseMax: 70, ruAdulte: 600,
     // 16 Md€ d'économies : déficit ramené vers 3 % du PIB en 2029 (calcul de l'application).
@@ -140,5 +140,5 @@
       prereglages: { deficit3: 'Defizit Richtung 3 % (16 Mrd. €)' },
     }),
   };
-  return commun.creerPays({ id: 'be', modele, sources, pib2024: 615, options, specifique });
+  return commun.creerPays({ id: 'be', modele, sources, partis, pib2024: 615, options, specifique });
 });

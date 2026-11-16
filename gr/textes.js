@@ -2,9 +2,9 @@
 // et la structure des curseurs viennent de ../textes-communs.js.
 (function (racine, fabrique) {
   if (typeof module === 'object' && module.exports) {
-    module.exports = (modele, sources) => fabrique(require('../textes-communs.js'), modele, sources);
-  } else racine.PAYS = fabrique(racine.PaysCommun, racine.DetteGrece, racine.SOURCES);
-})(globalThis, function (commun, modele, sources) {
+    module.exports = (modele, sources, partis = require('./partis.js')) => fabrique(require('../textes-communs.js'), modele, sources, partis);
+  } else racine.PAYS = fabrique(racine.PaysCommun, racine.DetteGrece, racine.SOURCES, racine.PARTIS);
+})(globalThis, function (commun, modele, sources, partis) {
   const options = {
     economiesMax: 12, economiesPas: 0.5, fraudeMax: 4, criseMax: 30, ruAdulte: 300,
     prereglages: [{ id: 'relache', p: { depenses: 2.5 } }],
@@ -143,5 +143,5 @@
       prereglages: { relache: 'Gelockerte Überschüsse' },
     }),
   };
-  return commun.creerPays({ id: 'gr', modele, sources, pib2024: 236, options, specifique });
+  return commun.creerPays({ id: 'gr', modele, sources, partis, pib2024: 236, options, specifique });
 });

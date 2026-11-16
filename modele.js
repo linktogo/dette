@@ -38,7 +38,7 @@
     };
 
     const DEFAUTS = {
-      depenses: c.defauts.croissance, economies: 0, prelevements: 0, fraude: 0,
+      depenses: c.defauts.croissance, economies: 0, nouvellesDepenses: 0, montee: 3, prelevements: 0, fraude: 0,
       irZone: 0, irSurtaxe: 0, erosion: 30, patrimoine: 0,
       ageLegal: 0, cotisation: 0, sousIndexation: 0, anneesSousIndexation: 4, retraites: 100,
       crise: 0, anneeCrise: 2029, smi: 0, smiEmplois: 5,
@@ -112,7 +112,7 @@
 
       for (let k = 1; k <= horizon; k++) {
         const annee = base.annee + k;
-        const montee = Math.min(1, k / 3);
+        const montee = Math.min(1, k / p.montee);
 
         // Une crise de 1 % du PIB de départ réduit la croissance d'un point, dont la moitié est rattrapée.
         let reel = p.croissance;
@@ -143,7 +143,7 @@
         H.postes.forEach((q, i) => { parPoste[q.id] = postes[i]; });
         parPoste.retraites += pibC * retraites / 100 - (age[0] + pensions) * echelle;
         parPoste.social += pibC * dependance / 100 - emploi[0] * echelle + ru.net * montee * echelle;
-        const nonVentile = (smi.depenses - p.economies) * montee * echelle + coutCrise;
+        const nonVentile = (smi.depenses + p.nouvellesDepenses - p.economies) * montee * echelle + coutCrise;
         const depensesPrimaires = Object.values(parPoste).reduce((s, v) => s + v, 0) + nonVentile;
 
         const recettes = pibC * (tauxRecettes + (p.prelevements / 100) * montee)
