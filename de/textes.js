@@ -1,9 +1,11 @@
 // Simulateur allemand : structure des curseurs (bornes, pas, préréglages) et textes
-// de l'interface en quatre langues. Les chiffres viennent du modèle (model.js).
+// de l'interface en quatre langues. Les chiffres viennent du modèle (model.js),
+// les programmes des partis, de partis.js.
 (function (racine, fabrique) {
-  if (typeof module === 'object' && module.exports) module.exports = fabrique;
-  else racine.PAYS = fabrique(racine.DetteAllemagne, racine.SOURCES);
-})(globalThis, function (modele, sources) {
+  if (typeof module === 'object' && module.exports) {
+    module.exports = (modele, sources, partis = require('./partis.js')) => fabrique(modele, sources, partis);
+  } else racine.PAYS = fabrique(racine.DetteAllemagne, racine.SOURCES, racine.PARTIS);
+})(globalThis, function (modele, sources, partis) {
   const actifIR = (p) => p.ir42 > 42 || p.ir45 > 45 || p.irSurtaxe > 0 || p.societes > 0 || p.patrimoine > 0;
   const actifRU = (p) => p.ruAdulte > 0 || p.ruMineur > 0;
 
@@ -16,7 +18,9 @@
       ] },
       { id: 'depenses', curseurs: [
         { id: 'depenses', min: -1, max: 3, pas: 0.1 },
-        { id: 'economies', min: 0, max: 150, pas: 5 },
+        { id: 'economies', min: 0, max: 200, pas: 5 },
+        { id: 'nouvellesDepenses', min: 0, max: 100, pas: 1 },
+        { id: 'montee', min: 1, max: 8, pas: 1 },
         { id: 'infra', min: 0, max: 150, pas: 10 },
         { id: 'otan', min: 0, max: 150, pas: 10 },
       ] },
@@ -132,7 +136,9 @@
           inflation: { nom: 'Inflation', f: (v) => pctAn(v), repere: 'Avec 0,9 % de croissance et 2,0 % d’inflation, un déficit d’environ 1,9 % du PIB suffit à stabiliser la dette.' },
           tauxMarche: { nom: 'Taux d’emprunt de l’État', f: (v) => pct(v), repere: 'Taux moyen à l’émission. Le Bund à 10 ans reste le taux de référence de la zone euro.' },
           depenses: { nom: 'Dépense publique hors intérêts, en volume', f: (v) => pctAn(v), repere: 'Référence : au rythme de la croissance. Hors programmes ci-dessous.' },
-          economies: { nom: 'Économies pérennes supplémentaires', f: (v) => mds(v), repere: 'En Md€ de 2026, atteints en 3 ans. Le frein à l’endettement imposerait des économies que le tendanciel n’inclut pas.' },
+          economies: { nom: 'Économies pérennes supplémentaires', f: (v) => mds(v), repere: 'En Md€ de 2026, atteints en 3 ans par défaut. Le frein à l’endettement imposerait des économies que le tendanciel n’inclut pas.' },
+          nouvellesDepenses: { nom: 'Dépenses nouvelles pérennes', f: (v) => mds(v), repere: 'En Md€ de 2026, non ventilées par poste. Sert à reprendre le total de dépenses nouvelles annoncé par un programme.' },
+          montee: { nom: 'Montée en charge des leviers budgétaires', f: (v) => u.annees(v), repere: 'Délai avant le plein effet des économies, dépenses nouvelles, impôts, cotisations et salaire minimum. 3 ans par défaut ; 6 ans pour un objectif de législature.' },
           infra: { nom: 'Fonds spécial Infrastructure dépensé', f: (v) => fmt(v, 0) + ' %', repere: '500 Md€ sur 12 ans (2025-2036) : 57,9 Md€ prévus en 2026, environ 40 Md€ par an ensuite. Imputé aux affaires économiques.' },
           otan: { nom: 'Trajectoire de défense vers 3,5 % du PIB', f: (v) => fmt(v, 0) + ' % réalisés', repere: 'Défense au sens de l’OTAN : environ 2,8 % du PIB en 2026, 3,5 % visés en 2029. 0 % gèle la dépense à son niveau de 2026.' },
           prelevements: { nom: 'Taux de recettes publiques', f: (v) => signe(v) + ' pt de PIB', repere: 'Destatis : recettes à 47,9 % du PIB en 2025, dépenses à 50,3 %.' },
@@ -192,7 +198,7 @@
             <li>Un an d’âge légal vaut ${fmt(k.agePlus)} Md€ par an en 2035, atteints progressivement ; la dérive nette des retraites et les dépenses de dépendance sont des hypothèses de l’application.</li>
             <li>Un point de chômage en moins rapporte ${fmt(k.chomagePt)} Md€ par an, en ${H.monteeChomage} ans, sans effet ajouté sur le PIB.</li>
             <li>Les effets du salaire minimum et les aides remplacées par le revenu universel (${mds(k.totalAides)} au total) sont des ordres de grandeur.</li>
-            <li>Les leviers budgétaires montent en charge sur ${H.montee} ans, puis suivent le PIB. Une crise réduit le PIB de 1 % par tranche de 150 Md€, dont la moitié est rattrapée l’année suivante.</li>
+            <li>Les leviers budgétaires montent en charge sur ${m.DEFAUTS.montee} ans par défaut (durée réglable), puis suivent le PIB. Une crise réduit le PIB de 1 % par tranche de 150 Md€, dont la moitié est rattrapée l’année suivante.</li>
             <li>Le « tendanciel » maintient les dépenses hors intérêts au rythme de la croissance, plus les programmes votés : il ignore le frein à l’endettement, qui imposerait des économies non encore décidées. Ce n’est pas une prévision officielle.</li>
           </ul>
           <p><strong>Ce que le modèle ignore :</strong> l’effet des économies, des impôts et des investissements sur la croissance, la réaction des taux au niveau de dette, les écarts entre déficit et variation de dette (le Stabilitätsrat projette une dette d’environ 80 % du PIB en 2029, en partie par des opérations financières).</p>`,
@@ -240,7 +246,9 @@
           inflation: { nom: 'Inflation', f: (v) => pctAn(v), repere: 'With 0.9% growth and 2.0% inflation, a deficit of about 1.9% of GDP is enough to stabilise debt.' },
           tauxMarche: { nom: 'Government borrowing rate', f: (v) => pct(v), repere: 'Average issuance rate. The 10-year Bund remains the euro area’s benchmark rate.' },
           depenses: { nom: 'Primary public spending, real terms', f: (v) => pctAn(v), repere: 'Reference: in line with growth. Excluding the programmes below.' },
-          economies: { nom: 'Additional permanent savings', f: (v) => mds(v), repere: 'In 2026 €bn, reached over 3 years. The debt brake would require savings that the baseline does not include.' },
+          economies: { nom: 'Additional permanent savings', f: (v) => mds(v), repere: 'In 2026 €bn, reached over 3 years by default. The debt brake would require savings that the baseline does not include.' },
+          nouvellesDepenses: { nom: 'Permanent new spending', f: (v) => mds(v), repere: 'In 2026 €bn, not allocated to a function. Used to carry over the total new spending announced by a programme.' },
+          montee: { nom: 'Phase-in of fiscal levers', f: (v) => u.annees(v), repere: 'Time before savings, new spending, taxes, contributions and minimum wage reach full effect. 3 years by default; 4 to 6 years for a target set over a parliamentary term.' },
           infra: { nom: 'Infrastructure special fund spent', f: (v) => fmt(v, 0) + '%', repere: '€500bn over 12 years (2025-2036): €57.9bn planned for 2026, about €40bn a year thereafter. Booked under economic affairs.' },
           otan: { nom: 'Defence path to 3.5% of GDP', f: (v) => fmt(v, 0) + '% achieved', repere: 'Defence on NATO’s definition: about 2.8% of GDP in 2026, 3.5% targeted for 2029. 0% freezes spending at its 2026 level.' },
           prelevements: { nom: 'Public revenue ratio', f: (v) => signe(v) + ' pp of GDP', repere: 'Destatis: revenue at 47.9% of GDP in 2025, spending at 50.3%.' },
@@ -300,7 +308,7 @@
             <li>One year of retirement age is worth €${fmt(k.agePlus)}bn a year in 2035, phased in; net pension drift and long-term care spending are app assumptions.</li>
             <li>One point less unemployment yields €${fmt(k.chomagePt)}bn a year, over ${H.monteeChomage} years, with no added effect on GDP.</li>
             <li>Minimum-wage effects and the benefits replaced by basic income (${mds(k.totalAides)} in total) are orders of magnitude.</li>
-            <li>Fiscal levers phase in over ${H.montee} years, then grow with GDP. A crisis cuts GDP by 1% per €150bn, half of which is recovered the following year.</li>
+            <li>Fiscal levers phase in over ${m.DEFAUTS.montee} years by default (adjustable), then grow with GDP. A crisis cuts GDP by 1% per €150bn, half of which is recovered the following year.</li>
             <li>The “baseline” keeps primary spending growing with the economy, plus the adopted programmes: it ignores the debt brake, which would require savings not yet decided. It is not an official forecast.</li>
           </ul>
           <p><strong>What the model ignores:</strong> the effect of savings, taxes and investment on growth, the response of interest rates to the debt level, and gaps between the deficit and the change in debt (the Stability Council projects debt of about 80% of GDP in 2029, partly through financial transactions).</p>`,
@@ -348,7 +356,9 @@
           inflation: { nom: 'Inflación', f: (v) => pctAn(v), repere: 'Con un 0,9 % de crecimiento y un 2,0 % de inflación, un déficit de en torno al 1,9 % del PIB basta para estabilizar la deuda.' },
           tauxMarche: { nom: 'Tipo de emisión del Estado', f: (v) => pct(v), repere: 'Tipo medio de emisión. El Bund a 10 años sigue siendo el tipo de referencia de la zona del euro.' },
           depenses: { nom: 'Gasto público primario, en volumen', f: (v) => pctAn(v), repere: 'Referencia: al ritmo del crecimiento. Sin los programas siguientes.' },
-          economies: { nom: 'Ahorros permanentes adicionales', f: (v) => mds(v), repere: 'En mil M€ de 2026, alcanzados en 3 años. El freno de la deuda exigiría ahorros que el tendencial no incluye.' },
+          economies: { nom: 'Ahorros permanentes adicionales', f: (v) => mds(v), repere: 'En mil M€ de 2026, alcanzados en 3 años por defecto. El freno de la deuda exigiría ahorros que el tendencial no incluye.' },
+          nouvellesDepenses: { nom: 'Gasto nuevo permanente', f: (v) => mds(v), repere: 'En mil M€ de 2026, sin asignar a una función. Sirve para recoger el total de gasto nuevo anunciado por un programa.' },
+          montee: { nom: 'Despliegue de las palancas presupuestarias', f: (v) => u.annees(v), repere: 'Plazo hasta el pleno efecto de ahorros, gasto nuevo, impuestos, cotizaciones y salario mínimo. 3 años por defecto; de 4 a 6 años para un objetivo de legislatura.' },
           infra: { nom: 'Fondo especial de infraestructuras gastado', f: (v) => fmt(v, 0) + ' %', repere: '500 mil M€ en 12 años (2025-2036): 57,9 mil M€ previstos en 2026 y unos 40 mil M€ anuales después. Imputado a asuntos económicos.' },
           otan: { nom: 'Senda de defensa hacia el 3,5 % del PIB', f: (v) => fmt(v, 0) + ' % cumplido', repere: 'Defensa según la OTAN: en torno al 2,8 % del PIB en 2026 y un 3,5 % previsto para 2029. Un 0 % congela el gasto en su nivel de 2026.' },
           prelevements: { nom: 'Ratio de ingresos públicos', f: (v) => signe(v) + ' pp del PIB', repere: 'Destatis: ingresos del 47,9 % del PIB en 2025, gasto del 50,3 %.' },
@@ -408,7 +418,7 @@
             <li>Un año de edad legal equivale a ${fmt(k.agePlus)} mil M€ al año en 2035, alcanzados progresivamente; la deriva neta de las pensiones y el gasto en dependencia son hipótesis de la aplicación.</li>
             <li>Un punto menos de paro aporta ${fmt(k.chomagePt)} mil M€ al año, en ${H.monteeChomage} años, sin efecto adicional sobre el PIB.</li>
             <li>Los efectos del salario mínimo y las ayudas sustituidas por la renta básica (${mds(k.totalAides)} en total) son órdenes de magnitud.</li>
-            <li>Las palancas presupuestarias se despliegan en ${H.montee} años y después siguen al PIB. Una crisis reduce el PIB un 1 % por cada 150 mil M€, la mitad del cual se recupera al año siguiente.</li>
+            <li>Las palancas presupuestarias se despliegan en ${m.DEFAUTS.montee} años por defecto (duración ajustable) y después siguen al PIB. Una crisis reduce el PIB un 1 % por cada 150 mil M€, la mitad del cual se recupera al año siguiente.</li>
             <li>El «tendencial» mantiene el gasto primario al ritmo del crecimiento, más los programas aprobados: ignora el freno de la deuda, que exigiría ahorros aún no decididos. No es una previsión oficial.</li>
           </ul>
           <p><strong>Lo que el modelo no tiene en cuenta:</strong> el efecto de los ahorros, los impuestos y la inversión sobre el crecimiento, la reacción de los tipos al nivel de deuda y las diferencias entre déficit y variación de la deuda (el Consejo de Estabilidad proyecta una deuda de en torno al 80 % del PIB en 2029, en parte por operaciones financieras).</p>`,
@@ -456,7 +466,9 @@
           inflation: { nom: 'Inflation', f: (v) => pctAn(v), repere: 'Bei 0,9 % Wachstum und 2,0 % Inflation reicht ein Defizit von etwa 1,9 % des BIP, um die Schulden zu stabilisieren.' },
           tauxMarche: { nom: 'Emissionszins des Staates', f: (v) => pct(v), repere: 'Durchschnittlicher Emissionszins. Die zehnjährige Bundesanleihe bleibt der Referenzzins des Euroraums.' },
           depenses: { nom: 'Primärausgaben, real', f: (v) => pctAn(v), repere: 'Referenz: im Tempo des Wachstums. Ohne die folgenden Programme.' },
-          economies: { nom: 'Zusätzliche dauerhafte Einsparungen', f: (v) => mds(v), repere: 'In Mrd. € von 2026, in 3 Jahren erreicht. Die Schuldenbremse würde Einsparungen erfordern, die das Basisszenario nicht enthält.' },
+          economies: { nom: 'Zusätzliche dauerhafte Einsparungen', f: (v) => mds(v), repere: 'In Mrd. € von 2026, standardmäßig in 3 Jahren erreicht. Die Schuldenbremse würde Einsparungen erfordern, die das Basisszenario nicht enthält.' },
+          nouvellesDepenses: { nom: 'Dauerhafte neue Ausgaben', f: (v) => mds(v), repere: 'In Mrd. € von 2026, keinem Bereich zugeordnet. Übernimmt die Summe neuer Ausgaben, die ein Programm ankündigt.' },
+          montee: { nom: 'Einführungsphase der Haushaltshebel', f: (v) => u.annees(v), repere: 'Zeit bis zur vollen Wirkung von Einsparungen, neuen Ausgaben, Steuern, Beiträge und Mindestlohn. Standard 3 Jahre; 4 bis 6 Jahre für ein Ziel innerhalb einer Wahlperiode.' },
           infra: { nom: 'Ausgeschöpftes Sondervermögen Infrastruktur', f: (v) => fmt(v, 0) + ' %', repere: '500 Mrd. € über 12 Jahre (2025-2036): 57,9 Mrd. € für 2026 veranschlagt, danach etwa 40 Mrd. € pro Jahr. Den wirtschaftlichen Angelegenheiten zugeordnet.' },
           otan: { nom: 'Verteidigungspfad zu 3,5 % des BIP', f: (v) => fmt(v, 0) + ' % umgesetzt', repere: 'Verteidigung nach NATO-Definition: etwa 2,8 % des BIP im Jahr 2026, 3,5 % für 2029 angestrebt. 0 % friert die Ausgaben auf dem Niveau von 2026 ein.' },
           prelevements: { nom: 'Staatliche Einnahmenquote', f: (v) => signe(v) + ' Pp. des BIP', repere: 'Destatis: Einnahmen 2025 bei 47,9 % des BIP, Ausgaben bei 50,3 %.' },
@@ -516,7 +528,7 @@
             <li>Ein Jahr Rentenalter entspricht 2035 ${fmt(k.agePlus)} Mrd. € pro Jahr, schrittweise erreicht; der Netto-Anstieg der Rentenlasten und die Pflegeausgaben sind Annahmen der Anwendung.</li>
             <li>Ein Punkt weniger Arbeitslosigkeit bringt ${fmt(k.chomagePt)} Mrd. € pro Jahr, in ${H.monteeChomage} Jahren, ohne zusätzliche Wirkung auf das BIP.</li>
             <li>Die Wirkungen des Mindestlohns und die vom Grundeinkommen ersetzten Leistungen (${mds(k.totalAides)} insgesamt) sind Größenordnungen.</li>
-            <li>Haushaltshebel wirken schrittweise über ${H.montee} Jahre und folgen danach dem BIP. Eine Krise senkt das BIP um 1 % je 150 Mrd. €, wovon die Hälfte im Folgejahr aufgeholt wird.</li>
+            <li>Haushaltshebel wirken schrittweise über ${m.DEFAUTS.montee} Jahre (Standard, einstellbar) und folgen danach dem BIP. Eine Krise senkt das BIP um 1 % je 150 Mrd. €, wovon die Hälfte im Folgejahr aufgeholt wird.</li>
             <li>Das „Basisszenario“ lässt die Primärausgaben mit dem Wachstum steigen, zuzüglich der beschlossenen Programme: Es ignoriert die Schuldenbremse, die noch nicht beschlossene Einsparungen erfordern würde. Es ist keine offizielle Prognose.</li>
           </ul>
           <p><strong>Was das Modell nicht berücksichtigt:</strong> die Wirkung von Einsparungen, Steuern und Investitionen auf das Wachstum, die Reaktion der Zinsen auf die Schuldenhöhe und Abweichungen zwischen Defizit und Schuldenänderung (der Stabilitätsrat projiziert für 2029 Schulden von etwa 80 % des BIP, teils durch finanzielle Transaktionen).</p>`,
@@ -524,5 +536,5 @@
     },
   };
 
-  return { id: 'de', modele, sources, pib2024: 4330, devise: 'EUR', structure, textes };
+  return { id: 'de', modele, sources, partis, pib2024: 4330, devise: 'EUR', structure, textes };
 });

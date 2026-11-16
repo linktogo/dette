@@ -31,7 +31,7 @@
     return { id: g.id, titre: tg.titre, intro: tg.intro, resume: tg.resume, curseurs };
   });
   const PREREGLAGES = P.structure.prereglages.map((s) => ({ ...s, nom: L.prereglages[s.id] }));
-  // Programmes des partis (France seulement) : réglages, textes de la langue, sources.
+  // Programmes des partis (pays qui en ont) : réglages, textes de la langue, sources.
   const TP = P.partis ? P.partis.textes[code] : null;
   const PARTIS = P.partis ? P.partis.liste.map((s) => ({ ...s, ...TP[s.id] })) : [];
 
