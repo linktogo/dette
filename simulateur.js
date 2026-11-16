@@ -36,6 +36,11 @@
   const PARTIS = P.partis ? P.partis.liste.map((s) => ({ ...s, ...TP[s.id] })) : [];
 
   const CURSEURS = GROUPES.flatMap((g) => g.curseurs);
+  // Configurations venues des autres pays (transpositions.js), recalculées pour ce pays.
+  const TT = globalThis.Transpositions ? Transpositions.TEXTES[code](u) : null;
+  const IMPORTS = TT ? Transpositions.pour(P.id, M)
+    .filter((s) => Object.keys(s.p).every((k) => CURSEURS.some((c) => c.id === k)))
+    .map((s) => ({ ...s, nom: TT.configs[s.id], pays: s.origines.map((o) => C.pays[o]).join(' · ') })) : [];
   let params = lireAdresse();
   const tendanciel = [pointDeDepart(), ...simuler(DEFAUTS)];
 
@@ -96,7 +101,7 @@
       if (titre) b.title = titre(s);
       b.addEventListener('click', () => {
         params = { ...DEFAUTS, ...s.p };
-        for (const g of GROUPES) if (g.curseurs.some((c) => params[c.id] !== DEFAUTS[c.id])) g.bloc.open = true;
+        ouvrirGroupesModifies();
         rendre();
       });
       racine.appendChild(b);
@@ -112,6 +117,92 @@
     const groupe = document.getElementById('boutons-partis');
     groupe.setAttribute('aria-label', TP.titre);
     construireBoutons(groupe, PARTIS, (s) => s.titre);
+  }
+
+  // Un curseur compte comme modifié s'il s'écarte de la référence et reste actif.
+  const modifie = (c, p = params) => p[c.id] !== DEFAUTS[c.id] && !(c.actifSi && !c.actifSi(p));
+  // Une configuration importée est active si tous ses réglages sont en place.
+  const importActif = (s) => Object.entries(s.p).every(([k, v]) => params[k] === v);
+
+  function ouvrirGroupesModifies() {
+    for (const g of GROUPES) if (g.curseurs.some((c) => params[c.id] !== DEFAUTS[c.id])) g.bloc.open = true;
+  }
+
+  // Bascule d'une configuration importée : elle s'ajoute aux réglages en cours, ou
+  // ses curseurs reviennent à la référence si elle est déjà active.
+  function basculerImport(s) {
+    if (importActif(s)) for (const k of Object.keys(s.p)) params[k] = DEFAUTS[k];
+    else Object.assign(params, s.p);
+    ouvrirGroupesModifies();
+    rendre();
+  }
+
+  function construireImports() {
+    if (!IMPORTS.length) return;
+    const pre = document.getElementById('prereglages');
+    let choix = pre.closest('.choix');
+    if (!choix) {
+      choix = document.createElement('div');
+      choix.className = 'choix';
+      pre.replaceWith(choix);
+      choix.appendChild(pre);
+    }
+    const bloc = document.createElement('div');
+    bloc.className = 'imports';
+    bloc.innerHTML = `<span class="libelle-partis" title="${TT.intro}">${TT.titre}</span><div class="prereglages" id="boutons-imports" role="group" aria-label="${TT.titre}"></div>`;
+    const groupe = bloc.querySelector('#boutons-imports');
+    for (const s of IMPORTS) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.innerHTML = `${s.nom} <small class="origine">${s.origines.map((o) => o.toUpperCase()).join(' · ')}</small>`;
+      b.title = `${TT.origine(s.pays)}. ${Transpositions.detail(TT, s.p, P.id)}.${s.limite ? ` (${TT.limite})` : ''}`;
+      b.addEventListener('click', () => basculerImport(s));
+      groupe.appendChild(b);
+    }
+    choix.appendChild(bloc);
+  }
+
+  // Panneau des changements effectués : curseurs modifiés, regroupés par pays
+  // d'origine quand ils viennent d'une configuration importée.
+  function construireChangements() {
+    if (!TT) return;
+    const carte = document.createElement('section');
+    carte.className = 'carte changements';
+    carte.id = 'changements';
+    carte.setAttribute('aria-live', 'polite');
+    const ancre = document.getElementById('fiche-parti') || document.getElementById('tuiles');
+    ancre.after(carte);
+    carte.addEventListener('click', (e) => {
+      const b = e.target.closest('button[data-action]');
+      if (!b) return;
+      if (b.dataset.action !== 'tout') return basculerImport(IMPORTS.find((s) => s.id === b.dataset.action));
+      params = { ...DEFAUTS };
+      rendre();
+    });
+  }
+
+  function majChangements() {
+    const carte = document.getElementById('changements');
+    if (!carte) return;
+    const modifies = CURSEURS.filter((c) => modifie(c));
+    const ligne = (c) => `<li><span class="nom">${c.nom}</span> <span class="avant">${c.f(DEFAUTS[c.id], DEFAUTS)}</span> → <b>${c.f(params[c.id], params)}</b></li>`;
+    const actifs = IMPORTS.filter(importActif);
+    const vus = new Set();
+    const blocs = actifs.map((s) => {
+      const cs = CURSEURS.filter((c) => c.id in s.p && modifie(c));
+      cs.forEach((c) => vus.add(c.id));
+      return `<div class="changement-pays">
+        <header><h3>${TT.parPays(s.pays)} : ${s.nom}</h3><button type="button" data-action="${s.id}">${TT.retirer}</button></header>
+        <ul>${cs.map(ligne).join('')}</ul>
+        <p class="note">${TT.effetSeul(points(s.effet), s.annee)}${s.limite ? ` · ${TT.limite}` : ''}</p>
+      </div>`;
+    });
+    const autres = modifies.filter((c) => !vus.has(c.id));
+    if (autres.length) {
+      blocs.push(`<div class="changement-pays"><header><h3>${TT.manuels} (${C.pays[P.id]})</h3></header><ul>${autres.map(ligne).join('')}</ul></div>`);
+    }
+    carte.innerHTML = `<header><h2>${TT.changements}</h2>${modifies.length ? `<button type="button" data-action="tout">${TT.toutRetirer}</button>` : ''}</header>`
+      + (blocs.length ? blocs.join('') : `<p class="note">${TT.aucunChangement}</p>`);
   }
 
   // Les réglages courants correspondent-ils exactement à ce préréglage ?
@@ -148,7 +239,7 @@
     }
     for (const g of GROUPES) {
       if (g.resume) g.elementResume.textContent = g.resume(params);
-      const modifies = g.curseurs.filter((c) => params[c.id] !== DEFAUTS[c.id] && !(c.actifSi && !c.actifSi(params))).length;
+      const modifies = g.curseurs.filter((c) => modifie(c)).length;
       const pastille = g.bloc.querySelector('.pastille-groupe');
       pastille.hidden = !modifies;
       pastille.textContent = modifies;
@@ -158,6 +249,8 @@
     PREREGLAGES.forEach((s, i) => boutons[i].setAttribute('aria-pressed', correspond(s)));
     const boutonsPartis = document.querySelectorAll('#boutons-partis button');
     PARTIS.forEach((s, i) => boutonsPartis[i].setAttribute('aria-pressed', correspond(s)));
+    const boutonsImports = document.querySelectorAll('#boutons-imports button');
+    IMPORTS.forEach((s, i) => boutonsImports[i].setAttribute('aria-pressed', importActif(s)));
   }
 
   function verdict(t) {
@@ -360,6 +453,7 @@
     const t = [pointDeDepart(), ...simuler(params)];
     majCurseurs();
     majFicheParti();
+    majChangements();
     majTuiles(t);
     majGraphiques(t);
     majPostes(t);
@@ -369,6 +463,8 @@
 
   construireCurseurs();
   construirePrereglages();
+  construireImports();
+  construireChangements();
   construireTextes();
   rendre();
   new ResizeObserver(() => majGraphiques([pointDeDepart(), ...simuler(params)])).observe(document.getElementById('g-ratio'));
