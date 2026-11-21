@@ -2,9 +2,9 @@
 // et la structure des curseurs viennent de ../textes-communs.js.
 (function (racine, fabrique) {
   if (typeof module === 'object' && module.exports) {
-    module.exports = (modele, sources) => fabrique(require('../textes-communs.js'), modele, sources);
-  } else racine.PAYS = fabrique(racine.PaysCommun, racine.DettePaysBas, racine.SOURCES);
-})(globalThis, function (commun, modele, sources) {
+    module.exports = (modele, sources, partis = require('./partis.js')) => fabrique(require('../textes-communs.js'), modele, sources, partis);
+  } else racine.PAYS = fabrique(racine.PaysCommun, racine.DettePaysBas, racine.SOURCES, racine.PARTIS);
+})(globalThis, function (commun, modele, sources, partis) {
   const options = {
     economiesMax: 50, economiesPas: 1, fraudeMax: 10, criseMax: 120, ruAdulte: 700,
     // Approximation de l'application : défense portée vers 3,5 % du PIB en 2036 (engagement OTAN).
@@ -136,5 +136,5 @@
       prereglages: { defense: 'Verteidigung bei 3,5 % des BIP' },
     }),
   };
-  return commun.creerPays({ id: 'nl', modele, sources, pib2024: 1130, options, specifique });
+  return commun.creerPays({ id: 'nl', modele, sources, partis, pib2024: 1130, options, specifique });
 });

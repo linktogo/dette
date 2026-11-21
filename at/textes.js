@@ -3,9 +3,9 @@
 // légal en Autriche : le groupe correspondant n'apparaît pas.
 (function (racine, fabrique) {
   if (typeof module === 'object' && module.exports) {
-    module.exports = (modele, sources) => fabrique(require('../textes-communs.js'), modele, sources);
-  } else racine.PAYS = fabrique(racine.PaysCommun, racine.DetteAutriche, racine.SOURCES);
-})(globalThis, function (commun, modele, sources) {
+    module.exports = (modele, sources, partis = require('./partis.js')) => fabrique(require('../textes-communs.js'), modele, sources, partis);
+  } else racine.PAYS = fabrique(racine.PaysCommun, racine.DetteAutriche, racine.SOURCES, racine.PARTIS);
+})(globalThis, function (commun, modele, sources, partis) {
   const options = {
     economiesMax: 20, economiesPas: 0.5, fraudeMax: 4, criseMax: 50, ruAdulte: 600,
     // Approximation de l'application : mesures de consolidation de 2025-2026, environ 0,6 point de PIB.
@@ -137,5 +137,5 @@
       prereglages: { consolidation: 'Beschlossene Konsolidierung' },
     }),
   };
-  return commun.creerPays({ id: 'at', modele, sources, pib2024: 480, options, specifique });
+  return commun.creerPays({ id: 'at', modele, sources, partis, pib2024: 480, options, specifique });
 });

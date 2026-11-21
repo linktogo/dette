@@ -39,7 +39,6 @@
     // (0,145 pour une maturité de 8,6 ans) transposé à la vie moyenne espagnole
     // de 7,9 ans (Tesoro Público, fin 2025).
     refinancement: 0.158,
-    montee: 3,              // années de montée en charge des leviers
     nichesTotal: 60,        // AIReF, Spending review : environ 60 Md€ de bénéfices fiscaux
     nichesRendement: 0.5,   // gain net / coût brut d'un bénéfice fiscal supprimé
     // Dépenses par fonction en 2024, Md€, hors intérêts. Reconstitution de
@@ -128,6 +127,8 @@
     tauxMarche: 3.0,   // taux moyen à l'émission, %
     depenses: 1.6,     // dépense primaire en volume, %/an
     economies: 0,      // économies pérennes, Md€ de 2026
+    nouvellesDepenses: 0, // dépenses nouvelles pérennes, Md€ de 2026
+    montee: 3,         // années de montée en charge des leviers budgétaires
     prelevements: 0,   // variation du taux de recettes, points de PIB
     niches: 0,         // % des bénéfices fiscaux supprimés
     fraude: 0,         // recouvrement supplémentaire, Md€ de 2026 par an
@@ -233,7 +234,7 @@
 
     for (let k = 1; k <= horizon; k++) {
       const annee = base.annee + k;
-      const montee = Math.min(1, k / H.montee);
+      const montee = Math.min(1, k / p.montee);
 
       // Croissance
       let reel = p.croissance;
@@ -268,7 +269,7 @@
       H.postes.forEach((q, i) => { parPoste[q.id] = postes[i]; });
       parPoste.retraites += pib * retraites / 100 - (age[0] + pensions) * echelle;
       parPoste.social += pib * dependance / 100 - emploi[0] * echelle + ru.net * montee * echelle;
-      const nonVentile = (smi.depenses - p.economies) * montee * echelle + coutCrise;
+      const nonVentile = (smi.depenses + p.nouvellesDepenses - p.economies) * montee * echelle + coutCrise;
       const depensesPrimaires = Object.values(parPoste).reduce((s, v) => s + v, 0) + nonVentile;
 
       // Recettes

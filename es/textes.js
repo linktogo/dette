@@ -1,9 +1,11 @@
 // Simulateur espagnol : structure des curseurs (bornes, pas, préréglages) et textes
-// de l'interface en quatre langues. Les chiffres viennent du modèle (model.js).
+// de l'interface en quatre langues. Les chiffres viennent du modèle (model.js),
+// les programmes des partis, de partis.js.
 (function (racine, fabrique) {
-  if (typeof module === 'object' && module.exports) module.exports = fabrique;
-  else racine.PAYS = fabrique(racine.DetteEspagne, racine.SOURCES);
-})(globalThis, function (modele, sources) {
+  if (typeof module === 'object' && module.exports) {
+    module.exports = (modele, sources, partis = require('./partis.js')) => fabrique(modele, sources, partis);
+  } else racine.PAYS = fabrique(racine.DetteEspagne, racine.SOURCES, racine.PARTIS);
+})(globalThis, function (modele, sources, partis) {
   const TAUX_IR = [19, 24, 30, 37, 45, 47];
   const actifIR = (p) => p.ir37 > 37 || p.ir45 > 45 || p.ir47 > 47 || p.irSurtaxe > 0 || p.societes > 25 || p.patrimoine > 0;
   const actifRU = (p) => p.ruAdulte > 0 || p.ruMineur > 0;
@@ -18,6 +20,8 @@
       { id: 'depenses', curseurs: [
         { id: 'depenses', min: -1, max: 4, pas: 0.1 },
         { id: 'economies', min: 0, max: 80, pas: 2.5 },
+        { id: 'nouvellesDepenses', min: 0, max: 60, pas: 0.5 },
+        { id: 'montee', min: 1, max: 8, pas: 1 },
       ] },
       { id: 'postes', postes: true, min: -4, max: 10, pas: 0.1 },
       { id: 'recettes', curseurs: [
@@ -156,7 +160,9 @@
           inflation: { nom: 'Inflation', f: (v) => pctAn(v), repere: 'Avec 1,6 % de croissance et 2,0 % d’inflation, un déficit d’environ 3,5 % du PIB suffit à stabiliser la dette.' },
           tauxMarche: { nom: 'Taux d’emprunt du Trésor', f: (v) => pct(v), repere: 'Tesoro : émissions à 2,71 % en moyenne en 2025, encours à 2,32 %. Vie moyenne : 7,9 ans.' },
           depenses: { nom: 'Dépense publique hors intérêts, en volume', f: (v) => pctAn(v), repere: 'Référence : au rythme de la croissance. Les règles européennes plafonnent la dépense nette ; l’AIReF juge l’Espagne en dépassement.' },
-          economies: { nom: 'Économies pérennes supplémentaires', f: (v) => mds(v), repere: 'En Md€ de 2026, atteints en 3 ans. AIReF : un ajustement de 0,9 point de PIB (environ 15 Md€) serait nécessaire d’ici 2028.' },
+          economies: { nom: 'Économies pérennes supplémentaires', f: (v) => mds(v), repere: 'En Md€ de 2026, atteints en 3 ans par défaut. AIReF : un ajustement de 0,9 point de PIB (environ 15 Md€) serait nécessaire d’ici 2028.' },
+          nouvellesDepenses: { nom: 'Dépenses nouvelles pérennes', f: (v) => mds(v), repere: 'En Md€ de 2026, non ventilées par poste. Sert à reprendre le total de dépenses nouvelles annoncé par un programme.' },
+          montee: { nom: 'Montée en charge des leviers budgétaires', f: (v) => u.annees(v), repere: 'Délai avant le plein effet des économies, dépenses nouvelles, impôts, bénéfices fiscaux, fraude, cotisations et salaire minimum. 3 ans par défaut ; 6 ans pour un objectif de législature.' },
           prelevements: { nom: 'Taux de recettes publiques', f: (v) => signe(v) + ' pt de PIB', repere: 'Banco de España : recettes à 42,9 % du PIB en 2025, dépenses à 45,3 %.' },
           niches: { nom: 'Bénéfices fiscaux supprimés', f: (v) => fmt(v, 0) + ' %', repere: 'AIReF : environ 60 Md€ par an, dont 17,8 Md€ de taux réduits d’IVA (qui recoupent les curseurs IVA). Gain net retenu : la moitié.' },
           fraude: { nom: 'Fraude recouvrée en plus', f: (v) => '+' + fmt(v) + ' Md€/an', repere: 'Agencia Tributaria : 22,7 Md€ recouvrés grâce au contrôle en 2025.' },
@@ -229,7 +235,7 @@
             <li>Un point de chômage en moins rapporte ${fmt(k.chomagePt)} Md€ par an, en ${H.monteeChomage} ans, sans effet ajouté sur le PIB (estimation de l’application).</li>
             <li>Les effets par point de hausse du SMI sont des estimations de l’application, fiables à 50 % près. Le SMI étant exonéré d’IRPF, seules les cotisations sont comptées. Les emplois perdus sont convertis en chômage sur une population active de ${fmt(H.smi.populationActive, 1)} millions.</li>
             <li>Le revenu universel est imputé au poste « Autre protection sociale ». Hormis l’IMV, les montants des aides qu’il remplace (${mds(k.totalAides)} au total) sont des ordres de grandeur ; leur réduction suit le rapport entre le revenu universel et l’aide moyenne.</li>
-            <li>Les leviers budgétaires montent en charge sur ${H.montee} ans, puis suivent le PIB.</li>
+            <li>Les leviers budgétaires montent en charge sur ${m.DEFAUTS.montee} ans par défaut (durée réglable), puis suivent le PIB.</li>
             <li>Une crise réduit le PIB de 1 % par tranche de 50 Md€, dont la moitié est rattrapée l’année suivante.</li>
             <li>Le « tendanciel » maintient les dépenses hors intérêts au rythme de la croissance, plus la dérive des pensions et de la dépendance : ce n’est pas une prévision officielle.</li>
           </ul>
@@ -279,7 +285,9 @@
           inflation: { nom: 'Inflation', f: (v) => pctAn(v), repere: 'With 1.6% growth and 2.0% inflation, a deficit of about 3.5% of GDP is enough to stabilise debt.' },
           tauxMarche: { nom: 'Treasury borrowing rate', f: (v) => pct(v), repere: 'Tesoro: 2025 issuance at 2.71% on average, stock at 2.32%. Average life: 7.9 years.' },
           depenses: { nom: 'Primary public spending, real terms', f: (v) => pctAn(v), repere: 'Reference: in line with growth. EU rules cap net expenditure; AIReF finds Spain is overshooting.' },
-          economies: { nom: 'Additional permanent savings', f: (v) => mds(v), repere: 'In 2026 €bn, reached over 3 years. AIReF: an adjustment of 0.9 pp of GDP (about €15bn) would be needed by 2028.' },
+          economies: { nom: 'Additional permanent savings', f: (v) => mds(v), repere: 'In 2026 €bn, reached over 3 years by default. AIReF: an adjustment of 0.9 pp of GDP (about €15bn) would be needed by 2028.' },
+          nouvellesDepenses: { nom: 'Permanent new spending', f: (v) => mds(v), repere: 'In 2026 €bn, not allocated to a function. Used to carry over the total new spending announced by a programme.' },
+          montee: { nom: 'Phase-in of fiscal levers', f: (v) => u.annees(v), repere: 'Time before savings, new spending, taxes, tax breaks, fraud, contributions and minimum wage reach full effect. 3 years by default; 4 to 6 years for a target set over a parliamentary term.' },
           prelevements: { nom: 'Public revenue ratio', f: (v) => signe(v) + ' pp of GDP', repere: 'Banco de España: revenue at 42.9% of GDP in 2025, spending at 45.3%.' },
           niches: { nom: 'Tax benefits removed', f: (v) => fmt(v, 0) + '%', repere: 'AIReF: about €60bn a year, including €17.8bn of reduced VAT rates (overlapping with the VAT sliders). Net gain assumed: half.' },
           fraude: { nom: 'Extra tax fraud recovered', f: (v) => `+€${fmt(v)}bn/yr`, repere: 'Agencia Tributaria: €22.7bn recovered through audits in 2025.' },
@@ -352,7 +360,7 @@
             <li>One point less unemployment yields €${fmt(k.chomagePt)}bn a year, over ${H.monteeChomage} years, with no added effect on GDP (app estimate).</li>
             <li>The per-point effects of a minimum-wage increase are the app’s estimates, reliable to within 50%. As the minimum wage is exempt from income tax, only contributions are counted. Lost jobs are converted into unemployment over a labour force of ${fmt(H.smi.populationActive, 1)} million.</li>
             <li>Universal basic income is booked under “Other social protection”. Apart from the IMV, the amounts of the benefits it replaces (${mds(k.totalAides)} in total) are orders of magnitude; their reduction follows the ratio between basic income and the average benefit.</li>
-            <li>Fiscal levers phase in over ${H.montee} years, then grow with GDP.</li>
+            <li>Fiscal levers phase in over ${m.DEFAUTS.montee} years by default (adjustable), then grow with GDP.</li>
             <li>A crisis cuts GDP by 1% per €50bn, half of which is recovered the following year.</li>
             <li>The “baseline” keeps primary spending growing with the economy, plus the drift in pensions and long-term care: it is not an official forecast.</li>
           </ul>
@@ -402,7 +410,9 @@
           inflation: { nom: 'Inflación', f: (v) => pctAn(v), repere: 'Con un 1,6 % de crecimiento y un 2,0 % de inflación, un déficit de en torno al 3,5 % del PIB basta para estabilizar la deuda.' },
           tauxMarche: { nom: 'Tipo de emisión del Tesoro', f: (v) => pct(v), repere: 'Tesoro: emisiones al 2,71 % de media en 2025, cartera al 2,32 %. Vida media: 7,9 años.' },
           depenses: { nom: 'Gasto público primario, en volumen', f: (v) => pctAn(v), repere: 'Referencia: al ritmo del crecimiento. Las reglas europeas limitan el gasto neto; la AIReF considera que España las supera.' },
-          economies: { nom: 'Ahorros permanentes adicionales', f: (v) => mds(v), repere: 'En mil M€ de 2026, alcanzados en 3 años. AIReF: haría falta un ajuste de 0,9 puntos del PIB (unos 15 mil M€) de aquí a 2028.' },
+          economies: { nom: 'Ahorros permanentes adicionales', f: (v) => mds(v), repere: 'En mil M€ de 2026, alcanzados en 3 años por defecto. AIReF: haría falta un ajuste de 0,9 puntos del PIB (unos 15 mil M€) de aquí a 2028.' },
+          nouvellesDepenses: { nom: 'Gasto nuevo permanente', f: (v) => mds(v), repere: 'En mil M€ de 2026, sin asignar a una función. Sirve para recoger el total de gasto nuevo anunciado por un programa.' },
+          montee: { nom: 'Despliegue de las palancas presupuestarias', f: (v) => u.annees(v), repere: 'Plazo hasta el pleno efecto de ahorros, gasto nuevo, impuestos, beneficios fiscales, fraude, cotizaciones y salario mínimo. 3 años por defecto; de 4 a 6 años para un objetivo de legislatura.' },
           prelevements: { nom: 'Ratio de ingresos públicos', f: (v) => signe(v) + ' pp del PIB', repere: 'Banco de España: ingresos del 42,9 % del PIB en 2025, gasto del 45,3 %.' },
           niches: { nom: 'Beneficios fiscales suprimidos', f: (v) => fmt(v, 0) + ' %', repere: 'AIReF: unos 60 mil M€ al año, de los que 17,8 mil M€ son tipos reducidos de IVA (que se solapan con los controles de IVA). Ganancia neta supuesta: la mitad.' },
           fraude: { nom: 'Fraude recuperado adicional', f: (v) => '+' + fmt(v) + ' mil M€/año', repere: 'Agencia Tributaria: 22,7 mil M€ recaudados por la lucha contra el fraude en 2025.' },
@@ -475,7 +485,7 @@
             <li>Un punto menos de paro aporta ${fmt(k.chomagePt)} mil M€ al año, en ${H.monteeChomage} años, sin efecto adicional sobre el PIB (estimación de la aplicación).</li>
             <li>Los efectos por punto de subida del SMI son estimaciones de la aplicación, fiables con un margen del 50 %. Como el SMI está exento de IRPF, solo se cuentan las cotizaciones. Los empleos perdidos se convierten en paro sobre una población activa de ${fmt(H.smi.populationActive, 1)} millones.</li>
             <li>La renta básica se imputa a «Otra protección social». Salvo el IMV, los importes de las ayudas que sustituye (${mds(k.totalAides)} en total) son órdenes de magnitud; su reducción sigue la relación entre la renta básica y la ayuda media.</li>
-            <li>Las palancas presupuestarias se despliegan en ${H.montee} años y después siguen al PIB.</li>
+            <li>Las palancas presupuestarias se despliegan en ${m.DEFAUTS.montee} años por defecto (duración ajustable) y después siguen al PIB.</li>
             <li>Una crisis reduce el PIB un 1 % por cada 50 mil M€, la mitad del cual se recupera al año siguiente.</li>
             <li>El «tendencial» mantiene el gasto primario al ritmo del crecimiento, más la deriva de las pensiones y de la dependencia: no es una previsión oficial.</li>
           </ul>
@@ -525,7 +535,9 @@
           inflation: { nom: 'Inflation', f: (v) => pctAn(v), repere: 'Bei 1,6 % Wachstum und 2,0 % Inflation reicht ein Defizit von etwa 3,5 % des BIP, um die Schulden zu stabilisieren.' },
           tauxMarche: { nom: 'Emissionszins des Schatzamts', f: (v) => pct(v), repere: 'Tesoro: Emissionen 2025 im Schnitt zu 2,71 %, Bestand zu 2,32 %. Durchschnittliche Laufzeit: 7,9 Jahre.' },
           depenses: { nom: 'Primärausgaben, real', f: (v) => pctAn(v), repere: 'Referenz: im Tempo des Wachstums. Die EU-Regeln begrenzen die Nettoausgaben; laut AIReF überschreitet Spanien sie.' },
-          economies: { nom: 'Zusätzliche dauerhafte Einsparungen', f: (v) => mds(v), repere: 'In Mrd. € von 2026, in 3 Jahren erreicht. AIReF: Bis 2028 wäre eine Anpassung von 0,9 Pp. des BIP (etwa 15 Mrd. €) nötig.' },
+          economies: { nom: 'Zusätzliche dauerhafte Einsparungen', f: (v) => mds(v), repere: 'In Mrd. € von 2026, standardmäßig in 3 Jahren erreicht. AIReF: Bis 2028 wäre eine Anpassung von 0,9 Pp. des BIP (etwa 15 Mrd. €) nötig.' },
+          nouvellesDepenses: { nom: 'Dauerhafte neue Ausgaben', f: (v) => mds(v), repere: 'In Mrd. € von 2026, keinem Bereich zugeordnet. Übernimmt die Summe neuer Ausgaben, die ein Programm ankündigt.' },
+          montee: { nom: 'Einführungsphase der Haushaltshebel', f: (v) => u.annees(v), repere: 'Zeit bis zur vollen Wirkung von Einsparungen, neuen Ausgaben, Steuern, Steuervergünstigungen, Betrugsbekämpfung, Beiträge und Mindestlohn. Standard 3 Jahre; 4 bis 6 Jahre für ein Ziel innerhalb einer Wahlperiode.' },
           prelevements: { nom: 'Staatliche Einnahmenquote', f: (v) => signe(v) + ' Pp. des BIP', repere: 'Banco de España: Einnahmen 2025 bei 42,9 % des BIP, Ausgaben bei 45,3 %.' },
           niches: { nom: 'Gestrichene Steuervergünstigungen', f: (v) => fmt(v, 0) + ' %', repere: 'AIReF: etwa 60 Mrd. € pro Jahr, davon 17,8 Mrd. € ermäßigte Mehrwertsteuersätze (Überschneidung mit den Mehrwertsteuer-Reglern). Angenommener Nettoertrag: die Hälfte.' },
           fraude: { nom: 'Zusätzlich eingetriebener Steuerbetrug', f: (v) => '+' + fmt(v) + ' Mrd. €/Jahr', repere: 'Agencia Tributaria: 22,7 Mrd. € durch Kontrollen im Jahr 2025 eingenommen.' },
@@ -598,7 +610,7 @@
             <li>Ein Punkt weniger Arbeitslosigkeit bringt ${fmt(k.chomagePt)} Mrd. € pro Jahr, in ${H.monteeChomage} Jahren, ohne zusätzliche Wirkung auf das BIP (Schätzung der Anwendung).</li>
             <li>Die Wirkungen je Punkt Mindestlohnerhöhung sind Schätzungen der Anwendung, auf 50 % genau. Da der Mindestlohn einkommensteuerfrei ist, werden nur Beiträge gezählt. Verlorene Stellen werden auf eine Erwerbsbevölkerung von ${fmt(H.smi.populationActive, 1)} Millionen in Arbeitslosigkeit umgerechnet.</li>
             <li>Das Grundeinkommen wird der „Sonstigen sozialen Sicherung“ zugeordnet. Abgesehen vom IMV sind die Beträge der ersetzten Leistungen (${mds(k.totalAides)} insgesamt) Größenordnungen; ihre Kürzung folgt dem Verhältnis von Grundeinkommen und Durchschnittsleistung.</li>
-            <li>Haushaltshebel wirken schrittweise über ${H.montee} Jahre und folgen danach dem BIP.</li>
+            <li>Haushaltshebel wirken schrittweise über ${m.DEFAUTS.montee} Jahre (Standard, einstellbar) und folgen danach dem BIP.</li>
             <li>Eine Krise senkt das BIP um 1 % je 50 Mrd. €, wovon die Hälfte im Folgejahr aufgeholt wird.</li>
             <li>Das „Basisszenario“ lässt die Primärausgaben mit dem Wachstum steigen, zuzüglich der Entwicklung von Renten und Pflege: Es ist keine offizielle Prognose.</li>
           </ul>
@@ -607,5 +619,5 @@
     },
   };
 
-  return { id: 'es', modele, sources, pib2024: 1595, structure, textes };
+  return { id: 'es', modele, sources, partis, pib2024: 1595, structure, textes };
 });

@@ -3,9 +3,9 @@
 // salaire minimum légal : le groupe correspondant n'apparaît pas.
 (function (racine, fabrique) {
   if (typeof module === 'object' && module.exports) {
-    module.exports = (modele, sources) => fabrique(require('../textes-communs.js'), modele, sources);
-  } else racine.PAYS = fabrique(racine.PaysCommun, racine.DetteItalie, racine.SOURCES);
-})(globalThis, function (commun, modele, sources) {
+    module.exports = (modele, sources, partis = require('./partis.js')) => fabrique(require('../textes-communs.js'), modele, sources, partis);
+  } else racine.PAYS = fabrique(racine.PaysCommun, racine.DetteItalie, racine.SOURCES, racine.PARTIS);
+})(globalThis, function (commun, modele, sources, partis) {
   const options = {
     economiesMax: 100, economiesPas: 5, fraudeMax: 20, criseMax: 200, ruAdulte: 500,
     // Proposition de l'assistant : effort modéré pour sortir durablement sous 3 % de déficit.
@@ -145,5 +145,5 @@
       prereglages: { effort: 'Geteilte Anstrengung' },
     }),
   };
-  return commun.creerPays({ id: 'it', modele, sources, pib2024: 2190, options, specifique });
+  return commun.creerPays({ id: 'it', modele, sources, partis, pib2024: 2190, options, specifique });
 });

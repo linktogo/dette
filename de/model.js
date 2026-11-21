@@ -36,7 +36,6 @@
     // Part de l'encours refinancée chaque année au taux de marché : calage français
     // transposé à une maturité un peu plus courte (hypothèse de l'application).
     refinancement: 0.16,
-    montee: 3,
     // Dépenses par fonction en 2024, Md€, hors intérêts. Reconstitution de
     // l'application (parts du PIB Eurostat, total Destatis 2 139,7 Md€ dont ~45 Md€
     // d'intérêts) : ordres de grandeur.
@@ -108,6 +107,8 @@
     tauxMarche: 3.0,   // taux moyen à l'émission, %
     depenses: 0.9,     // dépense primaire en volume, %/an
     economies: 0,      // économies pérennes, Md€ de 2026
+    nouvellesDepenses: 0, // dépenses nouvelles pérennes, Md€ de 2026
+    montee: 3,         // années de montée en charge des leviers budgétaires
     infra: 100,        // % du fonds spécial d'infrastructure dépensé
     otan: 100,         // % de la trajectoire de défense vers 3,5 % du PIB réalisée
     prelevements: 0,   // variation du taux de recettes, points de PIB
@@ -198,7 +199,7 @@
 
     for (let k = 1; k <= horizon; k++) {
       const annee = base.annee + k;
-      const montee = Math.min(1, k / H.montee);
+      const montee = Math.min(1, k / p.montee);
 
       let reel = p.croissance;
       if (p.crise > 0 && annee === p.anneeCrise) reel -= p.crise / 150;
@@ -234,7 +235,7 @@
       parPoste.social += pib * dependance / 100 - emploi[0] * echelle + ru.net * montee * echelle;
       parPoste.economie += pib * infra / 100;
       parPoste.defense += pib * otan / 100;
-      const nonVentile = (smi.depenses - p.economies) * montee * echelle + coutCrise;
+      const nonVentile = (smi.depenses + p.nouvellesDepenses - p.economies) * montee * echelle + coutCrise;
       const depensesPrimaires = Object.values(parPoste).reduce((s, v) => s + v, 0) + nonVentile;
 
       const recettes = pib * (tauxRecettes + (p.prelevements / 100) * montee)

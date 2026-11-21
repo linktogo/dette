@@ -21,6 +21,8 @@
       { id: 'depenses', curseurs: [
         { id: 'depenses', min: -1, max: 4, pas: 0.1 },
         { id: 'economies', min: 0, max: options.economiesMax, pas: options.economiesPas },
+        { id: 'nouvellesDepenses', min: 0, max: options.economiesMax, pas: options.economiesPas / 5 },
+        { id: 'montee', min: 1, max: 8, pas: 1 },
       ] },
       { id: 'postes', postes: true, min: -4, max: 8, pas: 0.1 },
       { id: 'recettes', curseurs: [
@@ -130,7 +132,9 @@
           inflation: { nom: 'Inflation', f: (v) => pctAn(v), repere: `Avec ${pct(D.croissance)} de croissance et ${pct(D.inflation)} d’inflation, un solde de ${pctSigne(k.stabilisant)} du PIB stabilise la dette.` },
           tauxMarche: { nom: 'Taux d’emprunt de l’État', f: (v) => pct(v), repere: `Taux moyen à l’émission. Référence : ${pct(D.tauxMarche)}.` },
           depenses: { nom: 'Dépense publique hors intérêts, en volume', f: (v) => pctAn(v), repere: 'Référence : au rythme de la croissance.' },
-          economies: { nom: 'Économies pérennes supplémentaires', f: (v) => mds(v), repere: 'En Md€ de 2026, atteints en 3 ans.' },
+          economies: { nom: 'Économies pérennes supplémentaires', f: (v) => mds(v), repere: 'En Md€ de 2026, atteints en 3 ans par défaut.' },
+          nouvellesDepenses: { nom: 'Dépenses nouvelles pérennes', f: (v) => mds(v), repere: 'En Md€ de 2026, non ventilées par poste. Sert à reprendre le total de dépenses nouvelles annoncé par un programme.' },
+          montee: { nom: 'Montée en charge des leviers budgétaires', f: (v) => u.annees(v), repere: 'Délai avant le plein effet des économies, dépenses nouvelles, impôts, fraude, cotisations et salaire minimum. 3 ans par défaut ; 4 à 6 ans pour un objectif de législature.' },
           prelevements: { nom: 'Taux de recettes publiques', f: (v) => signe(v) + ' pt de PIB', repere: `Recettes à ${pct(C.recettesPib)} du PIB en 2025.` },
           fraude: { nom: 'Fraude recouvrée en plus', f: (v) => '+' + fmt(v) + ' Md€/an', repere: 'Recettes supplémentaires, en Md€ de 2026 par an, atteintes en 3 ans.' },
           ...Object.fromEntries(H.tva.ids.map((id, i) => [id, { nom: s.tva[i].nom, f: (v) => pct(v),
@@ -178,7 +182,7 @@
             <li>Les montants par poste sont des ordres de grandeur reconstitués à partir des parts du PIB publiées par Eurostat.</li>
             <li>Les rendements par point de la TVA et de l’impôt sur le revenu, les effets de l’âge légal (${mds(k.agePlus, 1)} par an et par année), d’un point de chômage (${mds(k.chomagePt, 1)}) et du salaire minimum sont des estimations de l’application, fiables à 50 % près. La TVA est calculée à consommation inchangée.</li>
             <li>${s.deriveNote} Les aides remplacées par le revenu universel (${mds(k.totalAides, 1)} au total) sont des ordres de grandeur.</li>
-            <li>Les leviers budgétaires montent en charge sur 3 ans, puis suivent le PIB. Une crise coûtant 1 % du PIB réduit la croissance d’un point, dont la moitié est rattrapée l’année suivante.</li>
+            <li>Les leviers budgétaires montent en charge sur 3 ans par défaut (durée réglable), puis suivent le PIB. Une crise coûtant 1 % du PIB réduit la croissance d’un point, dont la moitié est rattrapée l’année suivante.</li>
             ${(s.hypotheses || []).map((h) => `<li>${h}</li>`).join('')}
             <li>Le « tendanciel » maintient les dépenses hors intérêts au rythme de la croissance : ce n’est pas une prévision officielle.</li>
           </ul>
@@ -221,7 +225,9 @@
           inflation: { nom: 'Inflation', f: (v) => pctAn(v), repere: `With ${pct(D.croissance)} growth and ${pct(D.inflation)} inflation, a balance of ${pctSigne(k.stabilisant)} of GDP stabilises debt.` },
           tauxMarche: { nom: 'Government borrowing rate', f: (v) => pct(v), repere: `Average issuance rate. Reference: ${pct(D.tauxMarche)}.` },
           depenses: { nom: 'Primary public spending, real terms', f: (v) => pctAn(v), repere: 'Reference: in line with growth.' },
-          economies: { nom: 'Additional permanent savings', f: (v) => mds(v), repere: 'In 2026 €bn, reached over 3 years.' },
+          economies: { nom: 'Additional permanent savings', f: (v) => mds(v), repere: 'In 2026 €bn, reached over 3 years by default.' },
+          nouvellesDepenses: { nom: 'Permanent new spending', f: (v) => mds(v), repere: 'In 2026 €bn, not allocated to a function. Used to carry over the total new spending announced by a programme.' },
+          montee: { nom: 'Phase-in of fiscal levers', f: (v) => u.annees(v), repere: 'Time before savings, new spending, taxes, fraud, contributions and minimum wage reach full effect. 3 years by default; 4 to 6 years for a target set over a parliamentary term.' },
           prelevements: { nom: 'Public revenue ratio', f: (v) => signe(v) + ' pp of GDP', repere: `Revenue at ${pct(C.recettesPib)} of GDP in 2025.` },
           fraude: { nom: 'Extra tax fraud recovered', f: (v) => `+€${fmt(v)}bn/yr`, repere: 'Extra revenue, in 2026 €bn a year, reached over 3 years.' },
           ...Object.fromEntries(H.tva.ids.map((id, i) => [id, { nom: s.tva[i].nom, f: (v) => pct(v),
@@ -269,7 +275,7 @@
             <li>Amounts by function are orders of magnitude reconstructed from the GDP shares published by Eurostat.</li>
             <li>Per-point yields of VAT and income tax, and the effects of the retirement age (${mds(k.agePlus, 1)} a year per year), one point of unemployment (${mds(k.chomagePt, 1)}) and the minimum wage are app estimates, reliable to within 50%. VAT is computed with unchanged consumption.</li>
             <li>${s.deriveNote} The benefits replaced by basic income (${mds(k.totalAides, 1)} in total) are orders of magnitude.</li>
-            <li>Fiscal levers phase in over 3 years, then grow with GDP. A crisis costing 1% of GDP cuts growth by one point, half of which is recovered the following year.</li>
+            <li>Fiscal levers phase in over 3 years by default (adjustable), then grow with GDP. A crisis costing 1% of GDP cuts growth by one point, half of which is recovered the following year.</li>
             ${(s.hypotheses || []).map((h) => `<li>${h}</li>`).join('')}
             <li>The “baseline” keeps primary spending growing with the economy: it is not an official forecast.</li>
           </ul>
@@ -312,7 +318,9 @@
           inflation: { nom: 'Inflación', f: (v) => pctAn(v), repere: `Con un ${pct(D.croissance)} de crecimiento y un ${pct(D.inflation)} de inflación, un saldo del ${pctSigne(k.stabilisant)} del PIB estabiliza la deuda.` },
           tauxMarche: { nom: 'Tipo de emisión del Estado', f: (v) => pct(v), repere: `Tipo medio de emisión. Referencia: ${pct(D.tauxMarche)}.` },
           depenses: { nom: 'Gasto público primario, en volumen', f: (v) => pctAn(v), repere: 'Referencia: al ritmo del crecimiento.' },
-          economies: { nom: 'Ahorros permanentes adicionales', f: (v) => mds(v), repere: 'En mil M€ de 2026, alcanzados en 3 años.' },
+          economies: { nom: 'Ahorros permanentes adicionales', f: (v) => mds(v), repere: 'En mil M€ de 2026, alcanzados en 3 años por defecto.' },
+          nouvellesDepenses: { nom: 'Gasto nuevo permanente', f: (v) => mds(v), repere: 'En mil M€ de 2026, sin asignar a una función. Sirve para recoger el total de gasto nuevo anunciado por un programa.' },
+          montee: { nom: 'Despliegue de las palancas presupuestarias', f: (v) => u.annees(v), repere: 'Plazo hasta el pleno efecto de ahorros, gasto nuevo, impuestos, fraude, cotizaciones y salario mínimo. 3 años por defecto; de 4 a 6 años para un objetivo de legislatura.' },
           prelevements: { nom: 'Ratio de ingresos públicos', f: (v) => signe(v) + ' pp del PIB', repere: `Ingresos del ${pct(C.recettesPib)} del PIB en 2025.` },
           fraude: { nom: 'Fraude recuperado adicional', f: (v) => '+' + fmt(v) + ' mil M€/año', repere: 'Ingresos adicionales, en mil M€ de 2026 al año, alcanzados en 3 años.' },
           ...Object.fromEntries(H.tva.ids.map((id, i) => [id, { nom: s.tva[i].nom, f: (v) => pct(v),
@@ -360,7 +368,7 @@
             <li>Los importes por función son órdenes de magnitud reconstruidos a partir de los porcentajes del PIB publicados por Eurostat.</li>
             <li>Los rendimientos por punto del IVA y del impuesto sobre la renta y los efectos de la edad legal (${mds(k.agePlus, 1)} al año por año), de un punto de paro (${mds(k.chomagePt, 1)}) y del salario mínimo son estimaciones de la aplicación, fiables con un margen del 50 %. El IVA se calcula con consumo constante.</li>
             <li>${s.deriveNote} Las ayudas sustituidas por la renta básica (${mds(k.totalAides, 1)} en total) son órdenes de magnitud.</li>
-            <li>Las palancas presupuestarias se despliegan en 3 años y después siguen al PIB. Una crisis que cuesta el 1 % del PIB reduce el crecimiento un punto, la mitad del cual se recupera al año siguiente.</li>
+            <li>Las palancas presupuestarias se despliegan en 3 años por defecto (duración ajustable) y después siguen al PIB. Una crisis que cuesta el 1 % del PIB reduce el crecimiento un punto, la mitad del cual se recupera al año siguiente.</li>
             ${(s.hypotheses || []).map((h) => `<li>${h}</li>`).join('')}
             <li>El «tendencial» mantiene el gasto primario al ritmo del crecimiento: no es una previsión oficial.</li>
           </ul>
@@ -403,7 +411,9 @@
           inflation: { nom: 'Inflation', f: (v) => pctAn(v), repere: `Bei ${pct(D.croissance)} Wachstum und ${pct(D.inflation)} Inflation stabilisiert ein Saldo von ${pctSigne(k.stabilisant)} des BIP die Schulden.` },
           tauxMarche: { nom: 'Emissionszins des Staates', f: (v) => pct(v), repere: `Durchschnittlicher Emissionszins. Referenz: ${pct(D.tauxMarche)}.` },
           depenses: { nom: 'Primärausgaben, real', f: (v) => pctAn(v), repere: 'Referenz: im Tempo des Wachstums.' },
-          economies: { nom: 'Zusätzliche dauerhafte Einsparungen', f: (v) => mds(v), repere: 'In Mrd. € von 2026, in 3 Jahren erreicht.' },
+          economies: { nom: 'Zusätzliche dauerhafte Einsparungen', f: (v) => mds(v), repere: 'In Mrd. € von 2026, standardmäßig in 3 Jahren erreicht.' },
+          nouvellesDepenses: { nom: 'Dauerhafte neue Ausgaben', f: (v) => mds(v), repere: 'In Mrd. € von 2026, keinem Bereich zugeordnet. Übernimmt die Summe neuer Ausgaben, die ein Programm ankündigt.' },
+          montee: { nom: 'Einführungsphase der Haushaltshebel', f: (v) => u.annees(v), repere: 'Zeit bis zur vollen Wirkung von Einsparungen, neuen Ausgaben, Steuern, Betrugsbekämpfung, Beiträgen und Mindestlohn. Standard 3 Jahre; 4 bis 6 Jahre für ein Ziel innerhalb einer Wahlperiode.' },
           prelevements: { nom: 'Staatliche Einnahmenquote', f: (v) => signe(v) + ' Pp. des BIP', repere: `Einnahmen 2025 bei ${pct(C.recettesPib)} des BIP.` },
           fraude: { nom: 'Zusätzlich eingetriebener Steuerbetrug', f: (v) => '+' + fmt(v) + ' Mrd. €/Jahr', repere: 'Zusätzliche Einnahmen in Mrd. € von 2026 pro Jahr, in 3 Jahren erreicht.' },
           ...Object.fromEntries(H.tva.ids.map((id, i) => [id, { nom: s.tva[i].nom, f: (v) => pct(v),
@@ -451,7 +461,7 @@
             <li>Die Beträge je Aufgabenbereich sind aus den von Eurostat veröffentlichten BIP-Anteilen rekonstruierte Größenordnungen.</li>
             <li>Die Erträge je Punkt von Mehrwert- und Einkommensteuer sowie die Wirkungen des Rentenalters (${mds(k.agePlus, 1)} pro Jahr und Altersjahr), eines Punkts Arbeitslosigkeit (${mds(k.chomagePt, 1)}) und des Mindestlohns sind Schätzungen der Anwendung, auf 50 % genau. Die Mehrwertsteuer wird bei unverändertem Konsum berechnet.</li>
             <li>${s.deriveNote} Die vom Grundeinkommen ersetzten Leistungen (${mds(k.totalAides, 1)} insgesamt) sind Größenordnungen.</li>
-            <li>Haushaltshebel wirken schrittweise über 3 Jahre und folgen danach dem BIP. Eine Krise, die 1 % des BIP kostet, senkt das Wachstum um einen Punkt, wovon die Hälfte im Folgejahr aufgeholt wird.</li>
+            <li>Haushaltshebel wirken schrittweise über 3 Jahre (Standard, einstellbar) und folgen danach dem BIP. Eine Krise, die 1 % des BIP kostet, senkt das Wachstum um einen Punkt, wovon die Hälfte im Folgejahr aufgeholt wird.</li>
             ${(s.hypotheses || []).map((h) => `<li>${h}</li>`).join('')}
             <li>Das „Basisszenario“ lässt die Primärausgaben mit dem Wachstum steigen: Es ist keine offizielle Prognose.</li>
           </ul>
@@ -477,10 +487,10 @@
   }
 
   // Construit l'objet PAYS attendu par simulateur.js.
-  function creerPays({ id, modele, sources, pib2024, options, specifique }) {
+  function creerPays({ id, modele, sources, partis, pib2024, options, specifique }) {
     const codes = Object.keys(GENERIQUE);
     return {
-      id, modele, sources, pib2024, devise: 'EUR',
+      id, modele, sources, partis, pib2024, devise: 'EUR',
       structure: structure(modele, options),
       textes: Object.fromEntries(codes.map((c) => [c, (u, m) => textes(c, u, m, specifique)])),
     };
