@@ -59,6 +59,8 @@ Ouvrez **http://localhost:8098**.
 - Bandeau fixe en haut de l’écran : dès que les tuiles de résultats sortent de la vue (curseurs sur mobile, défilement), les chiffres clés de 2036 restent affichés et se mettent à jour à chaque mouvement de curseur.
 - Indicateurs par habitant, en plus des ratios au PIB : dette et charge d’intérêts par habitant (tuiles, infobulles, tableau, page d’accueil) et dépenses par poste par habitant. La population suit une projection démographique par pays (Eurostat, INE, Destatis, ONS) sans effet sur la trajectoire de dette.
 - Explication de la méthode, de ses limites et des sources dans l'interface.
+- Configurations venues d'autres pays : les scénarios propres à un pays sont recalculés pour les neuf autres avec leur propre modèle ([transpositions.js](./transpositions.js)) : défense à 3,5 % du PIB (Pays-Bas, Allemagne), déficit à 3 % dès 2029 (Belgique), consolidation de 0,66 % du PIB (Autriche, Allemagne), effort partagé (Italie), freinage de la dépense (France), dépenses dynamiques (Portugal, Grèce), retraite à 68 ans (Espagne, Allemagne, Royaume-Uni), sans dérive des pensions et chômage −3 points (Espagne), pensions sous l'inflation (Royaume-Uni), taux d'emprunt allemand. Mêmes objectifs, montants adaptés à la taille de chaque économie, curseurs limités à leurs bornes. Les boutons s'ajoutent aux réglages en cours ; un second clic les retire.
+- Panneau « Changements effectués » dans chaque simulateur : curseurs modifiés (référence → valeur), regroupés par pays d'origine de la configuration importée, avec l'effet de chacune sur la dette en 2036. La page d'accueil liste, pays par pays, les configurations transposées, leurs réglages, leur effet et un lien qui ouvre le simulateur avec ce réglage.
 - Partage d'un scénario en copiant l'URL : les réglages sont encodés dans son fragment, après `#`. Les anciens liens de partage à la racine sont redirigés vers `/fr/`, et `/espagne/` vers `/es/` (Nginx).
 
 L'application est écrite en HTML, CSS et JavaScript, sans framework ni dépendance à installer. Les calculs sont effectués dans le navigateur ; aucun serveur applicatif ni base de données n'est nécessaire.
@@ -147,8 +149,9 @@ L'application sera disponible à l'adresse `http://<adresse-du-pi>:8098`.
 | [es/](./es/), [de/](./de/) | Simulateurs espagnol et allemand, même organisation, avec `partis.js` (programmes des partis) |
 | [uk/](./uk/) | Simulateur britannique, même organisation, avec `partis.js` |
 | [modele.js](./modele.js), [textes-communs.js](./textes-communs.js) | Modèle et textes communs, paramétrés par pays |
-| [it/](./it/), [pt/](./pt/), [gr/](./gr/), [at/](./at/), [be/](./be/), [nl/](./nl/) | Simulateurs italien, portugais, grec, autrichien, belge et néerlandais : `model.js` (configuration du modèle commun), `textes.js` (particularités en 4 langues), `sources.js`, `partis.js` (propositions des partis) |
-| [tests/](./tests/) | Tests des modèles (`fr`, `es`, `de`, `uk`, et `modele-commun.test.js` pour l'Italie, le Portugal, la Grèce, l'Autriche, la Belgique et les Pays-Bas) et complétude des traductions (`i18n.test.js`) |
+| [it/](./it/), [pt/](./pt/), [gr/](./gr/), [at/](./at/), [be/](./be/), [nl/](./nl/) | Simulateurs italien, portugais, grec, autrichien, belge et néerlandais : `model.js` (configuration du modèle commun), `textes.js` (particularités en 4 langues), `sources.js` |
+| [transpositions.js](./transpositions.js) | Configurations d'un pays recalculées pour les autres, textes en 4 langues |
+| [tests/](./tests/) | Tests des modèles (`fr`, `es`, `de`, `uk`, et `modele-commun.test.js` pour l'Italie, le Portugal, la Grèce, l'Autriche, la Belgique et les Pays-Bas) complétude des traductions (`i18n.test.js`) et configurations transposées (`transpositions.test.js`) |
 | [dev-server.js](./dev-server.js) | Serveur local avec rechargement automatique |
 | [nginx.conf](./nginx.conf) | Service des fichiers statiques et revalidation du cache |
 | [docker-compose.yml](./docker-compose.yml) | Configuration du conteneur Nginx |
